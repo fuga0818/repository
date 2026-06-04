@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>無料見積もり・お問い合わせ | スパークルクリーン株式会社</title>
+  <meta name="description" content="清掃サービスの無料見積もり・お問い合わせはこちら。オンライン予約・電話・メール・LINEで24時間受付。最短翌日対応。東京・首都圏・全国対応。">
+  <meta name="keywords" content="清掃 見積もり 無料,清掃業者 問い合わせ,オフィス清掃 予約,清掃会社 東京 連絡">
+  <meta name="author" content="スパークルクリーン株式会社">
+  <link rel="canonical" href="https://fuga0818.github.io/repository/contact.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="無料見積もり・お問い合わせ | スパークルクリーン株式会社">
+  <meta property="og:description" content="清掃サービスの無料見積もり・お問い合わせ。オンライン予約・電話・メール・LINEで24時間受付。最短翌日対応。">
+  <meta property="og:url" content="https://fuga0818.github.io/repository/contact.html">
+  <meta property="og:site_name" content="スパークルクリーン株式会社">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="無料見積もり・お問い合わせ | スパークルクリーン株式会社">
+  <meta name="twitter:description" content="清掃サービスの無料見積もり・お問い合わせ。24時間受付・最短翌日対応。">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "お問い合わせ・無料見積もり",
+    "url": "https://fuga0818.github.io/repository/contact.html",
+    "description": "清掃サービスの無料見積もり・お問い合わせページ。電話・メール・LINEで受付。",
+    "mainEntity": {
+      "@type": "LocalBusiness",
+      "name": "スパークルクリーン株式会社",
+      "telephone": "0120-XXX-XXX",
+      "email": "info@sparkle-clean.jp"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ---- お問い合わせレイアウト ---- */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ---- 予約システムエリア ---- */
+    #booking-system {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 40px;
+    }
+    .booking-placeholder {
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 56px 32px;
+      text-align: center;
+      background: var(--color-bg);
+    }
+    .booking-placeholder__icon {
+      width: 72px; height: 72px;
+      background: var(--color-green-light);
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      color: var(--color-green-dark);
+      margin: 0 auto 20px;
+    }
+    .booking-placeholder h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: var(--color-text-light); }
+    .booking-placeholder p { font-size: 0.875rem; color: var(--color-text-light); }
+
+    /* ---- お問い合わせフォーム ---- */
+    .form-section {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .form-section__title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-section__title i { color: var(--color-green); }
+    .form-section__subtitle {
+      font-size: 0.875rem;
+      color: var(--color-text-light);
+      margin-bottom: 28px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .form-required {
+      display: inline-block;
+      background: #ff5c5c;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+    .form-optional {
+      display: inline-block;
+      background: var(--color-border);
+      color: var(--color-text-light);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 0.925rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--color-green);
+      box-shadow: 0 0 0 3px rgba(106,171,122,0.15);
+      background: white;
+    }
+    textarea.form-control { resize: vertical; min-height: 140px; }
+    select.form-control { cursor: pointer; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-message {
+      display: none;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+    .form-message--success {
+      background: var(--color-green-light);
+      color: var(--color-green-dark);
+      border: 1px solid var(--color-green);
+    }
+    .form-message--error {
+      background: #fff0f0;
+      color: #c0392b;
+      border: 1px solid #f1c0c0;
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 16px;
+      font-size: 1rem;
+    }
+
+    .form-privacy {
+      font-size: 0.8rem;
+      color: var(--color-text-light);
+      text-align: center;
+      margin-top: 12px;
+    }
+    .form-privacy a { color: var(--color-green-dark); text-decoration: underline; }
+
+    /* ---- サイドバー ---- */
+    .contact-sidebar { display: flex; flex-direction: column; gap: 24px; }
+
+    .contact-info-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact-info-card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-info-card__title i { color: var(--color-green); }
+
+    .contact-method {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .contact-method:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .contact-method__icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .contact-method__icon--green { background: var(--color-green-light); color: var(--color-green-dark); }
+    .contact-method__icon--orange { background: var(--color-orange-light); color: var(--color-orange); }
+    .contact-method__icon--blue { background: #e6f0ff; color: #4a7bc8; }
+    .contact-method__label { font-size: 0.75rem; color: var(--color-text-light); margin-bottom: 4px; }
+    .contact-method__value { font-size: 1rem; font-weight: 700; color: var(--color-text); margin-bottom: 2px; }
+    .contact-method__note { font-size: 0.78rem; color: var(--color-text-light); }
+    .contact-method__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-green-dark);
+      margin-top: 6px;
+      transition: gap var(--transition);
+    }
+    .contact-method__link:hover { gap: 10px; }
+
+    /* 営業時間テーブル */
+    .hours-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .hours-table td { padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+    .hours-table td:first-child { color: var(--color-text-light); }
+    .hours-table td:last-child { text-align: right; font-weight: 500; }
+    .hours-table .open { color: var(--color-green-dark); }
+
+    /* アクセスマップ風 */
+    .map-placeholder {
+      background: var(--color-green-light);
+      border-radius: var(--radius-md);
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--color-green-dark);
+      font-size: 0.875rem;
+    }
+    .map-placeholder i { font-size: 2rem; }
+
+    /* ---- レスポンシブ ---- */
+    @media (max-width: 900px) {
+      .contact-layout { grid-template-columns: 1fr; }
+      .contact-sidebar { order: -1; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== ヘッダー ====== -->
+<header class="header">
+  <div class="container">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
+        <span>スパークルクリーン</span>
+      </a>
+      <nav class="header__nav">
+        <a href="index.html">ホーム</a>
+        <a href="service.html">サービス</a>
+        <a href="company.html">会社概要</a>
+        <a href="contact.html">お問い合わせ</a>
+      </nav>
+      <a href="contact.html" class="btn btn--primary btn--sm header__cta">
+        <i class="fa-solid fa-calendar-check"></i>今すぐ予約
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="index.html">ホーム</a>
+  <a href="service.html">サービス</a>
+  <a href="company.html">会社概要</a>
+  <a href="contact.html">お問い合わせ</a>
+  <a href="contact.html" class="btn btn--primary"><i class="fa-solid fa-calendar-check"></i>今すぐ予約</a>
+</nav>
+
+<!-- ====== ページヒーロー ====== -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" style="justify-content:center;color:rgba(255,255,255,0.7);">
+      <a href="index.html">ホーム</a>
+      <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;opacity:0.5;"></i>
+      <span>お問い合わせ・予約</span>
+    </nav>
+    <div class="page-hero__label">Contact &amp; Booking</div>
+    <h1 class="page-hero__title">お問い合わせ・ご予約</h1>
+    <p class="page-hero__subtitle">まずはお気軽にご連絡ください。無料でご相談を承ります。</p>
+  </div>
+</section>
+
+<!-- ====== メインコンテンツ ====== -->
+<section class="section">
+  <div class="container">
+    <div class="contact-layout">
+
+      <!-- 左カラム：予約フォームエリア -->
+      <div>
+        <!-- 予約システム埋め込みエリア -->
+        <div id="booking-system" class="fade-in">
+          <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-calendar-check" style="color:var(--color-green);"></i>
+            オンライン予約
+          </h2>
+          <p style="font-size:0.875rem;color:var(--color-text-light);margin-bottom:24px;">
+            ご希望の日時・サービスを選択してご予約いただけます。
+          </p>
+          <!-- 予約システムをここに埋め込む -->
+          <div class="booking-placeholder">
+            <div class="booking-placeholder__icon">
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <h3>予約システム</h3>
+            <p>予約システムをここに埋め込んでください</p>
+          </div>
+        </div>
+
+        <!-- お問い合わせフォーム -->
+        <div class="form-section fade-in">
+          <h2 class="form-section__title">
+            <i class="fa-solid fa-envelope"></i>
+            メールでのお問い合わせ
+          </h2>
+          <p class="form-section__subtitle">
+            以下のフォームにご入力いただき、送信ボタンを押してください。<br>
+            2営業日以内にご返信いたします。
+          </p>
+
+          <div id="form-message" class="form-message"></div>
+
+          <form id="contact-form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="name">
+                  お名前
+                  <span class="form-required">必須</span>
+                </label>
+                <input type="text" id="name" name="name" class="form-control"
+                       placeholder="山田 太郎" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="company">
+                  会社名
+                  <span class="form-optional">任意</span>
+                </label>
+                <input type="text" id="company" name="company" class="form-control"
+                       placeholder="株式会社〇〇" autocomplete="organization">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="email">
+                  メールアドレス
+                  <span class="form-required">必須</span>
+                </label>
+                <input type="email" id="email" name="email" class="form-control"
+                       placeholder="example@email.com" autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">
+                  電話番号
+                  <span class="form-optional">任意</span>
+                </label>
+                <input type="tel" id="phone" name="phone" class="form-control"
+                       placeholder="090-0000-0000" autocomplete="tel">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="service">
+                ご希望のサービス
+                <span class="form-required">必須</span>
+              </label>
+              <select id="service" name="service" class="form-control">
+                <option value="">選択してください</option>
+                <option value="office">オフィス清掃</option>
+                <option value="store">店舗清掃</option>
+                <option value="regular">定期清掃</option>
+                <option value="spot">スポット清掃</option>
+                <option value="other">その他・相談</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="area">
+                清掃場所の坪数（目安）
+                <span class="form-optional">任意</span>
+              </label>
+              <select id="area" name="area" class="form-control">
+                <option value="">選択してください</option>
+                <option value="under30">30坪以下</option>
+                <option value="30-50">30〜50坪</option>
+                <option value="50-100">50〜100坪</option>
+                <option value="over100">100坪以上</option>
+                <option value="unknown">わからない</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="message">
+                お問い合わせ内容
+                <span class="form-required">必須</span>
+              </label>
+              <textarea id="message" name="message" class="form-control"
+                        placeholder="ご相談内容・ご要望をご自由にお書きください。例：週2回のオフィス清掃を検討しています。見積もりをお願いしたい。"></textarea>
+            </div>
+            <div class="form-group">
+              <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.875rem;">
+                <input type="checkbox" name="privacy" required
+                       style="margin-top:3px;accent-color:var(--color-green);width:16px;height:16px;">
+                <span><a href="#" style="color:var(--color-green-dark);text-decoration:underline;">プライバシーポリシー</a>に同意する</span>
+              </label>
+            </div>
+            <button type="submit" class="btn btn--primary form-submit">
+              <i class="fa-solid fa-paper-plane"></i>
+              送信する
+            </button>
+            <p class="form-privacy">
+              送信いただいた情報は<a href="#">プライバシーポリシー</a>に従い適切に管理いたします。
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- 右カラム：連絡先情報 -->
+      <div class="contact-sidebar">
+        <!-- 電話・メール -->
+        <div class="contact-info-card fade-in">
+          <div class="contact-info-card__title">
+            <i class="fa-solid fa-address-card"></i>
+            直接お問い合わせ
+          </div>
+          <div class="contact-method">
+            <div class="contact-method__icon contact-method__icon--green">
+              <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+              <div class="contact-method__label">フリーダイヤル（通話料無料）</div>
+              <div class="contact-method__value">0120-XXX-XXX</div>
+              <div class="contact-method__note">受付 9:00〜18:00（年中無休）</div>
+              <a href="tel:0120000000" class="contact-method__link">
+                電話をかける <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method__icon contact-method__icon--orange">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div>
+              <div class="contact-method__label">メール</div>
+              <div class="contact-method__value" style="font-size:0.9rem;">info@sparkle-clean.jp</div>
+              <div class="contact-method__note">24時間受付・2営業日以内に返信</div>
+              <a href="mailto:info@sparkle-clean.jp" class="contact-method__link">
+                メールを送る <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method__icon contact-method__icon--blue">
+              <i class="fa-brands fa-line"></i>
+            </div>
+            <div>
+              <div class="contact-method__label">LINE公式アカウント</div>
+              <div class="contact-method__value">@sparkle-clean</div>
+              <div class="contact-method__note">メッセージ・写真相談も可能</div>
+              <a href="#" class="contact-method__link">
+                LINEで相談する <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 営業時間 -->
+        <div class="contact-info-card fade-in fade-in-delay-1">
+          <div class="contact-info-card__title">
+            <i class="fa-solid fa-clock"></i>
+            営業時間
+          </div>
+          <table class="hours-table">
+            <tr>
+              <td>月曜日</td>
+              <td class="open">9:00〜18:00</td>
+            </tr>
+            <tr>
+              <td>火曜日</td>
+              <td class="open">9:00〜18:00</td>
+            </tr>
+            <tr>
+              <td>水曜日</td>
+              <td class="open">9:00〜18:00</td>
+            </tr>
+            <tr>
+              <td>木曜日</td>
+              <td class="open">9:00〜18:00</td>
+            </tr>
+            <tr>
+              <td>金曜日</td>
+              <td class="open">9:00〜18:00</td>
+            </tr>
+            <tr>
+              <td>土・日・祝</td>
+              <td class="open">10:00〜17:00</td>
+            </tr>
+          </table>
+          <p style="font-size:0.78rem;color:var(--color-text-light);margin-top:12px;">
+            ※ 清掃作業自体は年中無休・24時間対応可能です。
+          </p>
+        </div>
+
+        <!-- アクセス -->
+        <div class="contact-info-card fade-in fade-in-delay-2">
+          <div class="contact-info-card__title">
+            <i class="fa-solid fa-location-dot"></i>
+            所在地・アクセス
+          </div>
+          <p style="font-size:0.875rem;color:var(--color-text-light);margin-bottom:16px;">
+            〒150-0001<br>
+            東京都渋谷区神宮前〇〇1-2-3<br>
+            スパークルビル5F
+          </p>
+          <p style="font-size:0.8rem;color:var(--color-text-light);margin-bottom:16px;">
+            <i class="fa-solid fa-train" style="color:var(--color-green);margin-right:6px;"></i>
+            渋谷駅 徒歩8分
+          </p>
+          <div class="map-placeholder">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>地図はここに表示されます</span>
+          </div>
+        </div>
+
+        <!-- よくある質問リンク -->
+        <div class="contact-info-card fade-in fade-in-delay-3"
+             style="background:var(--color-green-light);box-shadow:none;">
+          <div class="contact-info-card__title" style="color:var(--color-green-dark);">
+            <i class="fa-solid fa-circle-question"></i>
+            よくある質問
+          </div>
+          <p style="font-size:0.875rem;color:var(--color-text-light);margin-bottom:16px;">
+            お問い合わせの前にFAQをご確認ください。
+            多くの疑問が解決できるかもしれません。
+          </p>
+          <a href="service.html#faq" class="btn btn--secondary btn--sm" style="width:100%;justify-content:center;">
+            <i class="fa-solid fa-arrow-right"></i>FAQを見る
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 安心ポイント ====== -->
+<section class="section section--gray">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label fade-in">Our Promise</span>
+      <h2 class="section-title fade-in fade-in-delay-1">ご利用前に知っておきたい<br>スパークルクリーンの約束</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;" class="promise-grid">
+      <div class="card fade-in" style="text-align:center;padding:28px 20px;">
+        <div style="width:56px;height:56px;background:var(--color-green-light);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--color-green-dark);margin:0 auto 16px;">
+          <i class="fa-solid fa-shield-check"></i>
+        </div>
+        <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;">7日間無料再清掃保証</h3>
+        <p style="font-size:0.8rem;color:var(--color-text-light);">ご不満があれば7日以内に無料で再対応します</p>
+      </div>
+      <div class="card fade-in fade-in-delay-1" style="text-align:center;padding:28px 20px;">
+        <div style="width:56px;height:56px;background:var(--color-orange-light);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--color-orange);margin:0 auto 16px;">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+        </div>
+        <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;">見積もり無料・明瞭料金</h3>
+        <p style="font-size:0.8rem;color:var(--color-text-light);">追加料金なし。見積もり後の変更はご連絡します</p>
+      </div>
+      <div class="card fade-in fade-in-delay-2" style="text-align:center;padding:28px 20px;">
+        <div style="width:56px;height:56px;background:#e6f0ff;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#4a7bc8;margin:0 auto 16px;">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;">身元確認済みスタッフ</h3>
+        <p style="font-size:0.8rem;color:var(--color-text-light);">全スタッフの身元確認・誓約書締結を実施</p>
+      </div>
+      <div class="card fade-in fade-in-delay-3" style="text-align:center;padding:28px 20px;">
+        <div style="width:56px;height:56px;background:#f5e6ff;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#8a4ab8;margin:0 auto 16px;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:8px;">個人情報保護</h3>
+        <p style="font-size:0.8rem;color:var(--color-text-light);">お客様情報は厳重に管理・第三者提供なし</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== フッター ====== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="header__logo">
+          <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
+          <span>スパークルクリーン株式会社</span>
+        </a>
+        <p>プロの技術と誠実な対応で、あなたの大切な空間をいつもピカピカに。全国対応・24時間受付。</p>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">サービス</div>
+        <ul class="footer__links">
+          <li><a href="service.html#office">オフィス清掃</a></li>
+          <li><a href="service.html#store">店舗清掃</a></li>
+          <li><a href="service.html#regular">定期清掃</a></li>
+          <li><a href="service.html#price">料金プラン</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">会社情報</div>
+        <ul class="footer__links">
+          <li><a href="company.html">会社概要</a></li>
+          <li><a href="company.html#philosophy">企業理念</a></li>
+          <li><a href="company.html#staff">スタッフ紹介</a></li>
+          <li><a href="contact.html">採用情報</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">お問い合わせ</div>
+        <div class="footer__contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <div><strong>0120-XXX-XXX</strong><br><small>受付 9:00〜18:00（年中無休）</small></div>
+        </div>
+        <div class="footer__contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <div>info@sparkle-clean.jp</div>
+        </div>
+        <div class="footer__contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <div>東京都渋谷区〇〇1-2-3<br>スパークルビル5F</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2024 スパークルクリーン株式会社 All Rights Reserved.</span>
+      <div style="display:flex;gap:16px;">
+        <a href="#">プライバシーポリシー</a>
+        <a href="#">利用規約</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  // promise-gridのレスポンシブ対応
+  const promiseGrid = document.querySelector('.promise-grid');
+  if (promiseGrid) {
+    const mq = window.matchMedia('(max-width: 700px)');
+    const applyGrid = (e) => {
+      promiseGrid.style.gridTemplateColumns = e.matches ? '1fr 1fr' : '';
+    };
+    applyGrid(mq);
+    mq.addEventListener('change', applyGrid);
+  }
+</script>
+</body>
+</html>

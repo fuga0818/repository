@@ -3,2683 +3,715 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="スパークルクリーン株式会社 - オフィス・店舗・住宅の清掃サービス。導入300社、満足度98%、実績15年。24時間WEB予約受付中。">
-  <title>スパークルクリーン株式会社 | プロの清掃サービス</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <title>スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団</title>
+  <meta name="description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。無料見積もり即日対応。24時間受付。">
+  <meta name="keywords" content="清掃会社,オフィス清掃,店舗清掃,定期清掃,東京,清掃業者,ビルクリーニング,業務清掃">
+  <meta name="author" content="スパークルクリーン株式会社">
+  <link rel="canonical" href="https://fuga0818.github.io/repository/index.html">
+
+  <!-- OGP（SNSシェア用） -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団">
+  <meta property="og:description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。無料見積もり即日対応。">
+  <meta property="og:url" content="https://fuga0818.github.io/repository/index.html">
+  <meta property="og:site_name" content="スパークルクリーン株式会社">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団">
+  <meta name="twitter:description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
+
+  <!-- 構造化データ（JSON-LD） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "スパークルクリーン株式会社",
+    "description": "オフィス・店舗・定期清掃のプロ集団。導入300社以上、顧客満足度98%。",
+    "url": "https://fuga0818.github.io/repository/index.html",
+    "telephone": "0120-XXX-XXX",
+    "email": "info@sparkle-clean.jp",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "神宮前〇〇1-2-3 スパークルビル5F",
+      "addressLocality": "渋谷区",
+      "addressRegion": "東京都",
+      "postalCode": "150-0001",
+      "addressCountry": "JP"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Saturday","Sunday"],
+        "opens": "10:00",
+        "closes": "17:00"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "300"
+    },
+    "priceRange": "¥¥",
+    "areaServed": ["東京都","神奈川県","埼玉県","千葉県","大阪府"],
+    "serviceType": ["オフィス清掃","店舗清掃","定期清掃","ビルクリーニング"]
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --white: #ffffff;
-      --light-blue-1: #e8f4fd;
-      --light-blue-2: #4fc3f7;
-      --navy-1: #1a237e;
-      --navy-2: #283593;
-      --navy-light: #3949ab;
-      --text-dark: #1a1a2e;
-      --text-mid: #424242;
-      --text-light: #757575;
-      --border: #dce8f5;
-      --shadow-sm: 0 2px 8px rgba(26,35,126,0.08);
-      --shadow-md: 0 8px 32px rgba(26,35,126,0.12);
-      --shadow-lg: 0 16px 64px rgba(26,35,126,0.16);
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    html {
-      scroll-behavior: smooth;
-      font-size: 16px;
-    }
-
-    body {
-      font-family: 'Noto Sans JP', sans-serif;
-      color: var(--text-dark);
-      background: var(--white);
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    img { max-width: 100%; display: block; }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-    button { cursor: pointer; font-family: inherit; border: none; background: none; }
-
-    .container {
-      width: 100%;
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--light-blue-2);
-      background: rgba(79,195,247,0.12);
-      padding: 6px 16px;
-      border-radius: 100px;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 700;
-      color: var(--navy-1);
-      line-height: 1.35;
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      font-size: 1rem;
-      color: var(--text-light);
-      max-width: 560px;
-      line-height: 1.8;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .section-header .section-subtitle {
-      margin: 0 auto;
-    }
-
-    /* ===== ANIMATIONS ===== */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .fade-in-delay-1 { transition-delay: 0.1s; }
-    .fade-in-delay-2 { transition-delay: 0.2s; }
-    .fade-in-delay-3 { transition-delay: 0.3s; }
-    .fade-in-delay-4 { transition-delay: 0.4s; }
-
-    /* ===== BUTTONS ===== */
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 16px 36px;
-      border-radius: 100px;
-      box-shadow: 0 4px 20px rgba(79,195,247,0.45);
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(79,195,247,0.55);
-    }
-
-    .btn-primary .btn-icon {
-      width: 22px;
-      height: 22px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      flex-shrink: 0;
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--white);
-      color: var(--navy-1);
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 15px 34px;
-      border-radius: 100px;
-      border: 2px solid var(--navy-1);
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-
-    .btn-secondary:hover {
-      background: var(--navy-1);
-      color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .btn-cta-large {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
-      color: var(--white);
-      font-size: 1.1rem;
-      font-weight: 900;
-      padding: 20px 48px;
-      border-radius: 100px;
-      box-shadow: 0 6px 28px rgba(255,111,0,0.45);
-      transition: var(--transition);
-      white-space: nowrap;
-      letter-spacing: 0.02em;
-    }
-
-    .btn-cta-large:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(255,111,0,0.5);
-    }
-
-    .btn-cta-large .btn-icon {
-      width: 26px;
-      height: 26px;
-      background: rgba(255,255,255,0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    /* ===== HEADER ===== */
-    #header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      transition: box-shadow var(--transition);
-    }
-
-    #header.scrolled {
-      box-shadow: var(--shadow-md);
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-      gap: 24px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .logo-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, var(--navy-1) 0%, var(--navy-light) 100%);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .logo-text {
-      line-height: 1.2;
-    }
-
-    .logo-name {
-      font-size: 1rem;
-      font-weight: 900;
-      color: var(--navy-1);
-      letter-spacing: 0.02em;
-    }
-
-    .logo-sub {
-      font-size: 0.65rem;
-      color: var(--text-light);
-      font-weight: 400;
-      letter-spacing: 0.05em;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    nav a {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-mid);
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-      transition: var(--transition);
-    }
-
-    nav a:hover {
-      background: var(--light-blue-1);
-      color: var(--navy-1);
-    }
-
-    .header-phone {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-shrink: 0;
-    }
-
-    .phone-block {
-      text-align: right;
-      line-height: 1.2;
-    }
-
-    .phone-label {
-      font-size: 0.65rem;
-      color: var(--text-light);
-      letter-spacing: 0.05em;
-    }
-
-    .phone-number {
-      font-size: 1.1rem;
-      font-weight: 900;
-      color: var(--navy-1);
-      letter-spacing: 0.05em;
-    }
-
-    .phone-number a {
-      color: inherit;
-    }
-
-    .header-cta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
-      color: var(--white);
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 10px 18px;
-      border-radius: 100px;
-      box-shadow: 0 3px 14px rgba(79,195,247,0.4);
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-
-    .header-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 5px 20px rgba(79,195,247,0.5);
-    }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      width: 40px;
-      height: 40px;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-sm);
-      transition: var(--transition);
-      flex-shrink: 0;
-    }
-
-    .hamburger:hover { background: var(--light-blue-1); }
-
-    .hamburger span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--navy-1);
-      border-radius: 2px;
-      transition: var(--transition);
-    }
-
-    .hamburger.open span:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
-    }
-    .hamburger.open span:nth-child(2) {
-      opacity: 0;
-      transform: scaleX(0);
-    }
-    .hamburger.open span:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
-    }
-
-    /* Mobile nav */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      top: 72px;
-      left: 0;
-      right: 0;
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
-      padding: 16px 24px 24px;
-      z-index: 999;
-      transform: translateY(-10px);
-      opacity: 0;
-      transition: var(--transition);
-      pointer-events: none;
-    }
-
-    .mobile-nav.open {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-    }
-
-    .mobile-nav a {
-      display: block;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text-mid);
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      transition: color var(--transition);
-    }
-
-    .mobile-nav a:last-child { border-bottom: none; }
-    .mobile-nav a:hover { color: var(--navy-1); }
-
-    .mobile-nav .mobile-cta {
-      margin-top: 16px;
-      display: block;
-      text-align: center;
-    }
-
-    /* ===== HERO ===== */
-    #hero {
-      min-height: 100vh;
-      background: linear-gradient(160deg, var(--navy-1) 0%, var(--navy-2) 40%, #1565c0 70%, #1976d2 100%);
-      display: flex;
-      align-items: center;
-      padding-top: 72px;
+    /* ---- ヒーロー ---- */
+    .hero {
       position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
       overflow: hidden;
+      background: linear-gradient(135deg, #2a3d2e 0%, #4a8a5a 60%, #6aab7a 100%);
     }
-
-    .hero-bg-shapes {
+    .hero__bg {
       position: absolute;
       inset: 0;
-      pointer-events: none;
-      overflow: hidden;
+      background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1400&auto=format&fit=crop&q=60') center/cover no-repeat;
+      opacity: 0.18;
     }
-
-    .hero-shape {
+    .hero__blob {
       position: absolute;
       border-radius: 50%;
-      background: rgba(79,195,247,0.08);
-      animation: float 8s ease-in-out infinite;
+      filter: blur(80px);
+      pointer-events: none;
     }
-
-    .hero-shape-1 {
-      width: 500px;
-      height: 500px;
-      top: -100px;
-      right: -100px;
-      animation-delay: 0s;
+    .hero__blob--1 {
+      width: 500px; height: 500px;
+      background: rgba(240,125,58,0.25);
+      top: -100px; right: -100px;
     }
-
-    .hero-shape-2 {
-      width: 300px;
-      height: 300px;
-      bottom: 0px;
-      left: -60px;
-      animation-delay: 2s;
+    .hero__blob--2 {
+      width: 350px; height: 350px;
+      background: rgba(106,171,122,0.35);
+      bottom: -80px; left: -80px;
     }
-
-    .hero-shape-3 {
-      width: 200px;
-      height: 200px;
-      top: 50%;
-      right: 25%;
-      animation-delay: 4s;
-      background: rgba(79,195,247,0.05);
-    }
-
-    .hero-dots {
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-20px) scale(1.03); }
-    }
-
-    .hero-inner {
+    .hero__inner {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 64px;
       align-items: center;
-      padding: 80px 0;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
     }
-
-    .hero-badge {
+    .hero__content { color: white; }
+    .hero__badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(79,195,247,0.18);
-      border: 1px solid rgba(79,195,247,0.3);
-      color: var(--light-blue-2);
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 8px 18px;
-      border-radius: 100px;
-      margin-bottom: 24px;
-      letter-spacing: 0.05em;
-    }
-
-    .hero-badge-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--light-blue-2);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    .hero-title {
-      font-size: clamp(2rem, 4.5vw, 3.4rem);
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1.25;
-      margin-bottom: 24px;
-      letter-spacing: -0.01em;
-    }
-
-    .hero-title .accent {
-      color: var(--light-blue-2);
-      position: relative;
-    }
-
-    .hero-title .accent::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--light-blue-2), transparent);
-      border-radius: 2px;
-    }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.85;
-      margin-bottom: 40px;
-      max-width: 480px;
-    }
-
-    .hero-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 56px;
-    }
-
-    .btn-hero-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.35);
-      color: var(--white);
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 15px 34px;
-      border-radius: 100px;
-      transition: var(--transition);
-    }
-
-    .btn-hero-secondary:hover {
-      background: rgba(255,255,255,0.2);
-      transform: translateY(-2px);
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
-
-    .hero-stat {
-      text-align: center;
-    }
-
-    .hero-stat-value {
-      font-size: 2rem;
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .hero-stat-value span {
-      color: var(--light-blue-2);
-    }
-
-    .hero-stat-label {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.65);
-      font-weight: 500;
-    }
-
-    .hero-stat-divider {
-      width: 1px;
       background: rgba(255,255,255,0.15);
-      align-self: stretch;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: var(--radius-full);
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      backdrop-filter: blur(8px);
     }
-
-    /* Hero visual */
-    .hero-visual {
+    .hero__badge i { color: var(--color-orange); }
+    .hero__title {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+    .hero__title span { color: #ffd580; }
+    .hero__subtitle {
+      font-size: 1.05rem;
+      opacity: 0.88;
+      line-height: 1.8;
+      margin-bottom: 36px;
+    }
+    .hero__btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero__image-wrap {
       position: relative;
-    }
-
-    .hero-card-main {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.15);
       border-radius: var(--radius-lg);
-      padding: 40px;
-      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      aspect-ratio: 4/3;
     }
-
-    .hero-card-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
+    .hero__image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .hero__image-badge {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: white;
       border-radius: var(--radius-md);
+      padding: 12px 20px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 2.4rem;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 32px rgba(79,195,247,0.35);
+      gap: 12px;
+      box-shadow: var(--shadow-md);
     }
-
-    .hero-card-title {
+    .hero__image-badge-icon {
+      width: 44px; height: 44px;
+      background: var(--color-green-light);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-green-dark);
       font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 12px;
     }
-
-    .hero-card-text {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    .hero-service-list {
+    .hero__image-badge-text strong { display: block; font-size: 1.1rem; color: var(--color-text); }
+    .hero__image-badge-text span { font-size: 0.78rem; color: var(--color-text-light); }
+    .hero__scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
-      gap: 12px;
-    }
-
-    .hero-service-item {
-      display: flex;
       align-items: center;
-      gap: 12px;
-      background: rgba(255,255,255,0.06);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
+      gap: 8px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.75rem;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
     }
 
-    .hero-service-item-icon {
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .hero-service-item-text {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.9);
-    }
-
-    .hero-float-card {
-      position: absolute;
-      background: var(--white);
-      border-radius: var(--radius-md);
-      padding: 14px 18px;
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .hero-float-card-1 {
-      bottom: -20px;
-      right: -20px;
-      animation: floatCard 4s ease-in-out infinite;
-    }
-
-    .hero-float-card-2 {
-      top: -20px;
-      left: -20px;
-      animation: floatCard 4s ease-in-out infinite;
-      animation-delay: 2s;
-    }
-
-    @keyframes floatCard {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .float-icon {
-      font-size: 1.5rem;
-    }
-
-    .float-text strong {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--navy-1);
-    }
-
-    .float-text small {
-      font-size: 0.72rem;
-      color: var(--text-light);
-    }
-
-    /* ===== TICKER ===== */
-    .ticker-bar {
-      background: linear-gradient(90deg, var(--navy-1) 0%, var(--navy-2) 100%);
-      color: rgba(255,255,255,0.9);
-      padding: 14px 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .ticker-track {
-      display: flex;
-      gap: 0;
-      animation: ticker 30s linear infinite;
-      width: max-content;
-    }
-
-    .ticker-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 40px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    .ticker-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--light-blue-2);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* ===== SERVICES ===== */
-    #services {
-      padding: 100px 0;
-      background: var(--light-blue-1);
-    }
-
+    /* ---- サービス概要 ---- */
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 28px;
     }
-
-    .service-card {
-      background: var(--white);
+    .service-card { text-align: center; }
+    .service-card__icon {
+      width: 72px; height: 72px;
       border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 20px;
+    }
+    .service-card__icon--green { background: var(--color-green-light); color: var(--color-green-dark); }
+    .service-card__icon--orange { background: var(--color-orange-light); color: var(--color-orange); }
+    .service-card__icon--blue { background: #e6f0ff; color: #4a7bc8; }
+    .service-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+    .service-card p { font-size: 0.9rem; color: var(--color-text-light); margin-bottom: 20px; }
+    .service-card__link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.875rem; font-weight: 700;
+      color: var(--color-green-dark);
       transition: var(--transition);
-      border: 1px solid transparent;
     }
+    .service-card__link:hover { gap: 10px; }
 
-    .service-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-lg);
-      border-color: rgba(79,195,247,0.3);
-    }
-
-    .service-card-header {
-      height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card-header-1 {
-      background: linear-gradient(135deg, #1565c0 0%, var(--navy-2) 100%);
-    }
-    .service-card-header-2 {
-      background: linear-gradient(135deg, #00838f 0%, #006064 100%);
-    }
-    .service-card-header-3 {
-      background: linear-gradient(135deg, #4527a0 0%, #311b92 100%);
-    }
-
-    .service-card-header::before {
-      content: '';
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-      bottom: -80px;
-      right: -60px;
-    }
-
-    .service-icon {
-      font-size: 3.5rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .service-card-tag {
-      background: rgba(255,255,255,0.2);
-      color: var(--white);
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 4px 14px;
-      border-radius: 100px;
-      letter-spacing: 0.05em;
-      position: relative;
-      z-index: 1;
-    }
-
-    .service-card-body {
-      padding: 28px;
-    }
-
-    .service-card-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--navy-1);
-      margin-bottom: 12px;
-    }
-
-    .service-card-desc {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      line-height: 1.8;
-      margin-bottom: 20px;
-    }
-
-    .service-features {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .service-feature {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.875rem;
-      color: var(--text-mid);
-    }
-
-    .service-feature-check {
-      width: 20px;
-      height: 20px;
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 0.65rem;
-      color: white;
-      font-weight: 700;
-    }
-
-    .service-cta {
-      display: block;
-      margin: 24px 28px 28px;
-      text-align: center;
-      background: var(--light-blue-1);
-      color: var(--navy-1);
-      font-size: 0.9rem;
-      font-weight: 700;
-      padding: 13px;
-      border-radius: var(--radius-sm);
-      transition: var(--transition);
-      border: 1px solid var(--border);
-    }
-
-    .service-cta:hover {
-      background: var(--navy-1);
-      color: var(--white);
-      border-color: var(--navy-1);
-    }
-
-    /* ===== WHY US ===== */
-    #why {
-      padding: 100px 0;
-      background: var(--white);
-    }
-
-    .why-grid {
+    /* ---- 選ばれる理由 ---- */
+    .reasons-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 28px;
     }
-
-    .why-card {
-      background: var(--white);
-      border: 2px solid var(--border);
+    .reason-card {
+      background: var(--color-white);
       border-radius: var(--radius-lg);
-      padding: 40px 32px;
+      padding: 36px 28px;
+      box-shadow: var(--shadow-sm);
       text-align: center;
       transition: var(--transition);
-      position: relative;
-      overflow: hidden;
     }
-
-    .why-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--light-blue-2), var(--navy-light));
-      transform: scaleX(0);
-      transition: var(--transition);
+    .reason-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .reason-card__num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--color-green);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 12px;
     }
-
-    .why-card:hover {
-      border-color: rgba(79,195,247,0.4);
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .why-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .why-icon-wrap {
-      width: 88px;
-      height: 88px;
-      background: linear-gradient(135deg, var(--light-blue-1) 0%, #b3e5fc 100%);
+    .reason-card__icon {
+      width: 60px; height: 60px;
+      background: var(--color-green-light);
       border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.4rem;
-      margin: 0 auto 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      color: var(--color-green-dark);
+      margin: 0 auto 20px;
     }
+    .reason-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .reason-card p { font-size: 0.875rem; color: var(--color-text-light); }
 
-    .why-card-number {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--light-blue-2);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+    /* ---- 実績数字 ---- */
+    .stats-section {
+      background: linear-gradient(135deg, var(--color-green-dark), var(--color-green));
+      padding: 72px 0;
+      color: white;
     }
-
-    .why-card-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--navy-1);
-      margin-bottom: 12px;
-    }
-
-    .why-card-desc {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      line-height: 1.8;
-    }
-
-    /* Stats strip */
-    .stats-strip {
-      background: linear-gradient(135deg, var(--navy-1) 0%, var(--navy-2) 100%);
-      padding: 60px 0;
-      margin-top: 72px;
-    }
-
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-    }
-
-    .stat-item {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
       text-align: center;
-      padding: 0 32px;
-      position: relative;
     }
-
-    .stat-item + .stat-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10%;
-      height: 80%;
-      width: 1px;
-      background: rgba(255,255,255,0.15);
-    }
-
-    .stat-number {
-      font-size: clamp(2.4rem, 5vw, 3.6rem);
+    .stat-item__num {
+      font-size: clamp(2.2rem, 4vw, 3rem);
       font-weight: 900;
-      color: var(--white);
+      color: #ffd580;
       line-height: 1;
       margin-bottom: 8px;
     }
+    .stat-item__label { font-size: 0.9rem; opacity: 0.85; }
 
-    .stat-number span {
-      color: var(--light-blue-2);
-    }
-
-    .stat-label {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.7);
-      font-weight: 500;
-    }
-
-    /* ===== PRICING ===== */
-    #pricing {
-      padding: 100px 0;
-      background: var(--light-blue-1);
-    }
-
-    .pricing-grid {
+    /* ---- お客様の声 ---- */
+    .testimonials-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 28px;
-      align-items: stretch;
     }
-
-    .pricing-card {
-      background: var(--white);
+    .testimonial-card {
+      background: var(--color-white);
       border-radius: var(--radius-lg);
-      padding: 40px 32px;
-      border: 2px solid var(--border);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
       transition: var(--transition);
-      display: flex;
-      flex-direction: column;
       position: relative;
     }
-
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .pricing-card.featured {
-      border-color: var(--light-blue-2);
-      background: linear-gradient(160deg, var(--navy-1) 0%, var(--navy-2) 100%);
-      transform: scale(1.04);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .pricing-card.featured:hover {
-      transform: scale(1.04) translateY(-4px);
-    }
-
-    .pricing-badge {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
-      color: var(--white);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 6px 20px;
-      border-radius: 100px;
-      white-space: nowrap;
-      box-shadow: 0 4px 16px rgba(79,195,247,0.4);
-    }
-
-    .pricing-plan-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--light-blue-2);
-      margin-bottom: 8px;
-    }
-
-    .featured .pricing-plan-name {
-      color: var(--light-blue-2);
-    }
-
-    .pricing-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--navy-1);
+    .testimonial-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .testimonial-card__quote {
+      font-size: 3rem;
+      color: var(--color-green-light);
+      line-height: 1;
       margin-bottom: 16px;
+      font-family: Georgia, serif;
     }
-
-    .featured .pricing-title {
-      color: var(--white);
-    }
-
-    .pricing-price-block {
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .featured .pricing-price-block {
-      border-bottom-color: rgba(255,255,255,0.15);
-    }
-
-    .pricing-price {
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--navy-1);
-      line-height: 1;
-    }
-
-    .featured .pricing-price {
-      color: var(--white);
-    }
-
-    .pricing-price sup {
-      font-size: 1rem;
-      vertical-align: super;
-      font-weight: 600;
-    }
-
-    .pricing-price sub {
+    .testimonial-card__stars {
+      color: #f5a623;
       font-size: 0.875rem;
-      font-weight: 400;
-      color: var(--text-light);
+      margin-bottom: 16px;
+      letter-spacing: 2px;
     }
-
-    .featured .pricing-price sub {
-      color: rgba(255,255,255,0.65);
-    }
-
-    .pricing-note {
-      font-size: 0.8rem;
-      color: var(--text-light);
-      margin-top: 6px;
-    }
-
-    .featured .pricing-note {
-      color: rgba(255,255,255,0.6);
-    }
-
-    .pricing-features {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .pricing-feature {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
+    .testimonial-card__text {
       font-size: 0.9rem;
-      color: var(--text-mid);
-    }
-
-    .featured .pricing-feature {
-      color: rgba(255,255,255,0.85);
-    }
-
-    .pricing-check {
-      width: 20px;
-      height: 20px;
-      background: rgba(79,195,247,0.15);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-      font-size: 0.6rem;
-      color: var(--light-blue-2);
-      font-weight: 700;
-    }
-
-    .featured .pricing-check {
-      background: rgba(79,195,247,0.25);
-    }
-
-    .pricing-btn {
-      display: block;
-      text-align: center;
-      padding: 14px;
-      border-radius: 100px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      transition: var(--transition);
-      border: 2px solid var(--navy-1);
-      color: var(--navy-1);
-      background: transparent;
-    }
-
-    .pricing-btn:hover {
-      background: var(--navy-1);
-      color: var(--white);
-    }
-
-    .featured .pricing-btn {
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
-      border-color: transparent;
-      color: var(--white);
-      box-shadow: 0 4px 20px rgba(79,195,247,0.4);
-    }
-
-    .featured .pricing-btn:hover {
-      box-shadow: 0 8px 32px rgba(79,195,247,0.5);
-      transform: translateY(-2px);
-    }
-
-    /* ===== FAQ ===== */
-    #faq {
-      padding: 100px 0;
-      background: var(--white);
-    }
-
-    .faq-list {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      transition: var(--transition);
-    }
-
-    .faq-item.open {
-      border-color: rgba(79,195,247,0.4);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .faq-question {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 22px 28px;
-      cursor: pointer;
-      user-select: none;
-      background: var(--white);
-      transition: background var(--transition);
-    }
-
-    .faq-item.open .faq-question {
-      background: var(--light-blue-1);
-    }
-
-    .faq-question:hover {
-      background: var(--light-blue-1);
-    }
-
-    .faq-q-mark {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--light-blue-2) 0%, #0288d1 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      color: var(--white);
-      font-size: 0.9rem;
-      flex-shrink: 0;
-    }
-
-    .faq-q-text {
-      flex: 1;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--navy-1);
-    }
-
-    .faq-toggle {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: var(--transition);
-      font-size: 1.2rem;
-      color: var(--navy-1);
-      line-height: 1;
-    }
-
-    .faq-item.open .faq-toggle {
-      background: var(--navy-1);
-      color: var(--white);
-      transform: rotate(45deg);
-    }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .faq-answer-inner {
-      padding: 0 28px 22px 76px;
-      font-size: 0.95rem;
-      color: var(--text-light);
       line-height: 1.8;
+      color: var(--color-text);
+      margin-bottom: 24px;
     }
+    .testimonial-card__author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid var(--color-border);
+      padding-top: 20px;
+    }
+    .testimonial-card__avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .testimonial-card__name { font-size: 0.875rem; font-weight: 700; }
+    .testimonial-card__role { font-size: 0.78rem; color: var(--color-text-light); }
 
-    /* ===== CTA BANNER ===== */
+    /* ---- CTAバナー ---- */
     .cta-banner {
-      background: linear-gradient(135deg, var(--navy-1) 0%, var(--navy-light) 100%);
-      padding: 80px 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-banner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 32px 32px;
-    }
-
-    .cta-banner-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .cta-banner-title {
-      font-size: clamp(1.5rem, 3.5vw, 2.4rem);
-      font-weight: 900;
-      color: var(--white);
-      margin-bottom: 12px;
-    }
-
-    .cta-banner-sub {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 40px;
-    }
-
-    .cta-banner-btns {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    /* ===== CONTACT ===== */
-    #contact {
-      padding: 100px 0;
-      background: var(--light-blue-1);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 56px;
-      align-items: start;
-    }
-
-    .contact-info-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--navy-1);
-      margin-bottom: 16px;
-    }
-
-    .contact-info-desc {
-      font-size: 0.95rem;
-      color: var(--text-light);
-      line-height: 1.8;
-      margin-bottom: 32px;
-    }
-
-    .contact-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .contact-card {
-      background: var(--white);
-      border-radius: var(--radius-md);
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
-      transition: var(--transition);
-    }
-
-    .contact-card:hover {
-      box-shadow: var(--shadow-md);
-      border-color: rgba(79,195,247,0.3);
-    }
-
-    .contact-card-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, var(--light-blue-1) 0%, #b3e5fc 100%);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .contact-card-label {
-      font-size: 0.75rem;
-      color: var(--text-light);
-      margin-bottom: 2px;
-    }
-
-    .contact-card-value {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--navy-1);
-    }
-
-    .contact-card-value a {
-      color: inherit;
-    }
-
-    /* Form */
-    .contact-form {
-      background: var(--white);
+      background: linear-gradient(135deg, var(--color-orange) 0%, #e05a20 100%);
       border-radius: var(--radius-lg);
-      padding: 40px;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border);
-    }
-
-    .form-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--navy-1);
-      margin-bottom: 24px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-
-    .form-group:last-of-type {
-      margin-bottom: 0;
-    }
-
-    .form-label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--navy-1);
-    }
-
-    .form-label .required {
-      color: #e53935;
-      margin-left: 4px;
-      font-size: 0.75rem;
-    }
-
-    .form-control {
-      padding: 12px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 0.95rem;
-      font-family: inherit;
-      color: var(--text-dark);
-      background: var(--white);
-      transition: border-color var(--transition);
-      outline: none;
-      width: 100%;
-    }
-
-    .form-control:focus {
-      border-color: var(--light-blue-2);
-      box-shadow: 0 0 0 3px rgba(79,195,247,0.15);
-    }
-
-    .form-control::placeholder {
-      color: #bdbdbd;
-    }
-
-    select.form-control {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23757575' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 40px;
-    }
-
-    textarea.form-control {
-      resize: vertical;
-      min-height: 110px;
-    }
-
-    .form-submit {
-      margin-top: 24px;
-      width: 100%;
-      padding: 16px;
-      border-radius: 100px;
-      font-size: 1rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--navy-1) 0%, var(--navy-light) 100%);
-      color: var(--white);
-      cursor: pointer;
-      transition: var(--transition);
-      font-family: inherit;
-      border: none;
-      box-shadow: 0 4px 20px rgba(26,35,126,0.3);
-    }
-
-    .form-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(26,35,126,0.4);
-    }
-
-    .form-privacy {
-      font-size: 0.78rem;
-      color: var(--text-light);
-      text-align: center;
-      margin-top: 14px;
-      line-height: 1.6;
-    }
-
-    .form-privacy a {
-      color: var(--navy-light);
-      text-decoration: underline;
-    }
-
-    /* ===== FOOTER ===== */
-    #footer {
-      background: var(--navy-1);
-      color: rgba(255,255,255,0.8);
-      padding: 64px 0 0;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 48px;
-    }
-
-    .footer-brand .logo-name {
-      color: var(--white);
-    }
-
-    .footer-brand .logo-sub {
-      color: rgba(255,255,255,0.5);
-    }
-
-    .footer-desc {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.8;
-      margin: 16px 0 24px;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 10px;
-    }
-
-    .social-btn {
-      width: 38px;
-      height: 38px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .social-btn:hover {
-      background: var(--light-blue-2);
-      transform: translateY(-2px);
-    }
-
-    .footer-col-title {
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 16px;
-      letter-spacing: 0.05em;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .footer-links a {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.6);
-      transition: color var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--light-blue-2);
-    }
-
-    .footer-contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 10px;
-    }
-
-    .footer-contact-item span:first-child {
-      flex-shrink: 0;
-    }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding: 24px 0;
+      padding: 60px 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 32px;
       flex-wrap: wrap;
-      gap: 12px;
+      position: relative;
+      overflow: hidden;
     }
-
-    .footer-copyright {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-    }
-
-    .footer-legal {
-      display: flex;
-      gap: 24px;
-    }
-
-    .footer-legal a {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-      transition: color var(--transition);
-    }
-
-    .footer-legal a:hover {
-      color: rgba(255,255,255,0.8);
-    }
-
-    /* ===== FLOATING CTA ===== */
-    .float-cta-btn {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 900;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: linear-gradient(135deg, #ff6f00 0%, #ff8f00 100%);
-      color: var(--white);
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 14px 22px;
-      border-radius: 100px;
-      box-shadow: 0 6px 28px rgba(255,111,0,0.5);
-      transition: var(--transition);
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(16px);
-    }
-
-    .float-cta-btn.visible {
-      opacity: 1;
-      pointer-events: all;
-      transform: translateY(0);
-    }
-
-    .float-cta-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(255,111,0,0.55);
-    }
-
-    .float-pulse {
+    .cta-banner::before {
+      content: '';
       position: absolute;
-      inset: -4px;
-      border-radius: 100px;
-      border: 2px solid rgba(255,111,0,0.4);
-      animation: ripple 2s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes ripple {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.06); opacity: 0; }
-    }
-
-    /* ===== SCROLL TOP ===== */
-    .scroll-top {
-      position: fixed;
-      bottom: 32px;
-      left: 32px;
-      z-index: 900;
-      width: 48px;
-      height: 48px;
-      background: var(--white);
-      border: 2px solid var(--border);
-      color: var(--navy-1);
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.1);
       border-radius: 50%;
+      top: -100px; right: -80px;
+    }
+    .cta-banner__content { position: relative; z-index: 1; }
+    .cta-banner__title {
+      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+      font-weight: 900;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .cta-banner__subtitle { font-size: 1rem; color: rgba(255,255,255,0.88); }
+    .cta-banner__btns {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: var(--transition);
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
 
-    .scroll-top.visible {
-      opacity: 1;
-      pointer-events: all;
+    /* ---- レスポンシブ ---- */
+    @media (max-width: 900px) {
+      .hero__inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero__image-wrap { display: none; }
+      .hero { min-height: auto; padding: 80px 0; }
+      .services-grid, .reasons-grid, .testimonials-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
     }
-
-    .scroll-top:hover {
-      background: var(--navy-1);
-      color: var(--white);
-      transform: translateY(-3px);
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1024px) {
-      nav { display: none; }
-      .phone-block { display: none; }
-      .header-cta { display: none; }
-      .hamburger { display: flex; }
-      .mobile-nav { display: block; }
-      .services-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
-      .why-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
-      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
-      .pricing-card.featured { transform: none; }
-      .pricing-card.featured:hover { transform: translateY(-6px); }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-      .hero-visual { display: none; }
-      .hero-inner { padding: 60px 0; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr; gap: 32px; }
-      .stat-item + .stat-item::before { display: none; }
-    }
-
-    @media (max-width: 640px) {
-      .hero-btns { flex-direction: column; align-items: flex-start; }
-      .hero-stats { gap: 20px; }
-      .hero-stat-divider { display: none; }
-      .form-row { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      .float-cta-btn { bottom: 16px; right: 16px; font-size: 0.8rem; padding: 12px 18px; }
-      .scroll-top { left: 16px; bottom: 16px; }
-      .cta-banner-btns { flex-direction: column; }
-      .faq-answer-inner { padding-left: 28px; }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .cta-banner { padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
-  <header id="header">
-    <div class="container">
-      <div class="header-inner">
-        <a href="#" class="logo">
-          <div class="logo-icon">✨</div>
-          <div class="logo-text">
-            <div class="logo-name">スパークルクリーン</div>
-            <div class="logo-sub">Sparkle Clean Co., Ltd.</div>
-          </div>
-        </a>
-        <nav>
-          <a href="#services">サービス</a>
-          <a href="#why">選ばれる理由</a>
-          <a href="#pricing">料金プラン</a>
-          <a href="#faq">よくある質問</a>
-          <a href="#contact">お問い合わせ</a>
-        </nav>
-        <div class="header-phone">
-          <div class="phone-block">
-            <div class="phone-label">お電話でのご相談</div>
-            <div class="phone-number"><a href="tel:0120-123-456">0120-123-456</a></div>
-          </div>
-          <a href="#contact" class="header-cta">
-            <span>📅</span>
-            24時間WEB予約
-          </a>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="メニュー">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Mobile nav -->
-  <div class="mobile-nav" id="mobileNav">
-    <a href="#services" class="mobile-link">サービス内容</a>
-    <a href="#why" class="mobile-link">選ばれる理由</a>
-    <a href="#pricing" class="mobile-link">料金プラン</a>
-    <a href="#faq" class="mobile-link">よくある質問</a>
-    <a href="#contact" class="mobile-link">お問い合わせ</a>
-    <div class="mobile-cta">
-      <a href="#contact" class="btn-cta-large" style="justify-content:center;width:100%;">
-        <span class="btn-icon">📅</span>
-        24時間WEB予約はこちら
+<!-- ====== ヘッダー ====== -->
+<header class="header">
+  <div class="container">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
+        <span>スパークルクリーン</span>
       </a>
-    </div>
-    <div style="text-align:center;margin-top:14px;">
-      <a href="tel:0120-123-456" style="font-size:1.2rem;font-weight:900;color:var(--navy-1);">📞 0120-123-456</a>
-    </div>
-  </div>
-
-  <!-- ===== HERO ===== -->
-  <section id="hero">
-    <div class="hero-bg-shapes">
-      <div class="hero-shape hero-shape-1"></div>
-      <div class="hero-shape hero-shape-2"></div>
-      <div class="hero-shape hero-shape-3"></div>
-      <div class="hero-dots"></div>
-    </div>
-    <div class="container">
-      <div class="hero-inner">
-        <!-- Left content -->
-        <div class="hero-content">
-          <div class="hero-badge fade-in">
-            <div class="hero-badge-dot"></div>
-            <span>実績15年・導入300社突破</span>
-          </div>
-          <h1 class="hero-title fade-in fade-in-delay-1">
-            清潔な空間が、<br>
-            <span class="accent">ビジネスを変える。</span><br>
-            暮らしを変える。
-          </h1>
-          <p class="hero-desc fade-in fade-in-delay-2">
-            スパークルクリーン株式会社は、オフィス・店舗・住宅に至るまで、プロフェッショナルな清掃サービスを提供してまいりました。独自の洗浄技術と徹底した品質管理で、お客様の大切な空間を輝かせます。
-          </p>
-          <div class="hero-btns fade-in fade-in-delay-3">
-            <a href="#contact" class="btn-cta-large">
-              <span class="btn-icon">📅</span>
-              24時間WEB予約はこちら
-            </a>
-            <a href="#services" class="btn-hero-secondary">
-              サービスを見る
-              <span>→</span>
-            </a>
-          </div>
-          <div class="hero-stats fade-in fade-in-delay-4">
-            <div class="hero-stat">
-              <div class="hero-stat-value">300<span>社</span></div>
-              <div class="hero-stat-label">導入実績</div>
-            </div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat">
-              <div class="hero-stat-value">98<span>%</span></div>
-              <div class="hero-stat-label">顧客満足度</div>
-            </div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat">
-              <div class="hero-stat-value">15<span>年</span></div>
-              <div class="hero-stat-label">業界実績</div>
-            </div>
-          </div>
-        </div>
-        <!-- Right visual -->
-        <div class="hero-visual fade-in fade-in-delay-2">
-          <div class="hero-card-main">
-            <div class="hero-float-card hero-float-card-2">
-              <div class="float-icon">⭐</div>
-              <div class="float-text">
-                <strong>顧客満足度 No.1</strong>
-                <small>2023年 調査より</small>
-              </div>
-            </div>
-            <div class="hero-card-icon">🧹</div>
-            <div class="hero-card-title">プロが徹底清掃</div>
-            <div class="hero-card-text">
-              研修を受けた専門スタッフが<br>
-              丁寧かつ迅速に対応します
-            </div>
-            <div class="hero-service-list">
-              <div class="hero-service-item">
-                <div class="hero-service-item-icon">🏢</div>
-                <div class="hero-service-item-text">オフィス・ビル清掃</div>
-              </div>
-              <div class="hero-service-item">
-                <div class="hero-service-item-icon">🏪</div>
-                <div class="hero-service-item-text">店舗・飲食店清掃</div>
-              </div>
-              <div class="hero-service-item">
-                <div class="hero-service-item-icon">🏠</div>
-                <div class="hero-service-item-text">住宅・マンション清掃</div>
-              </div>
-            </div>
-            <div class="hero-float-card hero-float-card-1">
-              <div class="float-icon">✅</div>
-              <div class="float-text">
-                <strong>即日対応可能</strong>
-                <small>緊急清掃も承ります</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== TICKER ===== -->
-  <div class="ticker-bar" aria-hidden="true">
-    <div class="ticker-track">
-      <div class="ticker-item"><div class="ticker-dot"></div><span>導入300社突破</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>顧客満足度98%</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>業界実績15年</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>ISO認証取得</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>24時間WEB予約対応</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>即日対応可</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>環境配慮型洗剤使用</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>完全保険加入済み</span></div>
-      <!-- Duplicate for seamless loop -->
-      <div class="ticker-item"><div class="ticker-dot"></div><span>導入300社突破</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>顧客満足度98%</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>業界実績15年</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>ISO認証取得</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>24時間WEB予約対応</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>即日対応可</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>環境配慮型洗剤使用</span></div>
-      <div class="ticker-item"><div class="ticker-dot"></div><span>完全保険加入済み</span></div>
+      <nav class="header__nav">
+        <a href="index.html">ホーム</a>
+        <a href="service.html">サービス</a>
+        <a href="company.html">会社概要</a>
+        <a href="contact.html">お問い合わせ</a>
+      </nav>
+      <a href="contact.html" class="btn btn--primary btn--sm header__cta">
+        <i class="fa-solid fa-calendar-check"></i>今すぐ予約
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
+</header>
 
-  <!-- ===== SERVICES ===== -->
-  <section id="services">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">SERVICES</div>
-        <h2 class="section-title fade-in">幅広いニーズに対応する<br>清掃サービス</h2>
-        <p class="section-subtitle fade-in">オフィスビルから商業施設、一般住宅まで、あらゆる空間の清掃に対応。専任チームが最高品質のサービスをお届けします。</p>
-      </div>
-      <div class="services-grid">
-        <!-- Card 1 -->
-        <div class="service-card fade-in">
-          <div class="service-card-header service-card-header-1">
-            <div class="service-icon">🏢</div>
-            <div class="service-card-tag">B2B向け</div>
-          </div>
-          <div class="service-card-body">
-            <h3 class="service-card-title">オフィス・ビル清掃</h3>
-            <p class="service-card-desc">執務室・会議室・エントランスはもちろん、エレベーター内や共用廊下まで、ビル全体を清潔に保ちます。定期清掃から特別清掃まで柔軟にご対応。</p>
-            <div class="service-features">
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>フロアワックスがけ・床面研磨</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>ガラス外壁・窓ガラス清掃</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>トイレ・給湯室の除菌清掃</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>月次・週次の定期契約対応</span>
-              </div>
-            </div>
-          </div>
-          <a href="#contact" class="service-cta">詳しく見る・無料見積り →</a>
-        </div>
-        <!-- Card 2 -->
-        <div class="service-card fade-in fade-in-delay-1">
-          <div class="service-card-header service-card-header-2">
-            <div class="service-icon">🍽️</div>
-            <div class="service-card-tag">店舗・飲食店向け</div>
-          </div>
-          <div class="service-card-body">
-            <h3 class="service-card-title">店舗・飲食店清掃</h3>
-            <p class="service-card-desc">飲食店の厨房・排気設備から小売店の陳列棚まで、衛生基準に準拠した徹底洗浄を実施。営業時間外対応で店舗運営を妨げません。</p>
-            <div class="service-features">
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>厨房・グリストラップの洗浄</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>排気ダクト・換気扇清掃</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>客席・エアコンフィルター清掃</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>食品衛生に対応した洗剤使用</span>
-              </div>
-            </div>
-          </div>
-          <a href="#contact" class="service-cta">詳しく見る・無料見積り →</a>
-        </div>
-        <!-- Card 3 -->
-        <div class="service-card fade-in fade-in-delay-2">
-          <div class="service-card-header service-card-header-3">
-            <div class="service-icon">🏠</div>
-            <div class="service-card-tag">一般・法人向け</div>
-          </div>
-          <div class="service-card-body">
-            <h3 class="service-card-title">住宅・マンション清掃</h3>
-            <p class="service-card-desc">引越し清掃・大掃除・定期ハウスクリーニングなど、ご家庭のあらゆるニーズに対応。エアコン・浴室・キッチンを専用機材でピカピカに。</p>
-            <div class="service-features">
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>エアコン・換気設備のクリーニング</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>浴室・キッチン水回り徹底清掃</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>引越し前後の原状回復清掃</span>
-              </div>
-              <div class="service-feature">
-                <div class="service-feature-check">✓</div>
-                <span>ペット・タバコ臭の消臭対応</span>
-              </div>
-            </div>
-          </div>
-          <a href="#contact" class="service-cta">詳しく見る・無料見積り →</a>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- モバイルメニュー -->
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="index.html">ホーム</a>
+  <a href="service.html">サービス</a>
+  <a href="company.html">会社概要</a>
+  <a href="contact.html">お問い合わせ</a>
+  <a href="contact.html" class="btn btn--primary">
+    <i class="fa-solid fa-calendar-check"></i>今すぐ予約
+  </a>
+</nav>
 
-  <!-- ===== WHY US ===== -->
-  <section id="why">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">WHY CHOOSE US</div>
-        <h2 class="section-title fade-in">スパークルクリーンが<br>選ばれる3つの理由</h2>
-        <p class="section-subtitle fade-in">創業以来15年、数百社・数千件の実績を通じて磨き上げた、私たちの強みをご紹介します。</p>
+<!-- ====== ヒーロー ====== -->
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__blob hero__blob--1"></div>
+  <div class="hero__blob hero__blob--2"></div>
+  <div class="hero__inner">
+    <div class="hero__content fade-in">
+      <div class="hero__badge">
+        <i class="fa-solid fa-award"></i>
+        顧客満足度 98% 達成
       </div>
-      <div class="why-grid">
-        <div class="why-card fade-in">
-          <div class="why-icon-wrap">🎓</div>
-          <div class="why-card-number">REASON 01</div>
-          <h3 class="why-card-title">徹底した<br>スタッフ教育</h3>
-          <p class="why-card-desc">全スタッフは入社時から100時間以上の研修を受講。清掃技術はもちろん、接客マナー・安全管理まで厳しく教育しています。全員が国家資格「建築物環境衛生管理技術者」を取得しています。</p>
-        </div>
-        <div class="why-card fade-in fade-in-delay-1">
-          <div class="why-icon-wrap">🌿</div>
-          <div class="why-card-number">REASON 02</div>
-          <h3 class="why-card-title">環境に優しい<br>洗浄技術</h3>
-          <p class="why-card-desc">人体・環境に配慮した低刺激の業務用洗剤と、最新の機器を使用。有害物質を使わずに、細菌やウイルスを99.9%除去する独自の洗浄プロトコルで安心・安全を実現します。</p>
-        </div>
-        <div class="why-card fade-in fade-in-delay-2">
-          <div class="why-icon-wrap">🔒</div>
-          <div class="why-card-number">REASON 03</div>
-          <h3 class="why-card-title">万全の<br>保険・保証体制</h3>
-          <p class="why-card-desc">作業中の万一の事故や破損に備え、業務賠償責任保険に加入済み。作業後の品質が基準を満たさない場合は無償で再清掃をいたします。安心してお任せください。</p>
-        </div>
-      </div>
-
-      <!-- Stats Strip -->
-      <div class="stats-strip">
-        <div class="container">
-          <div class="stats-grid">
-            <div class="stat-item fade-in">
-              <div class="stat-number"><span class="count-up" data-target="300">0</span><span>社</span></div>
-              <div class="stat-label">累計導入実績</div>
-            </div>
-            <div class="stat-item fade-in fade-in-delay-1">
-              <div class="stat-number"><span class="count-up" data-target="98">0</span><span>%</span></div>
-              <div class="stat-label">顧客満足度</div>
-            </div>
-            <div class="stat-item fade-in fade-in-delay-2">
-              <div class="stat-number"><span class="count-up" data-target="15">0</span><span>年</span></div>
-              <div class="stat-label">業界実績</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PRICING ===== -->
-  <section id="pricing">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">PRICING</div>
-        <h2 class="section-title fade-in">明確な料金プランで<br>安心してご利用いただけます</h2>
-        <p class="section-subtitle fade-in">すべてのプランは月額固定料金です。追加費用・隠れたコストは一切ありません。無料見積りも随時承っております。</p>
-      </div>
-      <div class="pricing-grid">
-        <!-- Light -->
-        <div class="pricing-card fade-in">
-          <div class="pricing-plan-name">LIGHT</div>
-          <h3 class="pricing-title">ライトプラン</h3>
-          <div class="pricing-price-block">
-            <div class="pricing-price">
-              <sup>¥</sup>28,000<sub>/月〜</sub>
-            </div>
-            <div class="pricing-note">※ 税別・月1回清掃（50㎡まで）</div>
-          </div>
-          <div class="pricing-features">
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>月1回の定期清掃</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>床・ガラス・棚拭き</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>トイレ・洗面台の除菌清掃</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>担当スタッフ固定制</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>作業後の品質チェックシート提出</span>
-            </div>
-          </div>
-          <a href="#contact" class="pricing-btn">無料見積りを依頼する</a>
-        </div>
-        <!-- Standard (Featured) -->
-        <div class="pricing-card featured fade-in fade-in-delay-1">
-          <div class="pricing-badge">🌟 最も選ばれています</div>
-          <div class="pricing-plan-name">STANDARD</div>
-          <h3 class="pricing-title">スタンダードプラン</h3>
-          <div class="pricing-price-block">
-            <div class="pricing-price">
-              <sup>¥</sup>68,000<sub>/月〜</sub>
-            </div>
-            <div class="pricing-note">※ 税別・週1回清掃（100㎡まで）</div>
-          </div>
-          <div class="pricing-features">
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>週1回の定期清掃（4回/月）</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>ライトプランの全内容</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>エアコンフィルター清掃（季節毎）</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>専任チーム（2名体制）</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>緊急対応・スポット清掃10%割引</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>月次レポート・改善提案付き</span>
-            </div>
-          </div>
-          <a href="#contact" class="pricing-btn">無料見積りを依頼する</a>
-        </div>
-        <!-- Premium -->
-        <div class="pricing-card fade-in fade-in-delay-2">
-          <div class="pricing-plan-name">PREMIUM</div>
-          <h3 class="pricing-title">プレミアムプラン</h3>
-          <div class="pricing-price-block">
-            <div class="pricing-price">
-              <sup>¥</sup>148,000<sub>/月〜</sub>
-            </div>
-            <div class="pricing-note">※ 税別・毎日清掃（200㎡まで）</div>
-          </div>
-          <div class="pricing-features">
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>毎日清掃（祝日も対応可）</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>スタンダードプランの全内容</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>床面ワックスがけ（月1回）</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>専任マネージャー担当制</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>24時間緊急対応（年中無休）</span>
-            </div>
-            <div class="pricing-feature">
-              <div class="pricing-check">✓</div>
-              <span>スポット清掃無制限・無料</span>
-            </div>
-          </div>
-          <a href="#contact" class="pricing-btn">無料見積りを依頼する</a>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:48px;" class="fade-in">
-        <p style="font-size:0.9rem;color:var(--text-light);margin-bottom:20px;">料金はあくまでも目安です。面積・頻度・作業内容に応じて個別にお見積りします。</p>
-        <a href="#contact" class="btn-cta-large">
-          <span class="btn-icon">📅</span>
-          24時間WEB予約はこちら
+      <h1 class="hero__title">
+        <span>輝く空間</span>が<br>
+        最高のビジネスを<br>
+        生み出す
+      </h1>
+      <p class="hero__subtitle">
+        オフィス・店舗・施設の清掃を専門とするプロ集団。<br>
+        300社以上の信頼と実績で、あなたの大切な空間を<br>
+        ピカピカに仕上げます。
+      </p>
+      <div class="hero__btns">
+        <a href="contact.html" class="btn btn--primary">
+          <i class="fa-solid fa-calendar-check"></i>無料で予約する
+        </a>
+        <a href="service.html" class="btn btn--outline-white">
+          <i class="fa-solid fa-arrow-right"></i>サービスを見る
         </a>
       </div>
     </div>
-  </section>
-
-  <!-- ===== FAQ ===== -->
-  <section id="faq">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">FAQ</div>
-        <h2 class="section-title fade-in">よくあるご質問</h2>
-        <p class="section-subtitle fade-in">お客様からよく寄せられるご質問をまとめました。その他のご質問はお気軽にお問い合わせください。</p>
-      </div>
-      <div class="faq-list">
-        <div class="faq-item fade-in">
-          <div class="faq-question">
-            <div class="faq-q-mark">Q</div>
-            <div class="faq-q-text">初めて依頼する場合、どのような流れになりますか？</div>
-            <div class="faq-toggle">+</div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              まずは無料見積りフォームまたはお電話にてご連絡ください。ご連絡後、担当者が現地調査（無料）に伺い、お客様のご要望・清掃対象の状況を確認いたします。その後、詳細なお見積りをご提示し、ご納得いただいてからご契約となります。最短で翌日からのご対応も可能です。
-            </div>
-          </div>
+    <div class="hero__image-wrap fade-in fade-in-delay-2">
+      <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&auto=format&fit=crop&q=80"
+           alt="清掃スタッフが作業している様子">
+      <div class="hero__image-badge">
+        <div class="hero__image-badge-icon">
+          <i class="fa-solid fa-shield-check"></i>
         </div>
-        <div class="faq-item fade-in fade-in-delay-1">
-          <div class="faq-question">
-            <div class="faq-q-mark">Q</div>
-            <div class="faq-q-text">清掃スタッフはどのような資格・研修を受けていますか？</div>
-            <div class="faq-toggle">+</div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              全スタッフは採用後に100時間以上の社内研修を修了しています。清掃技術・衛生管理・安全対策・接客マナーを徹底的に学んだ上で現場へ配属されます。また、管理職スタッフは「建築物環境衛生管理技術者（ビル管理士）」の国家資格を取得しており、高水準のサービスを維持しています。
-            </div>
-          </div>
-        </div>
-        <div class="faq-item fade-in fade-in-delay-2">
-          <div class="faq-question">
-            <div class="faq-q-mark">Q</div>
-            <div class="faq-q-text">作業中に物が破損した場合、どうなりますか？</div>
-            <div class="faq-toggle">+</div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              万一、スタッフの作業ミスにより物品を破損した場合は、当社が加入する業務賠償責任保険にて補償いたします。作業終了後には必ず確認チェックを行い、もし問題が見つかった際は速やかにご報告・対応いたしますので、ご安心ください。
-            </div>
-          </div>
-        </div>
-        <div class="faq-item fade-in fade-in-delay-3">
-          <div class="faq-question">
-            <div class="faq-q-mark">Q</div>
-            <div class="faq-q-text">定期契約の解約はいつでもできますか？</div>
-            <div class="faq-toggle">+</div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              解約は1ヶ月前のご通知をいただければ、いつでも可能です。違約金・解約金は一切発生しません。長期ご契約いただいているお客様への特別割引や優待もございますが、無理な継続をお願いすることは一切ありません。
-            </div>
-          </div>
-        </div>
-        <div class="faq-item fade-in">
-          <div class="faq-question">
-            <div class="faq-q-mark">Q</div>
-            <div class="faq-q-text">土日・祝日や深夜の清掃は対応可能ですか？</div>
-            <div class="faq-toggle">+</div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              はい、土日・祝日・深夜・早朝のご対応も可能です（プランや地域によって異なります）。特に飲食店様や小売店様など、営業時間外での清掃をご希望のお客様も多く、柔軟にスケジュールを調整いたします。詳しくはお問い合わせ時にご相談ください。
-            </div>
-          </div>
-        </div>
-        <div class="faq-item fade-in fade-in-delay-1">
-          <div class="faq-question">
-            <div class="faq-q-mark">Q</div>
-            <div class="faq-q-text">使用する洗剤は安全ですか？ペットや子どもがいても大丈夫ですか？</div>
-            <div class="faq-toggle">+</div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              当社が使用する洗剤はすべて人体・環境への影響を考慮した低刺激・環境配慮型の製品です。ペットや小さなお子様がいるご家庭でも安心してご利用いただけます。ご要望に応じてより自然由来の洗剤のみを使用するオプションもご用意しています。アレルギーのあるお客様はご相談ください。
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CTA BANNER ===== -->
-  <div class="cta-banner">
-    <div class="container">
-      <div class="cta-banner-inner fade-in">
-        <h2 class="cta-banner-title">まずは無料でご相談・お見積りを</h2>
-        <p class="cta-banner-sub">ご要望をお聞きし、最適なプランをご提案いたします。費用は一切かかりません。</p>
-        <div class="cta-banner-btns">
-          <a href="#contact" class="btn-cta-large">
-            <span class="btn-icon">📅</span>
-            24時間WEB予約はこちら
-          </a>
-          <a href="tel:0120-123-456" class="btn-hero-secondary">
-            📞 0120-123-456（無料）
-          </a>
+        <div class="hero__image-badge-text">
+          <strong>安心保証付き</strong>
+          <span>作業後7日間無料対応</span>
         </div>
       </div>
     </div>
   </div>
+  <div class="hero__scroll">
+    <span>スクロール</span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </div>
+</section>
 
-  <!-- ===== CONTACT ===== -->
-  <section id="contact">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-label">CONTACT</div>
-        <h2 class="section-title fade-in">お問い合わせ・WEB予約</h2>
-        <p class="section-subtitle fade-in">24時間いつでもフォームよりお問い合わせいただけます。翌営業日中にご連絡いたします。</p>
+<!-- ====== サービス概要 ====== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label fade-in">Services</span>
+      <h2 class="section-title fade-in fade-in-delay-1">3つの主要サービス</h2>
+      <p class="section-subtitle fade-in fade-in-delay-2">
+        オフィスから店舗まで、あらゆる空間の清掃に対応。<br>お客様のニーズに合わせた最適なプランをご提案します。
+      </p>
+    </div>
+    <div class="services-grid">
+      <div class="card service-card fade-in">
+        <div class="service-card__icon service-card__icon--green">
+          <i class="fa-solid fa-building"></i>
+        </div>
+        <h3>オフィス清掃</h3>
+        <p>デスク・フロア・トイレなどオフィス全域を清潔に保ちます。早朝・夜間対応で業務の邪魔になりません。</p>
+        <a href="service.html#office" class="service-card__link">
+          詳しく見る <i class="fa-solid fa-arrow-right"></i>
+        </a>
       </div>
-      <div class="contact-grid">
-        <!-- Info -->
-        <div class="fade-in">
-          <h3 class="contact-info-title">お気軽にご連絡ください</h3>
-          <p class="contact-info-desc">
-            「まずは料金だけ知りたい」「どのプランが合うか相談したい」など、どんな小さなご質問でも歓迎します。経験豊富なスタッフが丁寧にご対応いたします。
-          </p>
-          <div class="contact-cards">
-            <div class="contact-card">
-              <div class="contact-card-icon">📞</div>
-              <div>
-                <div class="contact-card-label">お電話（平日 8:00〜19:00）</div>
-                <div class="contact-card-value"><a href="tel:0120-123-456">0120-123-456（フリーダイヤル）</a></div>
-              </div>
-            </div>
-            <div class="contact-card">
-              <div class="contact-card-icon">✉️</div>
-              <div>
-                <div class="contact-card-label">メール（24時間受付）</div>
-                <div class="contact-card-value"><a href="mailto:info@sparkle-clean.co.jp">info@sparkle-clean.co.jp</a></div>
-              </div>
-            </div>
-            <div class="contact-card">
-              <div class="contact-card-icon">📍</div>
-              <div>
-                <div class="contact-card-label">本社所在地</div>
-                <div class="contact-card-value">〒100-0001 東京都千代田区千代田1-1-1</div>
-              </div>
-            </div>
-            <div class="contact-card">
-              <div class="contact-card-icon">🕐</div>
-              <div>
-                <div class="contact-card-label">営業時間</div>
-                <div class="contact-card-value">平日 8:00〜19:00（WEB予約は24時間）</div>
-              </div>
-            </div>
+      <div class="card service-card fade-in fade-in-delay-1">
+        <div class="service-card__icon service-card__icon--orange">
+          <i class="fa-solid fa-store"></i>
+        </div>
+        <h3>店舗清掃</h3>
+        <p>飲食店・小売店・美容室など店舗に特化した清掃。お客様に気持ちよくご利用いただける空間を実現。</p>
+        <a href="service.html#store" class="service-card__link">
+          詳しく見る <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+      <div class="card service-card fade-in fade-in-delay-2">
+        <div class="service-card__icon service-card__icon--blue">
+          <i class="fa-solid fa-rotate"></i>
+        </div>
+        <h3>定期清掃</h3>
+        <p>週1回〜月1回など、ご都合に合わせた定期プランで継続的に清潔な環境を維持します。</p>
+        <a href="service.html#regular" class="service-card__link">
+          詳しく見る <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 選ばれる理由 ====== -->
+<section class="section section--gray">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label fade-in">Why Choose Us</span>
+      <h2 class="section-title fade-in fade-in-delay-1">スパークルクリーンが選ばれる理由</h2>
+      <p class="section-subtitle fade-in fade-in-delay-2">
+        創業以来変わらぬ3つの強みで、お客様から信頼をいただいています。
+      </p>
+    </div>
+    <div class="reasons-grid">
+      <div class="reason-card fade-in">
+        <div class="reason-card__num">01</div>
+        <div class="reason-card__icon">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <h3>訓練されたプロスタッフ</h3>
+        <p>全スタッフが清掃技術の研修を修了。資格保有者も多数在籍し、高品質なサービスをお約束します。</p>
+      </div>
+      <div class="reason-card fade-in fade-in-delay-1">
+        <div class="reason-card__num">02</div>
+        <div class="reason-card__icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <h3>環境にやさしい洗剤</h3>
+        <p>人体・環境に安全なエコ認定洗剤を使用。小さなお子様やペットがいる環境でも安心してご利用いただけます。</p>
+      </div>
+      <div class="reason-card fade-in fade-in-delay-2">
+        <div class="reason-card__num">03</div>
+        <div class="reason-card__icon">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <h3>24時間サポート体制</h3>
+        <p>緊急対応にも対応。電話・メール・LINEでいつでもご連絡いただけます。迅速な対応でご不安を解消します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 実績数字 ====== -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item fade-in">
+        <div class="stat-item__num">
+          <span class="count-up" data-target="300" data-suffix="+">0+</span>
+        </div>
+        <div class="stat-item__label">導入企業数</div>
+      </div>
+      <div class="stat-item fade-in fade-in-delay-1">
+        <div class="stat-item__num">
+          <span class="count-up" data-target="98" data-suffix="%">0%</span>
+        </div>
+        <div class="stat-item__label">顧客満足度</div>
+      </div>
+      <div class="stat-item fade-in fade-in-delay-2">
+        <div class="stat-item__num">
+          <span class="count-up" data-target="24" data-suffix="h">0h</span>
+        </div>
+        <div class="stat-item__label">対応時間</div>
+      </div>
+      <div class="stat-item fade-in fade-in-delay-3">
+        <div class="stat-item__num">
+          <span class="count-up" data-target="15" data-suffix="年">0年</span>
+        </div>
+        <div class="stat-item__label">業界経験</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== お客様の声 ====== -->
+<section class="section section--green">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label fade-in">Testimonials</span>
+      <h2 class="section-title fade-in fade-in-delay-1">お客様の声</h2>
+      <p class="section-subtitle fade-in fade-in-delay-2">
+        ご利用いただいたお客様から嬉しいお声をいただいています。
+      </p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-in">
+        <div class="testimonial-card__quote">"</div>
+        <div class="testimonial-card__stars">★★★★★</div>
+        <p class="testimonial-card__text">
+          オフィスの定期清掃をお願いして1年になります。スタッフの方々が丁寧で、細かい部分まで気を配っていただいています。社員からも「会社がきれいになった」と好評です。
+        </p>
+        <div class="testimonial-card__author">
+          <img class="testimonial-card__avatar"
+               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop"
+               alt="田中様">
+          <div>
+            <div class="testimonial-card__name">田中 健一 様</div>
+            <div class="testimonial-card__role">IT企業 総務部長</div>
           </div>
         </div>
-        <!-- Form -->
-        <div class="contact-form fade-in fade-in-delay-1">
-          <h3 class="form-title">📅 無料見積り・WEB予約フォーム</h3>
-          <form id="contactForm" novalidate>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">会社名・お名前 <span class="required">*必須</span></label>
-                <input type="text" class="form-control" placeholder="例：株式会社〇〇 山田太郎" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">電話番号 <span class="required">*必須</span></label>
-                <input type="tel" class="form-control" placeholder="例：03-0000-0000" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">メールアドレス <span class="required">*必須</span></label>
-              <input type="email" class="form-control" placeholder="例：info@company.co.jp" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">清掃の種類</label>
-              <select class="form-control">
-                <option value="">ご選択ください</option>
-                <option>オフィス・ビル清掃</option>
-                <option>店舗・飲食店清掃</option>
-                <option>住宅・マンション清掃</option>
-                <option>その他・ご相談</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">ご希望のプラン</label>
-              <select class="form-control">
-                <option value="">ご選択ください</option>
-                <option>ライトプラン（月1回〜）</option>
-                <option>スタンダードプラン（週1回〜）</option>
-                <option>プレミアムプラン（毎日〜）</option>
-                <option>スポット（単発）清掃</option>
-                <option>まだ未定・相談したい</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">ご要望・ご質問</label>
-              <textarea class="form-control" placeholder="清掃場所の広さ、ご希望日時、気になる点など、自由にご記入ください。"></textarea>
-            </div>
-            <button type="submit" class="form-submit">
-              無料見積りを依頼する（24時間受付中）
-            </button>
-            <p class="form-privacy">
-              送信することで<a href="#">プライバシーポリシー</a>に同意したものとみなします。<br>
-              ご入力いただいた情報は、お問い合わせへの回答のみに使用します。
-            </p>
-          </form>
+      </div>
+      <div class="testimonial-card fade-in fade-in-delay-1">
+        <div class="testimonial-card__quote">"</div>
+        <div class="testimonial-card__stars">★★★★★</div>
+        <p class="testimonial-card__text">
+          飲食店を経営していますが、厨房の清掃が悩みでした。プロの方に入っていただいてからグリース汚れも完璧に落としていただき、保健所の検査も安心して受けられます。
+        </p>
+        <div class="testimonial-card__author">
+          <img class="testimonial-card__avatar"
+               src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop"
+               alt="山田様">
+          <div>
+            <div class="testimonial-card__name">山田 裕子 様</div>
+            <div class="testimonial-card__role">レストランオーナー</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in fade-in-delay-2">
+        <div class="testimonial-card__quote">"</div>
+        <div class="testimonial-card__stars">★★★★★</div>
+        <p class="testimonial-card__text">
+          急な依頼にも関わらず翌日に対応していただきました。価格も良心的で、作業クオリティも申し分なし。リピート確定です。スタッフの方の礼儀正しさも印象的でした。
+        </p>
+        <div class="testimonial-card__author">
+          <img class="testimonial-card__avatar"
+               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop"
+               alt="鈴木様">
+          <div>
+            <div class="testimonial-card__name">鈴木 大輔 様</div>
+            <div class="testimonial-card__role">美容サロン経営</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer id="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="logo">
-            <div class="logo-icon">✨</div>
-            <div class="logo-text">
-              <div class="logo-name">スパークルクリーン株式会社</div>
-              <div class="logo-sub">Sparkle Clean Co., Ltd.</div>
-            </div>
-          </div>
-          <p class="footer-desc">
-            創業以来15年、オフィス・店舗・住宅の清掃サービスを提供してまいりました。プロフェッショナルな技術と誠実な対応で、お客様の空間を輝かせます。
-          </p>
-          <div class="footer-social">
-            <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
-            <a href="#" class="social-btn" aria-label="Facebook">f</a>
-            <a href="#" class="social-btn" aria-label="Instagram">📸</a>
-            <a href="#" class="social-btn" aria-label="LINE">L</a>
-          </div>
-        </div>
-        <div>
-          <div class="footer-col-title">サービス</div>
-          <div class="footer-links">
-            <a href="#services">オフィス・ビル清掃</a>
-            <a href="#services">店舗・飲食店清掃</a>
-            <a href="#services">住宅・マンション清掃</a>
-            <a href="#pricing">スポット清掃</a>
-            <a href="#pricing">定期清掃プラン</a>
-          </div>
-        </div>
-        <div>
-          <div class="footer-col-title">会社情報</div>
-          <div class="footer-links">
-            <a href="#">会社概要</a>
-            <a href="#">代表メッセージ</a>
-            <a href="#">スタッフ紹介</a>
-            <a href="#">採用情報</a>
-            <a href="#">ニュース</a>
-          </div>
-        </div>
-        <div>
-          <div class="footer-col-title">お問い合わせ</div>
-          <div class="footer-contact-item">
-            <span>📞</span>
-            <span><a href="tel:0120-123-456" style="color:rgba(255,255,255,0.6);">0120-123-456</a><br><small>平日 8:00〜19:00</small></span>
-          </div>
-          <div class="footer-contact-item">
-            <span>✉️</span>
-            <span><a href="mailto:info@sparkle-clean.co.jp" style="color:rgba(255,255,255,0.6);">info@sparkle-clean.co.jp</a></span>
-          </div>
-          <div class="footer-contact-item">
-            <span>📍</span>
-            <span>〒100-0001<br>東京都千代田区千代田1-1-1</span>
-          </div>
-          <div style="margin-top:16px;">
-            <a href="#contact" class="header-cta" style="display:inline-flex;font-size:0.82rem;">
-              <span>📅</span> WEB予約（24時間）
-            </a>
-          </div>
-        </div>
+<!-- ====== CTAバナー ====== -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner fade-in">
+      <div class="cta-banner__content">
+        <h2 class="cta-banner__title">まずは無料相談から始めてみませんか？</h2>
+        <p class="cta-banner__subtitle">お見積もり・ご相談は完全無料。お気軽にお問い合わせください。</p>
       </div>
-      <div class="footer-bottom">
-        <div class="footer-copyright">
-          &copy; 2024 スパークルクリーン株式会社 All Rights Reserved.
+      <div class="cta-banner__btns">
+        <a href="contact.html" class="btn btn--secondary">
+          <i class="fa-solid fa-envelope"></i>お問い合わせ
+        </a>
+        <a href="tel:0120000000" class="btn btn--outline-white">
+          <i class="fa-solid fa-phone"></i>電話で相談
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== フッター ====== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="header__logo">
+          <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
+          <span>スパークルクリーン株式会社</span>
+        </a>
+        <p>プロの技術と誠実な対応で、あなたの大切な空間をいつもピカピカに。全国対応・24時間受付。</p>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">サービス</div>
+        <ul class="footer__links">
+          <li><a href="service.html#office">オフィス清掃</a></li>
+          <li><a href="service.html#store">店舗清掃</a></li>
+          <li><a href="service.html#regular">定期清掃</a></li>
+          <li><a href="service.html#price">料金プラン</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">会社情報</div>
+        <ul class="footer__links">
+          <li><a href="company.html">会社概要</a></li>
+          <li><a href="company.html#philosophy">企業理念</a></li>
+          <li><a href="company.html#staff">スタッフ紹介</a></li>
+          <li><a href="contact.html">採用情報</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">お問い合わせ</div>
+        <div class="footer__contact-item">
+          <i class="fa-solid fa-phone"></i>
+          <div><strong>0120-XXX-XXX</strong><br><small>受付 9:00〜18:00（年中無休）</small></div>
         </div>
-        <div class="footer-legal">
-          <a href="#">プライバシーポリシー</a>
-          <a href="#">利用規約</a>
-          <a href="#">特定商取引法</a>
+        <div class="footer__contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <div>info@sparkle-clean.jp</div>
+        </div>
+        <div class="footer__contact-item">
+          <i class="fa-solid fa-location-dot"></i>
+          <div>東京都渋谷区〇〇1-2-3<br>スパークルビル5F</div>
         </div>
       </div>
     </div>
-  </footer>
+    <div class="footer__bottom">
+      <span>© 2024 スパークルクリーン株式会社 All Rights Reserved.</span>
+      <div style="display:flex;gap:16px;">
+        <a href="#">プライバシーポリシー</a>
+        <a href="#">利用規約</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-  <!-- Floating CTA -->
-  <a href="#contact" class="float-cta-btn" id="floatCta">
-    <div class="float-pulse"></div>
-    <span>📅</span>
-    24時間WEB予約はこちら
-  </a>
-
-  <!-- Scroll to top -->
-  <button class="scroll-top" id="scrollTop" aria-label="トップへ戻る">↑</button>
-
-  <!-- ===== JAVASCRIPT ===== -->
-  <script>
-    (function () {
-      'use strict';
-
-      // ---- Header scroll ----
-      const header = document.getElementById('header');
-      const floatCta = document.getElementById('floatCta');
-      const scrollTopBtn = document.getElementById('scrollTop');
-
-      window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        header.classList.toggle('scrolled', scrollY > 20);
-        floatCta.classList.toggle('visible', scrollY > 500);
-        scrollTopBtn.classList.toggle('visible', scrollY > 400);
-      }, { passive: true });
-
-      scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // ---- Hamburger ----
-      const hamburger = document.getElementById('hamburger');
-      const mobileNav = document.getElementById('mobileNav');
-
-      hamburger.addEventListener('click', () => {
-        const isOpen = mobileNav.classList.toggle('open');
-        hamburger.classList.toggle('open', isOpen);
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-      });
-
-      // Close mobile nav on link click
-      mobileNav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileNav.classList.remove('open');
-          hamburger.classList.remove('open');
-          document.body.style.overflow = '';
-        });
-      });
-
-      // ---- Fade-in Intersection Observer ----
-      const fadeEls = document.querySelectorAll('.fade-in');
-      const fadeObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            fadeObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-      fadeEls.forEach(el => fadeObserver.observe(el));
-
-      // ---- Count-up animation ----
-      const countEls = document.querySelectorAll('.count-up');
-      const countObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const target = parseInt(el.dataset.target, 10);
-            const duration = 1800;
-            const start = performance.now();
-
-            const animate = (time) => {
-              const elapsed = time - start;
-              const progress = Math.min(elapsed / duration, 1);
-              // Ease out cubic
-              const eased = 1 - Math.pow(1 - progress, 3);
-              el.textContent = Math.round(eased * target);
-              if (progress < 1) requestAnimationFrame(animate);
-              else el.textContent = target;
-            };
-
-            requestAnimationFrame(animate);
-            countObserver.unobserve(el);
-          }
-        });
-      }, { threshold: 0.5 });
-
-      countEls.forEach(el => countObserver.observe(el));
-
-      // ---- FAQ accordion ----
-      document.querySelectorAll('.faq-item').forEach(item => {
-        const question = item.querySelector('.faq-question');
-        const answer = item.querySelector('.faq-answer');
-
-        question.addEventListener('click', () => {
-          const isOpen = item.classList.contains('open');
-
-          // Close all
-          document.querySelectorAll('.faq-item.open').forEach(openItem => {
-            openItem.classList.remove('open');
-            openItem.querySelector('.faq-answer').style.maxHeight = '0';
-          });
-
-          // Open clicked if it was closed
-          if (!isOpen) {
-            item.classList.add('open');
-            answer.style.maxHeight = answer.scrollHeight + 'px';
-          }
-        });
-      });
-
-      // ---- Contact form submit ----
-      const contactForm = document.getElementById('contactForm');
-      contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const btn = contactForm.querySelector('.form-submit');
-        const original = btn.textContent;
-
-        btn.textContent = '✅ 送信しました！担当者より折り返しご連絡いたします。';
-        btn.style.background = 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)';
-        btn.disabled = true;
-
-        setTimeout(() => {
-          btn.textContent = original;
-          btn.style.background = '';
-          btn.disabled = false;
-          contactForm.reset();
-        }, 5000);
-      });
-
-      // ---- Smooth scroll for anchor links ----
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-          const targetId = this.getAttribute('href');
-          if (targetId === '#') return;
-          const target = document.querySelector(targetId);
-          if (target) {
-            e.preventDefault();
-            const headerH = header.offsetHeight;
-            const top = target.getBoundingClientRect().top + window.scrollY - headerH - 8;
-            window.scrollTo({ top, behavior: 'smooth' });
-          }
-        });
-      });
-
-    })();
-  </script>
+<script src="main.js"></script>
 </body>
 </html>
