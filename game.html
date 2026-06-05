@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人生シミュレーション</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a2e; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; }
+    #game-container { position: relative; }
+    canvas { display: block; border-radius: 8px; box-shadow: 0 0 40px rgba(100, 150, 255, 0.3); }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+  <script>
+  // ============================================================
+  // Constants
+  // ============================================================
+  const W = 800, H = 600;
+  const COLORS = {
+    sky_day:   0x87ceeb,
+    sky_night: 0x1a1a4e,
+    sky_eve:   0xff7043,
+    ground:    0x4caf50,
+    ground2:   0x388e3c,
+    house:     0xe53935,
+    house2:    0xb71c1c,
+    roof:      0x795548,
+    window:    0xfff176,
+    door:      0x6d4c41,
+    road:      0x616161,
+    panel_bg:  0x000000,
+    bar_hp:    0xe53935,
+    bar_en:    0xffeb3b,
+    bar_hap:   0xff80ab,
+    bar_mon:   0x66bb6a,
+    btn_work:  0x1565c0,
+    btn_sleep: 0x4a148c,
+    btn_eat:   0xe65100,
+    btn_play:  0xad1457,
+    btn_hover: 0xffffff,
+    text:      '#ffffff',
+    text_dark: '#222222',
+  };
+
+  // ============================================================
+  // Utility
+  // ============================================================
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // ============================================================
+  // MainScene
+  // ============================================================
+  class MainScene extends Phaser.Scene {
+    constructor() { super('MainScene'); }
+
+    // ---------- create ----------
+    create() {
+      // State
+      this.state = {
+        day: 1, hour: 7, minute: 0,
+        hp: 80, energy: 80, happiness: 60, money: 500,
+        age: 20, job: 'フリーター',
+        message: 'おはようございます！今日も一日頑張りましょう。',
+        actionLocked: false,
+        events: [],
+      };
+
+      this.minuteTimer = 0;
+      this.minutePerMs = 1000 / 60; // 1 real second = 1 min
+
+      this._buildWorld();
+      this._buildUI();
+      this._buildButtons();
+      this._buildCharacter();
+      this._buildEventLog();
+      this._updateAll();
+    }
+
+    // ---------- World (background) ----------
+    _buildWorld() {
+      // Sky gradient (graphics)
+      this.skyGfx = this.add.graphics();
+      this._drawSky(7);
+
+      // Ground
+      const g = this.add.graphics();
+      g.fillStyle(COLORS.ground2, 1);
+      g.fillRect(0, 360, W, 50);
+      g.fillStyle(COLORS.ground, 1);
+      g.fillRect(0, 350, W, 15);
+
+      // Road
+      g.fillStyle(COLORS.road, 1);
+      g.fillRect(0, 370, W, 35);
+      g.fillStyle(0xffffff, 1);
+      for (let x = 0; x < W; x += 80) g.fillRect(x, 384, 40, 5);
+
+      // House left
+      this._drawHouse(g, 60, 220);
+      // House right
+      this._drawHouse(g, 580, 200);
+
+      // Tree
+      this._drawTree(g, 320, 290);
+      this._drawTree(g, 460, 300);
+
+      // Sun / Moon
+      this.celestial = this.add.graphics();
+    }
+
+    _drawHouse(g, x, y) {
+      const w = 160, h = 120;
+      // Body
+      g.fillStyle(COLORS.house, 1);
+      g.fillRect(x, y, w, h);
+      // Shade
+      g.fillStyle(COLORS.house2, 1);
+      g.fillRect(x + w - 30, y, 30, h);
+      // Roof
+      g.fillStyle(COLORS.roof, 1);
+      g.fillTriangle(x - 10, y, x + w / 2, y - 60, x + w + 10, y);
+      // Door
+      g.fillStyle(COLORS.door, 1);
+      g.fillRect(x + w / 2 - 20, y + h - 55, 40, 55);
+      // Windows
+      g.fillStyle(COLORS.window, 1);
+      g.fillRect(x + 20, y + 25, 35, 30);
+      g.fillRect(x + w - 55, y + 25, 35, 30);
+      // Window frames
+      g.lineStyle(2, 0x333333, 1);
+      g.strokeRect(x + 20, y + 25, 35, 30);
+      g.strokeRect(x + w - 55, y + 25, 35, 30);
+    }
+
+    _drawTree(g, x, y) {
+      g.fillStyle(0x5d4037, 1);
+      g.fillRect(x - 8, y, 16, 55);
+      g.fillStyle(0x2e7d32, 1);
+      g.fillCircle(x, y - 10, 38);
+      g.fillStyle(0x388e3c, 1);
+      g.fillCircle(x - 15, y + 5, 28);
+      g.fillCircle(x + 15, y + 5, 28);
+    }
+
+    _drawSky(hour) {
+      const g = this.skyGfx;
+      g.clear();
+      let topColor, botColor;
+      if (hour >= 6 && hour < 9) {
+        const t = (hour - 6) / 3;
+        topColor = Phaser.Display.Color.Interpolate.ColorWithColor(
+          Phaser.Display.Color.ValueToColor(0x1a1a4e),
+          Phaser.Display.Color.ValueToColor(0x87ceeb), 100, t * 100);
+        botColor = Phaser.Display.Color.Interpolate.ColorWithColor(
+          Phaser.Display.Color.ValueToColor(0xff7043),
+          Phaser.Display.Color.ValueToColor(0xb3e5fc), 100, t * 100);
+      } else if (hour >= 9 && hour < 18) {
+        topColor = Phaser.Display.Color.ValueToColor(0x42a5f5);
+        botColor = Phaser.Display.Color.ValueToColor(0xe3f2fd);
+      } else if (hour >= 18 && hour < 21) {
+        const t = (hour - 18) / 3;
+        topColor = Phaser.Display.Color.Interpolate.ColorWithColor(
+          Phaser.Display.Color.ValueToColor(0x42a5f5),
+          Phaser.Display.Color.ValueToColor(0x1a1a4e), 100, t * 100);
+        botColor = Phaser.Display.Color.Interpolate.ColorWithColor(
+          Phaser.Display.Color.ValueToColor(0xe3f2fd),
+          Phaser.Display.Color.ValueToColor(0xff7043), 100, t * 100);
+      } else {
+        topColor = Phaser.Display.Color.ValueToColor(0x0d0d2b);
+        botColor = Phaser.Display.Color.ValueToColor(0x1a1a4e);
+      }
+      g.fillGradientStyle(
+        Phaser.Display.Color.GetColor(topColor.r, topColor.g, topColor.b),
+        Phaser.Display.Color.GetColor(topColor.r, topColor.g, topColor.b),
+        Phaser.Display.Color.GetColor(botColor.r, botColor.g, botColor.b),
+        Phaser.Display.Color.GetColor(botColor.r, botColor.g, botColor.b),
+        1);
+      g.fillRect(0, 0, W, 360);
+    }
+
+    _drawCelestial(hour) {
+      const g = this.celestial;
+      g.clear();
+      // 0~24 => position arc across sky
+      const ratio = ((hour - 6 + 24) % 24) / 14; // 6am -> 8pm
+      const cx = lerp(80, W - 80, clamp(ratio, 0, 1));
+      const cy = lerp(60, 280, Math.abs(clamp(ratio, 0, 1) - 0.5) * 2);
+      if (hour >= 6 && hour < 20) {
+        // Sun
+        g.fillStyle(0xffee58, 1);
+        g.fillCircle(cx, cy, 28);
+        g.fillStyle(0xfff176, 0.5);
+        g.fillCircle(cx, cy, 40);
+      } else {
+        // Moon
+        const mx = (hour >= 20) ? lerp(W - 80, W + 60, (hour - 20) / 8) : lerp(-60, 80, hour / 6);
+        g.fillStyle(0xeceff1, 1);
+        g.fillCircle(mx, 80, 22);
+        g.fillStyle(0x1a1a4e, 1);
+        g.fillCircle(mx + 8, 74, 18);
+        // Stars
+        g.fillStyle(0xffffff, 1);
+        const stars = [[150,40],[300,20],[500,55],[620,30],[700,70],[100,100],[400,15]];
+        stars.forEach(([sx, sy]) => g.fillCircle(sx, sy, 2));
+      }
+    }
+
+    // ---------- Character ----------
+    _buildCharacter() {
+      this.charGfx = this.add.graphics();
+      this.charX = W / 2;
+      this.charTargetX = W / 2;
+      this.charY = 308;
+      this._drawCharacter();
+    }
+
+    _drawCharacter() {
+      const g = this.charGfx;
+      g.clear();
+      const x = this.charX, y = this.charY;
+      // Shadow
+      g.fillStyle(0x000000, 0.2);
+      g.fillEllipse(x, y + 42, 44, 14);
+      // Body
+      g.fillStyle(0x1565c0, 1);
+      g.fillRoundedRect(x - 16, y + 2, 32, 38, 5);
+      // Head
+      g.fillStyle(0xffcc80, 1);
+      g.fillCircle(x, y - 8, 18);
+      // Hair
+      g.fillStyle(0x4e342e, 1);
+      g.fillEllipse(x, y - 22, 36, 16);
+      // Eyes
+      g.fillStyle(0x222222, 1);
+      g.fillCircle(x - 6, y - 9, 3);
+      g.fillCircle(x + 6, y - 9, 3);
+      // Mouth
+      g.lineStyle(2, 0x5d4037, 1);
+      g.beginPath(); g.arc(x, y - 2, 6, 0, Math.PI, false); g.strokePath();
+      // Legs
+      g.fillStyle(0x37474f, 1);
+      g.fillRect(x - 14, y + 38, 12, 28);
+      g.fillRect(x + 2, y + 38, 12, 28);
+      // Shoes
+      g.fillStyle(0x212121, 1);
+      g.fillRect(x - 16, y + 62, 16, 8);
+      g.fillRect(x, y + 62, 16, 8);
+    }
+
+    // ---------- UI Panel ----------
+    _buildUI() {
+      const panelY = 405;
+      // Background panel
+      const panel = this.add.graphics();
+      panel.fillStyle(0x0d1117, 0.92);
+      panel.fillRoundedRect(10, panelY, W - 20, 185, 12);
+      panel.lineStyle(1, 0x30363d, 1);
+      panel.strokeRoundedRect(10, panelY, W - 20, 185, 12);
+
+      // Status bars section (left)
+      this._buildStatusBars(panelY);
+
+      // Time / day display
+      this.timeText = this.add.text(W / 2, panelY + 15, '', {
+        fontSize: '22px', fontFamily: 'monospace', color: '#e2e8f0',
+        stroke: '#000', strokeThickness: 2
+      }).setOrigin(0.5, 0);
+
+      this.dayText = this.add.text(W / 2, panelY + 42, '', {
+        fontSize: '13px', fontFamily: 'sans-serif', color: '#94a3b8'
+      }).setOrigin(0.5, 0);
+
+      // Message box
+      this.msgBg = this.add.graphics();
+      this.msgBg.fillStyle(0x161b22, 0.9);
+      this.msgBg.fillRoundedRect(15, panelY + 140, W - 30, 45, 8);
+
+      this.msgText = this.add.text(W / 2, panelY + 163, '', {
+        fontSize: '13px', fontFamily: 'sans-serif', color: '#c9d1d9',
+        wordWrap: { width: W - 60 }
+      }).setOrigin(0.5, 0.5);
+    }
+
+    _buildStatusBars(panelY) {
+      const barDefs = [
+        { label: '❤️ 体力',   key: 'hp',        color: COLORS.bar_hp,  x: 20,  y: panelY + 68 },
+        { label: '⚡ 活力',   key: 'energy',    color: COLORS.bar_en,  x: 20,  y: panelY + 90 },
+        { label: '😊 幸福度', key: 'happiness', color: COLORS.bar_hap, x: 20,  y: panelY + 112 },
+        { label: '💰 所持金', key: 'money',     color: COLORS.bar_mon, x: 420, y: panelY + 68 },
+      ];
+
+      this.barObjs = {};
+      barDefs.forEach(def => {
+        this.add.text(def.x, def.y, def.label, {
+          fontSize: '12px', fontFamily: 'sans-serif', color: '#94a3b8'
+        });
+
+        if (def.key !== 'money') {
+          const bgBar = this.add.graphics();
+          bgBar.fillStyle(0x21262d, 1);
+          bgBar.fillRoundedRect(def.x + 90, def.y + 2, 170, 10, 5);
+
+          const bar = this.add.graphics();
+          this.barObjs[def.key] = { bar, bgBar, x: def.x + 90, y: def.y + 2, color: def.color };
+        } else {
+          const txt = this.add.text(def.x + 90, def.y, '¥500', {
+            fontSize: '14px', fontFamily: 'monospace', color: '#66bb6a'
+          });
+          this.barObjs[def.key] = { txt };
+        }
+      });
+
+      // Age / job
+      this.add.text(420, panelY + 90, '年齢 / 職業', {
+        fontSize: '12px', color: '#94a3b8', fontFamily: 'sans-serif'
+      });
+      this.ageJobText = this.add.text(510, panelY + 90, '', {
+        fontSize: '13px', fontFamily: 'monospace', color: '#e2e8f0'
+      });
+    }
+
+    _updateBars() {
+      const s = this.state;
+      ['hp','energy','happiness'].forEach(key => {
+        const obj = this.barObjs[key];
+        const val = clamp(s[key], 0, 100);
+        obj.bar.clear();
+        obj.bar.fillStyle(obj.color, 1);
+        obj.bar.fillRoundedRect(obj.x, obj.y, 170 * val / 100, 10, 5);
+      });
+      const mObj = this.barObjs.money;
+      mObj.txt.setText(`¥${s.money.toLocaleString()}`);
+      this.ageJobText.setText(`${s.age}歳 / ${s.job}`);
+    }
+
+    // ---------- Buttons ----------
+    _buildButtons() {
+      const btnY = 540;
+      const actions = [
+        { label: '💼 働く',    key: 'work',  x: 90,  color: COLORS.btn_work },
+        { label: '😴 寝る',    key: 'sleep', x: 255, color: COLORS.btn_sleep },
+        { label: '🍱 食べる',  key: 'eat',   x: 420, color: COLORS.btn_eat },
+        { label: '🎮 遊ぶ',    key: 'play',  x: 590, color: COLORS.btn_play },
+      ];
+
+      this.buttons = {};
+      actions.forEach(a => {
+        const btn = this.add.graphics();
+        const lbl = this.add.text(a.x, btnY, a.label, {
+          fontSize: '16px', fontFamily: 'sans-serif', color: '#ffffff',
+          stroke: '#000', strokeThickness: 1
+        }).setOrigin(0.5, 0.5).setInteractive({ useHandCursor: true });
+
+        const drawBtn = (hover) => {
+          btn.clear();
+          btn.fillStyle(hover ? 0x444444 : a.color, hover ? 0.9 : 1);
+          btn.fillRoundedRect(a.x - 80, btnY - 22, 160, 44, 8);
+          btn.lineStyle(1, hover ? 0xffffff : 0x00000033, 1);
+          btn.strokeRoundedRect(a.x - 80, btnY - 22, 160, 44, 8);
+        };
+
+        drawBtn(false);
+        lbl.on('pointerover', () => drawBtn(true));
+        lbl.on('pointerout', () => drawBtn(false));
+        lbl.on('pointerdown', () => this._doAction(a.key));
+
+        this.buttons[a.key] = { btn, lbl, drawBtn, x: a.x, y: btnY, color: a.color };
+      });
+    }
+
+    // ---------- Event Log ----------
+    _buildEventLog() {
+      // Overlay modal (hidden by default)
+      this.modal = this.add.graphics().setVisible(false);
+      this.modalTitle = this.add.text(W/2, 120, '', {
+        fontSize: '22px', fontFamily: 'sans-serif', color: '#f0f6fc',
+        stroke: '#000', strokeThickness: 2
+      }).setOrigin(0.5).setVisible(false);
+      this.modalBody = this.add.text(W/2, 200, '', {
+        fontSize: '15px', fontFamily: 'sans-serif', color: '#c9d1d9',
+        wordWrap: { width: 460 }, align: 'center'
+      }).setOrigin(0.5).setVisible(false);
+
+      // Dismiss button
+      this.modalBtn = this.add.text(W/2, 310, '[ 続ける ]', {
+        fontSize: '17px', fontFamily: 'sans-serif', color: '#58a6ff',
+        stroke: '#000', strokeThickness: 1
+      }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false);
+      this.modalBtn.on('pointerdown', () => this._closeModal());
+    }
+
+    _showModal(title, body) {
+      const g = this.modal;
+      g.clear();
+      g.fillStyle(0x000000, 0.78);
+      g.fillRect(0, 0, W, H);
+      g.fillStyle(0x161b22, 1);
+      g.fillRoundedRect(W/2 - 260, 80, 520, 280, 16);
+      g.lineStyle(2, 0x30363d, 1);
+      g.strokeRoundedRect(W/2 - 260, 80, 520, 280, 16);
+      g.setVisible(true);
+      this.modalTitle.setText(title).setVisible(true);
+      this.modalBody.setText(body).setVisible(true);
+      this.modalBtn.setVisible(true);
+      this.state.actionLocked = true;
+    }
+
+    _closeModal() {
+      this.modal.setVisible(false);
+      this.modalTitle.setVisible(false);
+      this.modalBody.setVisible(false);
+      this.modalBtn.setVisible(false);
+      this.state.actionLocked = false;
+    }
+
+    // ---------- Actions ----------
+    _doAction(key) {
+      if (this.state.actionLocked) return;
+      const s = this.state;
+      const h = s.hour;
+
+      if (key === 'work') {
+        if (h < 8 || h >= 22) {
+          this._showMsg('⚠️ 今は働けません（8〜22時のみ）');
+          return;
+        }
+        if (s.energy < 15) {
+          this._showMsg('⚠️ 疲れすぎて働けません！休んでください。');
+          return;
+        }
+        const earn = Phaser.Math.Between(120, 280);
+        s.money += earn;
+        s.energy = clamp(s.energy - 20, 0, 100);
+        s.hp = clamp(s.hp - 5, 0, 100);
+        s.happiness = clamp(s.happiness - 5, 0, 100);
+        s.hour = clamp(s.hour + 3, 0, 23);
+        this._showMsg(`💼 3時間働いて ¥${earn} 稼ぎました！`);
+        this._charWalkTo(Phaser.Math.Between(150, 650));
+        this._checkPromotion();
+
+      } else if (key === 'sleep') {
+        if (h >= 22 || h < 6) {
+          s.energy = clamp(s.energy + 50, 0, 100);
+          s.hp = clamp(s.hp + 15, 0, 100);
+          s.hour = 7; s.minute = 0;
+          s.day += 1;
+          if (s.day % 365 === 0) {
+            s.age += 1;
+            this._showModal('🎂 誕生日！', `${s.age}歳になりました！\nこれからも頑張りましょう。`);
+          } else {
+            this._showMsg(`😴 ぐっすり眠りました。${s.day}日目の朝です。`);
+          }
+          this._randomEvent();
+        } else {
+          s.energy = clamp(s.energy + 20, 0, 100);
+          s.hp = clamp(s.hp + 5, 0, 100);
+          s.hour = clamp(s.hour + 2, 0, 23);
+          this._showMsg('💤 少し仮眠しました（2時間）。');
+        }
+
+      } else if (key === 'eat') {
+        if (s.money < 500) {
+          this._showMsg('⚠️ お金が足りません（食事代 ¥500）。');
+          return;
+        }
+        s.money -= 500;
+        s.hp = clamp(s.hp + 25, 0, 100);
+        s.energy = clamp(s.energy + 15, 0, 100);
+        s.happiness = clamp(s.happiness + 5, 0, 100);
+        s.hour = clamp(s.hour + 1, 0, 23);
+        this._showMsg('🍱 美味しい食事をとりました（¥500消費）。');
+        this._charWalkTo(Phaser.Math.Between(150, 650));
+
+      } else if (key === 'play') {
+        if (s.money < 300) {
+          this._showMsg('⚠️ お金が足りません（娯楽費 ¥300）。');
+          return;
+        }
+        s.money -= 300;
+        s.happiness = clamp(s.happiness + 25, 0, 100);
+        s.energy = clamp(s.energy - 10, 0, 100);
+        s.hour = clamp(s.hour + 2, 0, 23);
+        this._showMsg('🎮 楽しく遊びました（¥300消費）。幸福度UP！');
+        this._charWalkTo(Phaser.Math.Between(150, 650));
+      }
+
+      this._checkGameOver();
+      this._updateAll();
+    }
+
+    _checkPromotion() {
+      const s = this.state;
+      if (s.money >= 10000 && s.job === 'フリーター') {
+        s.job = '正社員';
+        this._showModal('🎉 昇進！', '正社員になりました！\nこれから給料が上がります。');
+      } else if (s.money >= 50000 && s.job === '正社員') {
+        s.job = '課長';
+        this._showModal('🎉 昇進！', '課長に昇格しました！\n部下もできました。');
+      } else if (s.money >= 150000 && s.job === '課長') {
+        s.job = '部長';
+        this._showModal('🎉 昇進！', '部長になりました！\n会社の中心人物です。');
+      } else if (s.money >= 500000 && s.job === '部長') {
+        s.job = 'CEO';
+        this._showModal('👑 社長就任！', 'とうとう社長になりました！\n夢を叶えましたね。');
+      }
+    }
+
+    _randomEvent() {
+      const events = [
+        { chance: 0.12, fn: () => {
+          const bonus = Phaser.Math.Between(500, 2000);
+          this.state.money += bonus;
+          this._showModal('💰 臨時収入！', `¥${bonus}の臨時収入がありました！`);
+        }},
+        { chance: 0.08, fn: () => {
+          const loss = Phaser.Math.Between(300, 1000);
+          this.state.money = Math.max(0, this.state.money - loss);
+          this._showModal('😨 アクシデント', `予期せぬ出費 ¥${loss} が発生しました。`);
+        }},
+        { chance: 0.10, fn: () => {
+          this.state.happiness = clamp(this.state.happiness + 20, 0, 100);
+          this._showModal('🌸 良いことがあった', '友人から嬉しい連絡が来ました！幸福度UP！');
+        }},
+        { chance: 0.05, fn: () => {
+          this.state.hp = clamp(this.state.hp - 20, 0, 100);
+          this._showModal('🤒 体調不良', '少し体調を崩しました。休んでください。');
+        }},
+      ];
+
+      for (const e of events) {
+        if (Math.random() < e.chance) { e.fn(); break; }
+      }
+    }
+
+    _checkGameOver() {
+      const s = this.state;
+      if (s.hp <= 0) {
+        this._showModal('💀 ゲームオーバー', `体力が尽きました。\n${s.day}日間・${s.age}歳まで生きました。\nページをリロードして再挑戦！`);
+        this.state.actionLocked = true;
+      }
+    }
+
+    _showMsg(msg) {
+      this.state.message = msg;
+      this.msgText.setText(msg);
+    }
+
+    _charWalkTo(targetX) {
+      this.charTargetX = clamp(targetX, 60, W - 60);
+    }
+
+    // ---------- Time ----------
+    _tickTime(delta) {
+      if (this.state.actionLocked) return;
+      this.minuteTimer += delta;
+      if (this.minuteTimer >= this.minutePerMs) {
+        this.minuteTimer -= this.minutePerMs;
+        this.state.minute += 1;
+        if (this.state.minute >= 60) {
+          this.state.minute = 0;
+          this.state.hour += 1;
+          if (this.state.hour >= 24) {
+            this.state.hour = 0;
+          }
+          // Passive energy/hp drain
+          this.state.energy = clamp(this.state.energy - 1, 0, 100);
+          this.state.hp = clamp(this.state.hp - 0.5, 0, 100);
+          this._updateAll();
+        }
+        // Update time display every minute
+        this._updateTimeText();
+      }
+    }
+
+    _updateTimeText() {
+      const s = this.state;
+      const hh = String(s.hour).padStart(2, '0');
+      const mm = String(s.minute).padStart(2, '0');
+      this.timeText.setText(`${hh}:${mm}`);
+      this.dayText.setText(`第${s.day}日`);
+    }
+
+    // ---------- Master update ----------
+    _updateAll() {
+      this._updateBars();
+      this._updateTimeText();
+      this._drawSky(this.state.hour);
+      this._drawCelestial(this.state.hour);
+    }
+
+    // ---------- update loop ----------
+    update(time, delta) {
+      this._tickTime(delta);
+
+      // Character walk animation
+      if (Math.abs(this.charX - this.charTargetX) > 1) {
+        this.charX = lerp(this.charX, this.charTargetX, 0.08);
+        this._drawCharacter();
+      }
+
+      // Celestial smooth update
+      this._drawCelestial(this.state.hour + this.state.minute / 60);
+    }
+  }
+
+  // ============================================================
+  // Game config
+  // ============================================================
+  new Phaser.Game({
+    type: Phaser.AUTO,
+    width: W,
+    height: H,
+    backgroundColor: '#000000',
+    parent: 'game-container',
+    scene: [MainScene],
+  });
+  </script>
+</body>
+</html>
