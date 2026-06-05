@@ -167,25 +167,14 @@ canvas { position:absolute; top:0; left:0; }
     <!-- Start Screen -->
     <div id="start-screen" id="start-screen">
       <h1>🌱 リアル人生シミュレーター</h1>
-      <p>18歳から始まるリアルな人生。就職・恋愛・結婚・子育て・老後まで、<br>すべての選択があなたの人生を決めます。</p>
+      <p>0歳の誕生から始まるリアルな人生。幼少期・学校・就職・恋愛・結婚・老後・死まで、<br>すべての選択があなたの人生を決めます。</p>
       <label style="font-size:13px;color:#8b949e;">名前</label>
       <input id="name-input" type="text" placeholder="名前を入力" maxlength="10" value="田中 太郎">
-      <div style="font-size:13px;color:#8b949e;margin-top:8px;">スタートの道を選んでください</div>
-      <div class="start-choices">
-        <div class="start-card" onclick="startGame('university')">
-          <div class="icon">🎓</div>
-          <div class="label">大学進学</div>
-          <div class="desc">4年間の学費<br>卒業後の選択肢増</div>
-        </div>
-        <div class="start-card" onclick="startGame('work')">
-          <div class="icon">💼</div>
-          <div class="label">就職</div>
-          <div class="desc">すぐ働き始める<br>4年分の収入あり</div>
-        </div>
-        <div class="start-card" onclick="startGame('parttime')">
-          <div class="icon">☕</div>
-          <div class="label">フリーター</div>
-          <div class="desc">自由な生活<br>低収入だが自由</div>
+      <div style="margin-top:8px;">
+        <div class="start-card" style="width:200px;margin:0 auto;" onclick="startGame()">
+          <div class="icon">👶</div>
+          <div class="label">この世に生まれる</div>
+          <div class="desc">0歳から人生を始める</div>
         </div>
       </div>
     </div>
@@ -199,30 +188,36 @@ canvas { position:absolute; top:0; left:0; }
 // ============================================================
 const S = {
   name: '田中 太郎',
-  age: 18, year: 2006, month: 4, // 月は1-12
-  hp: 95, stress: 10, happiness: 70, social: 50,
-  savings: 100000,
-  education: 'highschool', // highschool / university
+  age: 0, year: 1988, month: 1,
+  hp: 100, stress: 0, happiness: 80, social: 20,
+  savings: 0,
+  education: 'none', // none / highschool / university
   job: null, jobMonths: 0, jobTitle: '無職',
-  grossIncome: 0,     // 税前
-  netIncome: 0,       // 手取り
+  grossIncome: 0,
+  netIncome: 0,
+  // childhood stats (影響は就職・健康へ)
+  studyLevel: 0,    // 0-100
+  athleticLevel: 0, // 0-100
   // family
-  livingWith: 'parents', // parents / alone / partner / family
-  partner: null,       // null or { name, age, metYear }
+  livingWith: 'parents',
+  partner: null,
   married: false,
-  children: [],        // [{ name, age }]
+  children: [],
   parentHealth: 100,
   parentNeedsCare: false,
   // flags
   hasLoan: false, loanBalance: 0, loanMonthly: 0,
   hasInvestment: false, investBalance: 0,
   isDead: false, deathAge: null, deathCause: null,
-  lifeEvents: [],      // strings for game-over summary
+  lifeEvents: [],
   // internal
+  inChildhood: true,  // age < 18
   inUniversity: false, uniYear: 0,
   unemployedMonths: 0,
   exerciseStreak: 0,
   lastEventMonth: -12,
+  // childhood school stage flags
+  hsPathChosen: false,
 };
 
 // Job table: key → { title, gross, req }
@@ -371,34 +366,55 @@ class BgScene extends Phaser.Scene {
   }
   drawChar(age, married, children) {
     const g = this.charGfx; g.clear();
-    const x=this.charX, y=308;
+    // Scale by age: baby(0-2)=0.25, child(3-11)=0.55, teen(12-17)=0.8, adult=1.0
+    const scale = age < 3 ? 0.25 : age < 6 ? 0.42 : age < 12 ? 0.60 : age < 18 ? 0.80 : 1.0;
+    const x = this.charX;
+    const baseY = 370; // feet always on ground
+    const h_total = 80 * scale; // total character height
+    const y = baseY - h_total; // head center offset
+
+    const headR  = 18 * scale;
+    const bodyW  = 32 * scale, bodyH = (age>60?42:38) * scale;
+    const legH   = 28 * scale, legW  = 12 * scale;
+    const shoeH  = 8  * scale;
+    const eyeR   = Math.max(1, 3 * scale);
+
     // Shadow
-    g.fillStyle(0x000000, 0.18); g.fillEllipse(x, y+44, 44, 12);
-    // Body — color by age
-    const bodyColor = age < 30 ? 0x1565c0 : age < 50 ? 0x37474f : 0x6d6d6d;
+    g.fillStyle(0x000000, 0.18); g.fillEllipse(x, baseY+4, 44*scale, 10*scale);
+    // Body
+    const bodyColor = age < 12 ? 0xe91e63 : age < 18 ? 0x43a047 : age < 30 ? 0x1565c0 : age < 50 ? 0x37474f : 0x6d6d6d;
     g.fillStyle(bodyColor, 1);
-    g.fillRoundedRect(x-16, y+2, 32, age>60?42:38, 4);
+    g.fillRoundedRect(x-bodyW/2, y+headR*0.6, bodyW, bodyH, 4*scale);
     // Head
     const skinColor = age < 50 ? 0xffcc80 : 0xd4956a;
-    g.fillStyle(skinColor, 1); g.fillCircle(x, y-8, 18);
-    // Hair — grays with age
+    g.fillStyle(skinColor, 1); g.fillCircle(x, y, headR);
+    // Hair
     const hairColor = age < 40 ? 0x4e342e : age < 55 ? 0x8d6e63 : 0xbdbdbd;
-    g.fillStyle(hairColor, 1); g.fillEllipse(x, y-22, 36, 16);
+    g.fillStyle(hairColor, 1); g.fillEllipse(x, y-headR*0.75, headR*2, headR*0.9);
+    // Baby — rounder face, chubby cheeks
+    if (age < 3) { g.fillStyle(0xffcc80, 0.5); g.fillCircle(x-headR*0.7, y+headR*0.1, headR*0.4); g.fillCircle(x+headR*0.7, y+headR*0.1, headR*0.4); }
     // Eyes
-    g.fillStyle(0x222, 1); g.fillCircle(x-6, y-10, 3); g.fillCircle(x+6, y-10, 3);
-    // Mouth: wrinkles at old age
-    g.lineStyle(2, 0x5d4037, 1);
-    g.beginPath(); g.arc(x, y-3, 6, 0.1, Math.PI-0.1, false); g.strokePath();
-    if (age > 55) { // wrinkle lines
+    g.fillStyle(0x222, 1); g.fillCircle(x-headR*0.35, y-headR*0.1, eyeR); g.fillCircle(x+headR*0.35, y-headR*0.1, eyeR);
+    // Mouth
+    g.lineStyle(Math.max(1,2*scale), 0x5d4037, 1);
+    g.beginPath(); g.arc(x, y+headR*0.2, headR*0.35, 0.1, Math.PI-0.1, false); g.strokePath();
+    // Wrinkles
+    if (age > 55) {
       g.lineStyle(1, 0xa1887f, 0.5);
-      g.beginPath(); g.moveTo(x-14, y-8); g.lineTo(x-8, y-4); g.strokePath();
-      g.beginPath(); g.moveTo(x+14, y-8); g.lineTo(x+8, y-4); g.strokePath();
+      g.beginPath(); g.moveTo(x-headR*0.8, y-headR*0.15); g.lineTo(x-headR*0.45, y+headR*0.1); g.strokePath();
+      g.beginPath(); g.moveTo(x+headR*0.8, y-headR*0.15); g.lineTo(x+headR*0.45, y+headR*0.1); g.strokePath();
     }
     // Legs
-    g.fillStyle(0x37474f, 1); g.fillRect(x-14, y+38, 12, 28); g.fillRect(x+2, y+38, 12, 28);
-    g.fillStyle(0x212121, 1); g.fillRect(x-16, y+62, 16, 8); g.fillRect(x, y+62, 16, 8);
-    // Cane for elderly
-    if (age > 70) { g.lineStyle(3, 0xa1887f, 1); g.beginPath(); g.moveTo(x+18, y+10); g.lineTo(x+28, y+70); g.strokePath(); }
+    const legTop = y + headR*0.6 + bodyH;
+    g.fillStyle(0x37474f, 1);
+    g.fillRect(x-bodyW/2+legW*0.1, legTop, legW, legH);
+    g.fillRect(x+bodyW/2-legW*1.1, legTop, legW, legH);
+    // Shoes
+    g.fillStyle(0x212121, 1);
+    g.fillRect(x-bodyW/2+legW*0.1-legW*0.1, legTop+legH, legW*1.2, shoeH);
+    g.fillRect(x+bodyW/2-legW*1.2, legTop+legH, legW*1.2, shoeH);
+    // Cane
+    if (age > 70) { g.lineStyle(3, 0xa1887f, 1); g.beginPath(); g.moveTo(x+bodyW/2+4, y+headR); g.lineTo(x+bodyW/2+14, baseY+shoeH); g.strokePath(); }
   }
   update(_, delta) {
     if (!S.isDead && Math.abs(this.charX-this.charTargetX)>0.5) {
@@ -441,38 +457,16 @@ function cycleSpeed() {
   document.getElementById('speed-label').textContent = '速度: ' + SPEED_LABELS[speedIdx];
 }
 
-function startGame(path) {
+function startGame() {
   S.name = document.getElementById('name-input').value || '田中 太郎';
   document.getElementById('start-screen').style.display = 'none';
   gameStarted = true;
   paused = false;
   document.getElementById('btn-pause').textContent = '⏸ 一時停止';
-
-  if (path === 'university') {
-    S.inUniversity = true; S.uniYear = 1;
-    S.savings = 100000;
-    S.livingWith = 'parents';
-    log('🎓 大学に入学しました。4年間頑張りましょう！', 'good');
-    S.lifeEvents.push('大学進学');
-  } else if (path === 'work') {
-    S.job = 'office_hs'; S.jobMonths = 0;
-    S.grossIncome = JOBS.office_hs.gross;
-    S.livingWith = 'alone';
-    S.savings = 100000;
-    log('💼 高校卒業後、すぐに就職しました。', 'good');
-    S.lifeEvents.push('高卒就職');
-  } else {
-    S.job = 'parttime'; S.jobMonths = 0;
-    S.grossIncome = JOBS.parttime.gross;
-    S.livingWith = 'parents';
-    S.savings = 100000;
-    log('☕ フリーターとして生活を始めました。', 'normal');
-    S.lifeEvents.push('フリーター生活開始');
-  }
+  log(`👶 ${S.name}が生まれました！${S.year}年${S.month}月。`, 'good');
+  S.lifeEvents.push('誕生');
   updateUI();
   renderActions();
-
-  // Start simulation loop
   setInterval(simLoop, 100);
 }
 
@@ -496,14 +490,13 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) last
 // MONTHLY TICK
 // ============================================================
 function tickMonth() {
-  // Advance time
   S.month++;
   if (S.month > 12) { S.month = 1; S.year++; S.age++; onNewYear(); }
 
-  // University progression
-  if (S.inUniversity) tickUniversity();
+  // Childhood phase (age 0-17)
+  if (S.inChildhood) { tickChildhood(); updateUI(); renderActions(); return; }
 
-  // Income & expenses
+  if (S.inUniversity) tickUniversity();
   tickFinances();
 
   // Passive stat changes
@@ -538,6 +531,94 @@ function tickMonth() {
 
   updateUI();
   renderActions();
+}
+
+// ============================================================
+// CHILDHOOD TICK (age 0-17)
+// ============================================================
+function tickChildhood() {
+  // Passive childhood happiness
+  S.happiness = Math.min(100, S.happiness + 0.1);
+  // Random small childhood events
+  if (S.month === 1 && Math.random() < 0.15) {
+    const events = [
+      [()=>{ S.happiness=Math.min(100,S.happiness+10); log('🎁 お年玉をもらいました！嬉しい！', 'good'); }],
+      [()=>{ S.hp=Math.max(0,S.hp-8); S.stress=Math.min(100,S.stress+5); log('🤒 風邪をひきました。しばらく寝込みます。', 'bad'); }],
+      [()=>{ S.social=Math.min(100,S.social+8); log('👫 友達と楽しく遊びました。', 'good'); }],
+    ];
+    events[Math.floor(Math.random()*events.length)][0]();
+  }
+  if (S.hp < 80) S.hp = Math.min(100, S.hp + 1); // 子供は回復が早い
+}
+
+function onChildhoodYear() {
+  const a = S.age;
+  if (a === 1) { log('👶 初めて歩きました！', 'good'); S.lifeEvents.push('初歩き'); }
+  if (a === 3) { log('🎒 幼稚園に入園しました。', 'good'); S.lifeEvents.push('幼稚園入園'); }
+  if (a === 6) {
+    log('🏫 小学校に入学しました。', 'good'); S.lifeEvents.push('小学校入学');
+    showModal('🏫','小学校入学',`${S.name}は小学生になりました！\n放課後の過ごし方を選んでください。`,[
+      { label:'勉強を頑張る', desc:'学力アップ。将来の進路に有利', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+20); log('📚 勉強を頑張る小学生になりました。', 'good'); } },
+      { label:'スポーツに打ち込む', desc:'体力アップ。健康に有利', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+20); S.hp=Math.min(100,S.hp+5); log('⚽ スポーツが得意な小学生になりました。', 'good'); } },
+      { label:'友達と自由に遊ぶ', desc:'社会性アップ', fn:()=>{ S.social=Math.min(100,S.social+20); S.happiness=Math.min(100,S.happiness+10); log('👫 友達と毎日楽しく遊ぶ小学生になりました。', 'good'); } },
+    ]);
+  }
+  if (a === 10) {
+    showModal('📖','小学5年生',`${S.name}は高学年になりました。\n習い事を始めますか？`,[
+      { label:'塾に通う（成績UP）', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+15); log('📖 塾に通い始めました。勉強が得意になっています。', 'good'); } },
+      { label:'スポーツクラブ（体力UP）', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+15); log('🏃 スポーツクラブに入りました。', 'good'); } },
+      { label:'習い事なし（自由時間）', fn:()=>{ S.happiness=Math.min(100,S.happiness+10); log('自由な時間を満喫しています。', 'normal'); } },
+    ]);
+  }
+  if (a === 12) {
+    log('🏫 中学校に入学しました。', 'good'); S.lifeEvents.push('中学校入学');
+    showModal('🏫','中学校入学',`${S.name}は中学生になりました！\n部活動を選んでください。`,[
+      { label:'勉強系（文化部・生徒会）', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+20); S.social=Math.min(100,S.social+10); log('📚 文化部で活動し、勉強も頑張っています。', 'good'); } },
+      { label:'運動部（体力全振り）', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+25); S.hp=Math.min(100,S.hp+10); log('⚽ 運動部でスポーツに打ち込んでいます。', 'good'); } },
+      { label:'部活なし（アルバイト的に自由）', fn:()=>{ S.happiness=Math.min(100,S.happiness+8); S.savings+=30000; log('📱 部活に入らず自由に過ごしています。', 'normal'); } },
+    ]);
+  }
+  if (a === 15) {
+    log('🏫 高校に入学しました。', 'good'); S.lifeEvents.push('高校入学');
+    const studyBonus = S.studyLevel >= 50 ? '（進学校）' : '（普通科）';
+    showModal('🏫','高校入学'+studyBonus,`${S.name}は高校生になりました！\n将来の方向性を考えましょう。`,[
+      { label:'大学進学を目指す', desc:'勉強に集中。高い学力が必要', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+15); S.hsPathChosen='university'; log('🎓 大学進学を目指して勉強を始めました。', 'good'); } },
+      { label:'専門学校・就職を視野に', desc:'早めに社会へ。実学重視', fn:()=>{ S.hsPathChosen='work'; log('💼 卒業後は就職か専門学校を考えています。', 'normal'); } },
+      { label:'とりあえず楽しむ', desc:'高校生活を謳歌する', fn:()=>{ S.happiness=Math.min(100,S.happiness+15); S.social=Math.min(100,S.social+15); S.hsPathChosen='parttime'; log('🎵 高校生活を思いっきり楽しんでいます。', 'good'); } },
+    ]);
+  }
+  if (a === 16 && Math.random() < 0.4) {
+    showModal('💕','初めての恋',`${S.name}に好きな人ができました。\nどうしますか？`,[
+      { label:'告白する！', fn:()=>{ if(Math.random()<0.6){ S.happiness=Math.min(100,S.happiness+20); S.social=Math.min(100,S.social+10); log('💑 交際がスタートしました！青春！', 'good'); S.lifeEvents.push('初恋・成功'); }else{ S.happiness=Math.max(0,S.happiness-10); log('💔 振られてしまいました。でも大丈夫。', 'bad'); S.lifeEvents.push('初恋・失恋'); } } },
+      { label:'勉強に集中する', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+10); log('📚 恋愛より勉強を選びました。', 'normal'); } },
+    ]);
+  }
+  if (a === 17) {
+    showModal('🎓','高校3年生',`いよいよ進路を決める時期です。\n${S.name}の将来はどうなるでしょうか。`,
+      buildGradChoices()
+    );
+  }
+}
+
+function buildGradChoices() {
+  const opts = [];
+  if (S.studyLevel >= 40 || S.hsPathChosen === 'university') {
+    opts.push({ label:'🎓 大学進学（4年間）', desc:'月5〜6万の学費。就職の幅が広がる', fn:()=>{
+      S.inChildhood=false; S.inUniversity=true; S.uniYear=1; S.education='highschool'; S.livingWith='parents'; S.savings=100000;
+      // athletic bonus
+      if(S.athleticLevel>=50) S.hp=Math.min(100,S.hp+10);
+      log('🎓 大学に入学しました！新生活スタートです。', 'good'); S.lifeEvents.push('大学進学');
+    }});
+  }
+  opts.push({ label:'💼 就職（高卒）', desc:'すぐに稼げる。キャリアは自分次第', fn:()=>{
+    S.inChildhood=false; S.job='office_hs'; S.grossIncome=JOBS.office_hs.gross+(S.studyLevel>=50?20000:0); S.livingWith='alone'; S.education='highschool'; S.savings=100000;
+    log('💼 高校卒業後、就職しました！', 'good'); S.lifeEvents.push('高卒就職');
+  }});
+  opts.push({ label:'☕ フリーター', desc:'自由だが低収入。将来は不安定', fn:()=>{
+    S.inChildhood=false; S.job='parttime'; S.grossIncome=JOBS.parttime.gross; S.livingWith='parents'; S.education='highschool'; S.savings=100000;
+    log('☕ フリーターとして生活を始めました。', 'normal'); S.lifeEvents.push('フリーター開始');
+  }});
+  return opts;
 }
 
 function tickUniversity() {
@@ -673,6 +754,7 @@ function checkPromotion() {
 }
 
 function onNewYear() {
+  if (S.inChildhood) { onChildhoodYear(); updateUI(); renderActions(); return; }
   log(`━━ ${S.year}年 ${S.name}は${S.age}歳になりました ━━`, 'month');
   S.lifeEvents.push(`${S.age}歳`);
   // Birthday events
@@ -844,6 +926,19 @@ function renderActions() {
 
 function getAvailableActions() {
   const acts = [];
+  if (S.inChildhood) {
+    if (S.age < 3) return [{ label:'👶 すやすや眠る', fn:()=>{ S.hp=Math.min(100,S.hp+3); log('💤 すやすや眠っています。', 'normal'); } }];
+    if (S.age < 6) return [
+      { label:'🧸 おもちゃで遊ぶ', fn:()=>{ S.happiness=Math.min(100,S.happiness+5); log('🧸 おもちゃで楽しく遊びました。', 'good'); } },
+      { label:'🏃 外で走り回る', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+3); S.hp=Math.min(100,S.hp+2); log('🏃 元気いっぱい外で遊びました。', 'good'); } },
+    ];
+    // 小学生以上
+    acts.push({ label:'📚 勉強する', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+3); log('📚 一生懸命勉強しました。', 'good'); } });
+    acts.push({ label:'⚽ 運動する', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+3); S.hp=Math.min(100,S.hp+2); log('⚽ 体を動かしました。', 'good'); } });
+    acts.push({ label:'👫 友達と遊ぶ', fn:()=>{ S.social=Math.min(100,S.social+4); S.happiness=Math.min(100,S.happiness+4); log('👫 友達と遊んで楽しい一日でした。', 'good'); } });
+    if (S.age >= 14) acts.push({ label:'📖 参考書を買う（¥3,000）', cost:'¥3,000', disabled:S.savings<3000, fn:()=>{ S.savings-=3000; S.studyLevel=Math.min(100,S.studyLevel+8); log('📖 参考書で自主学習しました。', 'good'); } });
+    return acts;
+  }
   if (S.inUniversity) {
     acts.push({ label:'📚 アルバイト', desc:'大学生バイト。月3〜5万', fn:()=>{ S.savings+=40000; log('☕ バイトで4万円稼ぎました。', 'normal'); } });
     acts.push({ label:'🏃 運動する', desc:'健康・ストレス解消', fn:()=>{ S.hp=Math.min(100,S.hp+5); S.stress=Math.max(0,S.stress-8); S.exerciseStreak=3; log('🏃 運動しました。健康維持！', 'good'); } });
@@ -947,21 +1042,35 @@ function updateUI() {
 
   // Char info
   const info = document.getElementById('char-info');
-  const jobInfo = S.inUniversity ? `大学${S.uniYear}年生` : (JOBS[S.job]?.title || '無職');
-  const famInfo = S.married ? `既婚（${S.partner?.name}）` : (S.partner ? `交際中（${S.partner?.name}）` : '独身');
-  const childInfo = S.children.length > 0 ? `子供: ${S.children.map(c=>`${c.name}(${c.age}歳)`).join(' ')}` : '';
-  info.innerHTML = [
-    `<span>${S.name}</span>　${S.age}歳`,
-    `${S.year}年${S.month}月`,
-    `学歴: ${S.education==='university'?'大卒':'高卒'}`,
-    `職業: <span>${jobInfo}</span>`,
-    famInfo,
-    childInfo,
-    S.hasLoan ? `奨学金残: ¥${S.loanBalance.toLocaleString()}` : '',
-    S.parentNeedsCare ? '👴 親の介護中' : '',
-  ].filter(Boolean).map(l=>`<div>${l}</div>`).join('');
+  let lines = [`<span>${S.name}</span>　${S.age}歳`, `${S.year}年${S.month}月`];
+  if (S.inChildhood) {
+    const stage = S.age < 3 ? '👶 赤ちゃん' : S.age < 6 ? '🧒 幼稚園児' : S.age < 12 ? '🏫 小学生' : S.age < 15 ? '🏫 中学生' : '🏫 高校生';
+    lines.push(`<span>${stage}</span>`);
+    lines.push(`📚 勉強力: ${Math.round(S.studyLevel)}`);
+    lines.push(`⚽ 運動力: ${Math.round(S.athleticLevel)}`);
+  } else {
+    const jobInfo = S.inUniversity ? `大学${S.uniYear}年生` : (JOBS[S.job]?.title || '無職');
+    const famInfo = S.married ? `既婚（${S.partner?.name}）` : (S.partner ? `交際中（${S.partner?.name}）` : '独身');
+    const childInfo = S.children.length > 0 ? `子供: ${S.children.map(c=>`${c.name}(${c.age}歳)`).join(' ')}` : '';
+    lines.push(`学歴: ${S.education==='university'?'大卒':'高卒'}`);
+    lines.push(`職業: <span>${jobInfo}</span>`);
+    lines.push(famInfo);
+    if (childInfo) lines.push(childInfo);
+    if (S.hasLoan) lines.push(`奨学金残: ¥${S.loanBalance.toLocaleString()}`);
+    if (S.parentNeedsCare) lines.push('👴 親の介護中');
+  }
+  info.innerHTML = lines.filter(Boolean).map(l=>`<div>${l}</div>`).join('');
 
   // Finance
+  if (S.inChildhood) {
+    document.getElementById('savings-big').textContent = S.age < 6 ? '—' : `¥${S.savings.toLocaleString()}`;
+    document.getElementById('savings-big').style.color = '#8b949e';
+    document.getElementById('fin-income').textContent = '親が管理中';
+    ['fin-rent','fin-food','fin-util','fin-ins','fin-edu','fin-misc'].forEach(id=>{ document.getElementById(id).textContent='—'; });
+    document.getElementById('fin-net').textContent = '—';
+    document.getElementById('date-display').textContent = `${S.year}年${S.month}月`;
+    return;
+  }
   document.getElementById('savings-big').textContent = '¥'+(Math.max(0,S.savings)).toLocaleString();
   if (S.savings < 0) {
     document.getElementById('savings-big').style.color='#f85149';
