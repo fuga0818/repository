@@ -1,623 +1,1011 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>人生シミュレーション</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #1a1a2e; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', sans-serif; }
-    #game-container { position: relative; }
-    canvas { display: block; border-radius: 8px; box-shadow: 0 0 40px rgba(100, 150, 255, 0.3); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リアル人生シミュレーター</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0d1117; font-family:'Segoe UI','Hiragino Sans',sans-serif; color:#e6edf3; overflow:hidden; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+#root { width:1000px; height:660px; position:relative; border-radius:12px; overflow:hidden; box-shadow:0 0 60px rgba(56,139,253,0.2); }
+canvas { position:absolute; top:0; left:0; }
+#ui { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+
+/* ---------- Left panel ---------- */
+#panel-left { position:absolute; top:8px; left:8px; width:220px; height:390px; background:rgba(13,17,23,0.88); border:1px solid #30363d; border-radius:10px; padding:12px; pointer-events:auto; }
+.panel-title { font-size:11px; color:#58a6ff; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; border-bottom:1px solid #21262d; padding-bottom:4px; }
+.stat-row { display:flex; align-items:center; margin-bottom:7px; gap:6px; }
+.stat-label { font-size:11px; color:#8b949e; width:68px; flex-shrink:0; }
+.stat-bar-bg { flex:1; height:8px; background:#21262d; border-radius:4px; overflow:hidden; }
+.stat-bar { height:100%; border-radius:4px; transition:width 0.4s; }
+.stat-val { font-size:11px; color:#c9d1d9; width:26px; text-align:right; flex-shrink:0; }
+#char-info { margin-top:10px; font-size:12px; color:#c9d1d9; line-height:1.8; }
+#char-info span { color:#f0f6fc; font-weight:600; }
+
+/* ---------- Right panel ---------- */
+#panel-right { position:absolute; top:8px; right:8px; width:220px; height:390px; background:rgba(13,17,23,0.88); border:1px solid #30363d; border-radius:10px; padding:12px; pointer-events:auto; }
+.money-row { display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px; }
+.money-label { color:#8b949e; }
+.money-val { font-family:monospace; }
+.money-pos { color:#3fb950; }
+.money-neg { color:#f85149; }
+.money-neutral { color:#c9d1d9; }
+.divider { border:none; border-top:1px solid #21262d; margin:7px 0; }
+#savings-big { font-size:22px; font-family:monospace; color:#58a6ff; font-weight:700; text-align:center; margin:8px 0 4px; }
+#savings-label { font-size:10px; color:#8b949e; text-align:center; margin-bottom:8px; }
+#net-row { display:flex; justify-content:space-between; font-size:13px; font-weight:600; padding:5px 0; border-top:1px solid #30363d; }
+
+/* ---------- Event log ---------- */
+#panel-log { position:absolute; bottom:8px; left:8px; right:8px; height:220px; background:rgba(13,17,23,0.90); border:1px solid #30363d; border-radius:10px; padding:10px 12px; pointer-events:auto; display:flex; flex-direction:column; gap:6px; }
+#log-header { display:flex; align-items:center; justify-content:space-between; }
+#log-title { font-size:11px; color:#58a6ff; text-transform:uppercase; letter-spacing:1px; }
+#date-display { font-size:13px; font-family:monospace; color:#c9d1d9; }
+#log-body { flex:1; overflow-y:auto; display:flex; flex-direction:column-reverse; gap:3px; }
+#log-body::-webkit-scrollbar { width:4px; } #log-body::-webkit-scrollbar-thumb { background:#30363d; border-radius:2px; }
+.log-entry { font-size:12px; line-height:1.5; padding:3px 6px; border-radius:4px; }
+.log-normal { color:#c9d1d9; }
+.log-event  { color:#f0f6fc; background:#161b22; }
+.log-good   { color:#3fb950; background:#0f2a18; }
+.log-bad    { color:#f85149; background:#2d0f0f; }
+.log-warn   { color:#d29922; background:#2a1f0f; }
+.log-month  { color:#58a6ff; background:#0d1f3c; font-weight:600; border-left:2px solid #1f6feb; padding-left:8px; }
+
+/* ---------- Action area ---------- */
+#action-area { position:absolute; bottom:230px; right:8px; width:220px; display:flex; flex-direction:column; gap:5px; pointer-events:auto; }
+.act-btn { background:#161b22; border:1px solid #30363d; border-radius:7px; padding:7px 10px; font-size:12px; color:#c9d1d9; cursor:pointer; text-align:left; transition:all 0.15s; display:flex; align-items:center; gap:6px; }
+.act-btn:hover { background:#1f2937; border-color:#58a6ff; color:#f0f6fc; }
+.act-btn:disabled { opacity:0.35; cursor:not-allowed; }
+.act-btn .act-cost { margin-left:auto; font-size:10px; color:#8b949e; }
+
+/* ---------- Time control ---------- */
+#time-ctrl { position:absolute; bottom:230px; left:8px; width:220px; display:flex; gap:5px; pointer-events:auto; }
+.ctrl-btn { flex:1; background:#161b22; border:1px solid #30363d; border-radius:7px; padding:8px; font-size:12px; color:#c9d1d9; cursor:pointer; text-align:center; transition:all 0.15s; }
+.ctrl-btn:hover { background:#1f2937; border-color:#58a6ff; }
+.ctrl-btn.active { background:#0d2137; border-color:#1f6feb; color:#58a6ff; }
+#speed-label { font-size:10px; color:#8b949e; text-align:center; margin-top:3px; }
+
+/* ---------- Modal ---------- */
+#modal-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.75); display:none; align-items:center; justify-content:center; pointer-events:auto; z-index:100; }
+#modal-overlay.active { display:flex; }
+#modal-box { background:#161b22; border:1px solid #30363d; border-radius:14px; padding:28px 32px; width:460px; max-height:560px; overflow-y:auto; }
+#modal-icon { font-size:40px; text-align:center; margin-bottom:8px; }
+#modal-title { font-size:20px; font-weight:700; color:#f0f6fc; text-align:center; margin-bottom:8px; }
+#modal-body { font-size:14px; color:#8b949e; line-height:1.8; text-align:center; margin-bottom:18px; }
+#modal-choices { display:flex; flex-direction:column; gap:8px; }
+.choice-btn { background:#21262d; border:1px solid #30363d; border-radius:8px; padding:12px 16px; font-size:13px; color:#c9d1d9; cursor:pointer; text-align:left; transition:all 0.15s; }
+.choice-btn:hover { background:#1f2937; border-color:#58a6ff; color:#f0f6fc; }
+.choice-desc { font-size:11px; color:#8b949e; margin-top:3px; }
+
+/* ---------- Game Over ---------- */
+#gameover { position:absolute; inset:0; background:rgba(0,0,0,0.9); display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px; pointer-events:auto; z-index:200; }
+#gameover.active { display:flex; }
+#gameover h1 { font-size:32px; color:#f0f6fc; }
+#gameover .summary { font-size:14px; color:#8b949e; text-align:center; line-height:2; max-width:500px; }
+#restart-btn { background:#1f6feb; border:none; border-radius:8px; padding:12px 32px; font-size:16px; color:#fff; cursor:pointer; }
+#restart-btn:hover { background:#388bfd; }
+
+/* ---------- Start Screen ---------- */
+#start-screen { position:absolute; inset:0; background:rgba(13,17,23,0.96); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px; pointer-events:auto; z-index:200; }
+#start-screen h1 { font-size:28px; color:#f0f6fc; letter-spacing:2px; }
+#start-screen p { font-size:13px; color:#8b949e; text-align:center; max-width:420px; line-height:1.8; }
+.start-choices { display:flex; gap:12px; margin-top:8px; }
+.start-card { background:#161b22; border:1px solid #30363d; border-radius:10px; padding:18px 22px; width:140px; cursor:pointer; text-align:center; transition:all 0.2s; }
+.start-card:hover { border-color:#58a6ff; background:#0d1f3c; }
+.start-card .icon { font-size:32px; margin-bottom:8px; }
+.start-card .label { font-size:13px; color:#c9d1d9; font-weight:600; }
+.start-card .desc { font-size:11px; color:#8b949e; margin-top:4px; line-height:1.5; }
+#name-input { background:#21262d; border:1px solid #30363d; border-radius:6px; padding:8px 14px; font-size:14px; color:#f0f6fc; width:200px; text-align:center; outline:none; }
+#name-input:focus { border-color:#58a6ff; }
+</style>
 </head>
 <body>
-  <div id="game-container"></div>
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
-  <script>
-  // ============================================================
-  // Constants
-  // ============================================================
-  const W = 800, H = 600;
-  const COLORS = {
-    sky_day:   0x87ceeb,
-    sky_night: 0x1a1a4e,
-    sky_eve:   0xff7043,
-    ground:    0x4caf50,
-    ground2:   0x388e3c,
-    house:     0xe53935,
-    house2:    0xb71c1c,
-    roof:      0x795548,
-    window:    0xfff176,
-    door:      0x6d4c41,
-    road:      0x616161,
-    panel_bg:  0x000000,
-    bar_hp:    0xe53935,
-    bar_en:    0xffeb3b,
-    bar_hap:   0xff80ab,
-    bar_mon:   0x66bb6a,
-    btn_work:  0x1565c0,
-    btn_sleep: 0x4a148c,
-    btn_eat:   0xe65100,
-    btn_play:  0xad1457,
-    btn_hover: 0xffffff,
-    text:      '#ffffff',
-    text_dark: '#222222',
-  };
+<div id="root">
+  <canvas id="bg-canvas" width="1000" height="660"></canvas>
+  <div id="ui">
+    <!-- Left: Character Stats -->
+    <div id="panel-left">
+      <div class="panel-title">ステータス</div>
+      <div class="stat-row"><span class="stat-label">❤️ 健康</span><div class="stat-bar-bg"><div class="stat-bar" id="bar-hp" style="background:#f85149"></div></div><span class="stat-val" id="val-hp">95</span></div>
+      <div class="stat-row"><span class="stat-label">😤 ストレス</span><div class="stat-bar-bg"><div class="stat-bar" id="bar-st" style="background:#d29922"></div></div><span class="stat-val" id="val-st">10</span></div>
+      <div class="stat-row"><span class="stat-label">😊 幸福度</span><div class="stat-bar-bg"><div class="stat-bar" id="bar-hap" style="background:#ff80ab"></div></div><span class="stat-val" id="val-hap">70</span></div>
+      <div class="stat-row"><span class="stat-label">🤝 社会性</span><div class="stat-bar-bg"><div class="stat-bar" id="bar-soc" style="background:#79c0ff"></div></div><span class="stat-val" id="val-soc">50</span></div>
+      <div id="char-info"></div>
+    </div>
 
-  // ============================================================
-  // Utility
-  // ============================================================
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    <!-- Right: Finance -->
+    <div id="panel-right">
+      <div class="panel-title">家計</div>
+      <div id="savings-big">¥0</div>
+      <div id="savings-label">貯蓄</div>
+      <hr class="divider">
+      <div class="money-row"><span class="money-label">💼 月収（手取り）</span><span class="money-val money-pos" id="fin-income">¥0</span></div>
+      <div class="money-row"><span class="money-label">🏠 家賃</span><span class="money-val money-neg" id="fin-rent">¥0</span></div>
+      <div class="money-row"><span class="money-label">🍚 食費</span><span class="money-val money-neg" id="fin-food">¥0</span></div>
+      <div class="money-row"><span class="money-label">💡 光熱費</span><span class="money-val money-neg" id="fin-util">¥0</span></div>
+      <div class="money-row"><span class="money-label">🏥 保険・年金</span><span class="money-val money-neg" id="fin-ins">¥0</span></div>
+      <div class="money-row"><span class="money-label">👶 教育費</span><span class="money-val money-neg" id="fin-edu">¥0</span></div>
+      <div class="money-row"><span class="money-label">💳 その他</span><span class="money-val money-neg" id="fin-misc">¥0</span></div>
+      <div id="net-row"><span>月間収支</span><span id="fin-net" class="money-pos">¥0</span></div>
+    </div>
 
-  // ============================================================
-  // MainScene
-  // ============================================================
-  class MainScene extends Phaser.Scene {
-    constructor() { super('MainScene'); }
+    <!-- Time control (left of log) -->
+    <div id="time-ctrl">
+      <button class="ctrl-btn" id="btn-pause" onclick="togglePause()">⏸ 一時停止</button>
+      <button class="ctrl-btn" id="btn-speed" onclick="cycleSpeed()">⏩ 速度</button>
+    </div>
+    <div style="position:absolute;bottom:428px;left:8px;width:220px;"><div id="speed-label">速度: 普通 (1秒/月)</div></div>
 
-    // ---------- create ----------
-    create() {
-      // State
-      this.state = {
-        day: 1, hour: 7, minute: 0,
-        hp: 80, energy: 80, happiness: 60, money: 500,
-        age: 20, job: 'フリーター',
-        message: 'おはようございます！今日も一日頑張りましょう。',
-        actionLocked: false,
-        events: [],
-      };
+    <!-- Action buttons (right of log) -->
+    <div id="action-area"></div>
 
-      this.minuteTimer = 0;
-      this.minutePerMs = 1000 / 60; // 1 real second = 1 min
+    <!-- Event Log -->
+    <div id="panel-log">
+      <div id="log-header">
+        <span id="log-title">ライフログ</span>
+        <span id="date-display">──</span>
+      </div>
+      <div id="log-body"></div>
+    </div>
 
-      this._buildWorld();
-      this._buildUI();
-      this._buildButtons();
-      this._buildCharacter();
-      this._buildEventLog();
-      this._updateAll();
+    <!-- Modal -->
+    <div id="modal-overlay">
+      <div id="modal-box">
+        <div id="modal-icon"></div>
+        <div id="modal-title"></div>
+        <div id="modal-body"></div>
+        <div id="modal-choices"></div>
+      </div>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameover">
+      <h1>人生終了</h1>
+      <div class="summary" id="go-summary"></div>
+      <button id="restart-btn" onclick="location.reload()">もう一度生きる</button>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" id="start-screen">
+      <h1>🌱 リアル人生シミュレーター</h1>
+      <p>18歳から始まるリアルな人生。就職・恋愛・結婚・子育て・老後まで、<br>すべての選択があなたの人生を決めます。</p>
+      <label style="font-size:13px;color:#8b949e;">名前</label>
+      <input id="name-input" type="text" placeholder="名前を入力" maxlength="10" value="田中 太郎">
+      <div style="font-size:13px;color:#8b949e;margin-top:8px;">スタートの道を選んでください</div>
+      <div class="start-choices">
+        <div class="start-card" onclick="startGame('university')">
+          <div class="icon">🎓</div>
+          <div class="label">大学進学</div>
+          <div class="desc">4年間の学費<br>卒業後の選択肢増</div>
+        </div>
+        <div class="start-card" onclick="startGame('work')">
+          <div class="icon">💼</div>
+          <div class="label">就職</div>
+          <div class="desc">すぐ働き始める<br>4年分の収入あり</div>
+        </div>
+        <div class="start-card" onclick="startGame('parttime')">
+          <div class="icon">☕</div>
+          <div class="label">フリーター</div>
+          <div class="desc">自由な生活<br>低収入だが自由</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+<script>
+// ============================================================
+// GAME STATE
+// ============================================================
+const S = {
+  name: '田中 太郎',
+  age: 18, year: 2006, month: 4, // 月は1-12
+  hp: 95, stress: 10, happiness: 70, social: 50,
+  savings: 100000,
+  education: 'highschool', // highschool / university
+  job: null, jobMonths: 0, jobTitle: '無職',
+  grossIncome: 0,     // 税前
+  netIncome: 0,       // 手取り
+  // family
+  livingWith: 'parents', // parents / alone / partner / family
+  partner: null,       // null or { name, age, metYear }
+  married: false,
+  children: [],        // [{ name, age }]
+  parentHealth: 100,
+  parentNeedsCare: false,
+  // flags
+  hasLoan: false, loanBalance: 0, loanMonthly: 0,
+  hasInvestment: false, investBalance: 0,
+  isDead: false, deathAge: null, deathCause: null,
+  lifeEvents: [],      // strings for game-over summary
+  // internal
+  inUniversity: false, uniYear: 0,
+  unemployedMonths: 0,
+  exerciseStreak: 0,
+  lastEventMonth: -12,
+};
+
+// Job table: key → { title, gross, req }
+const JOBS = {
+  parttime:     { title: 'アルバイト',         gross: 110000,  req: null },
+  office_hs:    { title: '会社員（高卒）',      gross: 200000,  req: 'highschool' },
+  office_uni:   { title: '会社員（大卒）',      gross: 240000,  req: 'university' },
+  engineer:     { title: 'エンジニア',          gross: 350000,  req: 'university' },
+  sales:        { title: '営業職',              gross: 280000,  req: 'highschool' },
+  nurse:        { title: '看護師',              gross: 310000,  req: 'university' },
+  teacher:      { title: '教員',                gross: 290000,  req: 'university' },
+  manager:      { title: '管理職（課長）',       gross: 500000,  req: null, promote: true },
+  senior_mgr:   { title: '部長',               gross: 650000,  req: null, promote: true },
+  executive:    { title: '役員・取締役',         gross: 900000,  req: null, promote: true },
+  freelance:    { title: 'フリーランス',         gross: 400000,  req: 'university' },
+  unemployed:   { title: '求職中',              gross: 0,       req: null },
+};
+
+// Monthly expenses calculator
+function calcExpenses() {
+  let rent = 0, food = 0, util = 0, ins = 0, edu = 0, misc = 0;
+  if (S.livingWith === 'parents') {
+    food = 20000; util = 5000; misc = 15000;
+  } else {
+    // 1R~2LDK depending on family
+    const baseRent = S.children.length > 0 ? 90000 : (S.married ? 80000 : 68000);
+    rent = baseRent;
+    food = S.married ? 50000 : 30000;
+    food += S.children.filter(c=>c.age<18).length * 15000;
+    util = S.married ? 18000 : 10000;
+    misc = 20000 + S.children.filter(c=>c.age<18).length * 5000;
+  }
+  // 保険・年金
+  if (S.grossIncome > 0) {
+    ins = Math.round(S.grossIncome * 0.14); // 厚生年金+健康保険の概算
+  } else {
+    ins = 16000; // 国民年金
+  }
+  // 子供の教育費
+  S.children.forEach(c => {
+    if (c.age >= 3 && c.age < 6) edu += 25000;   // 保育園
+    else if (c.age >= 6 && c.age < 15) edu += 15000; // 小中学校+習い事
+    else if (c.age >= 15 && c.age < 18) edu += 30000; // 高校
+    else if (c.age >= 18 && c.age < 22) edu += 60000; // 大学
+  });
+  // ローン返済
+  misc += S.loanMonthly;
+  return { rent, food, util, ins, edu, misc };
+}
+
+function calcTax(gross) {
+  // 簡易所得税+住民税（年収換算で概算）
+  const annual = gross * 12;
+  let rate = 0.05;
+  if (annual > 1950000) rate = 0.10;
+  if (annual > 3300000) rate = 0.15;
+  if (annual > 6950000) rate = 0.23;
+  if (annual > 9000000) rate = 0.33;
+  return Math.round(gross * rate);
+}
+
+// ============================================================
+// RENDERING (Phaser background)
+// ============================================================
+let phaserScene;
+class BgScene extends Phaser.Scene {
+  constructor() { super('BgScene'); }
+  create() {
+    phaserScene = this;
+    this.skyGfx = this.add.graphics();
+    this.worldGfx = this.add.graphics();
+    this.charGfx = this.add.graphics();
+    this.celestialGfx = this.add.graphics();
+    this._buildStaticWorld();
+    this.charX = 500; this.charTargetX = 500;
+  }
+  _buildStaticWorld() {
+    const g = this.worldGfx;
+    // Ground
+    g.fillStyle(0x2d5a1b, 1); g.fillRect(0, 340, 1000, 60);
+    g.fillStyle(0x3d7a25, 1); g.fillRect(0, 330, 1000, 14);
+    // Road
+    g.fillStyle(0x555, 1); g.fillRect(0, 360, 1000, 40);
+    g.fillStyle(0xffffff, 1);
+    for (let x=0; x<1000; x+=80) g.fillRect(x, 376, 40, 5);
+    // House 1
+    this._house(g, 50, 190, 180, 140);
+    // Apartment
+    this._apartment(g, 700, 100, 220, 230);
+    // Trees
+    [280,380,480,580].forEach(x=>this._tree(g, x, 290+Math.sin(x)*5));
+  }
+  _house(g, x, y, w, h) {
+    g.fillStyle(0xd4956a, 1); g.fillRect(x, y, w, h);
+    g.fillStyle(0xb07850, 1); g.fillRect(x+w-40, y, 40, h);
+    g.fillStyle(0x7a4f35, 1); g.fillTriangle(x-10, y, x+w/2, y-70, x+w+10, y);
+    g.fillStyle(0x6d4c41, 1); g.fillRect(x+w/2-22, y+h-55, 44, 55);
+    g.fillStyle(0xfff9c4, 1);
+    [[25,30],[w-65,30],[25,90],[w-65,90]].forEach(([dx,dy])=>g.fillRect(x+dx, y+dy, 36, 28));
+  }
+  _apartment(g, x, y, w, h) {
+    g.fillStyle(0x607d8b, 1); g.fillRect(x, y, w, h);
+    g.fillStyle(0x455a64, 1); g.fillRect(x+w-30, y, 30, h);
+    g.fillStyle(0x90a4ae, 1); g.fillRect(x, y, w, 12);
+    // Windows grid
+    g.fillStyle(0xfff9c4, 1);
+    for (let row=0; row<5; row++) for (let col=0; col<4; col++)
+      g.fillRect(x+15+col*50, y+25+row*40, 28, 22);
+    g.fillStyle(0x37474f, 1); g.fillRect(x+w/2-18, y+h-50, 36, 50);
+  }
+  _tree(g, x, y) {
+    g.fillStyle(0x5d4037, 1); g.fillRect(x-6, y, 12, 50);
+    g.fillStyle(0x2e7d32, 1); g.fillCircle(x, y-5, 30);
+    g.fillStyle(0x388e3c, 1); g.fillCircle(x-12, y+8, 20); g.fillCircle(x+12, y+8, 20);
+  }
+  drawSky(hour) {
+    const g = this.skyGfx; g.clear();
+    let top, bot;
+    if (hour >= 5 && hour < 8) {
+      const t=(hour-5)/3;
+      top = lerpColor(0x0d0d2b, 0x1565c0, t); bot = lerpColor(0xff5722, 0x87ceeb, t);
+    } else if (hour >= 8 && hour < 18) {
+      top = 0x1565c0; bot = 0x90caf9;
+    } else if (hour >= 18 && hour < 21) {
+      const t=(hour-18)/3;
+      top = lerpColor(0x1565c0, 0x0d0d2b, t); bot = lerpColor(0x90caf9, 0xff5722, t);
+    } else {
+      top = 0x050512; bot = 0x0d1030;
     }
-
-    // ---------- World (background) ----------
-    _buildWorld() {
-      // Sky gradient (graphics)
-      this.skyGfx = this.add.graphics();
-      this._drawSky(7);
-
-      // Ground
-      const g = this.add.graphics();
-      g.fillStyle(COLORS.ground2, 1);
-      g.fillRect(0, 360, W, 50);
-      g.fillStyle(COLORS.ground, 1);
-      g.fillRect(0, 350, W, 15);
-
-      // Road
-      g.fillStyle(COLORS.road, 1);
-      g.fillRect(0, 370, W, 35);
+    g.fillGradientStyle(top, top, bot, bot, 1); g.fillRect(0, 0, 1000, 340);
+  }
+  drawCelestial(hour) {
+    const g = this.celestialGfx; g.clear();
+    const r = ((hour-6+24)%24)/14;
+    const cx = 80 + (1000-160)*Math.min(1,Math.max(0,r));
+    const cy = 60 + 240*Math.abs(Math.min(1,Math.max(0,r))-0.5)*2;
+    if (hour>=6 && hour<20) {
+      g.fillStyle(0xffee58, 1); g.fillCircle(cx, cy, 28);
+      g.fillStyle(0xfff176, 0.4); g.fillCircle(cx, cy, 42);
+    } else {
+      g.fillStyle(0xeceff1, 1); g.fillCircle(200, 70, 22);
+      g.fillStyle(0x050512, 1); g.fillCircle(210, 64, 18);
       g.fillStyle(0xffffff, 1);
-      for (let x = 0; x < W; x += 80) g.fillRect(x, 384, 40, 5);
-
-      // House left
-      this._drawHouse(g, 60, 220);
-      // House right
-      this._drawHouse(g, 580, 200);
-
-      // Tree
-      this._drawTree(g, 320, 290);
-      this._drawTree(g, 460, 300);
-
-      // Sun / Moon
-      this.celestial = this.add.graphics();
+      [[100,30],[250,15],[450,50],[700,25],[850,60],[150,90],[600,12]].forEach(([sx,sy])=>g.fillCircle(sx,sy,Math.random()<0.3?3:2));
     }
-
-    _drawHouse(g, x, y) {
-      const w = 160, h = 120;
-      // Body
-      g.fillStyle(COLORS.house, 1);
-      g.fillRect(x, y, w, h);
-      // Shade
-      g.fillStyle(COLORS.house2, 1);
-      g.fillRect(x + w - 30, y, 30, h);
-      // Roof
-      g.fillStyle(COLORS.roof, 1);
-      g.fillTriangle(x - 10, y, x + w / 2, y - 60, x + w + 10, y);
-      // Door
-      g.fillStyle(COLORS.door, 1);
-      g.fillRect(x + w / 2 - 20, y + h - 55, 40, 55);
-      // Windows
-      g.fillStyle(COLORS.window, 1);
-      g.fillRect(x + 20, y + 25, 35, 30);
-      g.fillRect(x + w - 55, y + 25, 35, 30);
-      // Window frames
-      g.lineStyle(2, 0x333333, 1);
-      g.strokeRect(x + 20, y + 25, 35, 30);
-      g.strokeRect(x + w - 55, y + 25, 35, 30);
+  }
+  drawChar(age, married, children) {
+    const g = this.charGfx; g.clear();
+    const x=this.charX, y=308;
+    // Shadow
+    g.fillStyle(0x000000, 0.18); g.fillEllipse(x, y+44, 44, 12);
+    // Body — color by age
+    const bodyColor = age < 30 ? 0x1565c0 : age < 50 ? 0x37474f : 0x6d6d6d;
+    g.fillStyle(bodyColor, 1);
+    g.fillRoundedRect(x-16, y+2, 32, age>60?42:38, 4);
+    // Head
+    const skinColor = age < 50 ? 0xffcc80 : 0xd4956a;
+    g.fillStyle(skinColor, 1); g.fillCircle(x, y-8, 18);
+    // Hair — grays with age
+    const hairColor = age < 40 ? 0x4e342e : age < 55 ? 0x8d6e63 : 0xbdbdbd;
+    g.fillStyle(hairColor, 1); g.fillEllipse(x, y-22, 36, 16);
+    // Eyes
+    g.fillStyle(0x222, 1); g.fillCircle(x-6, y-10, 3); g.fillCircle(x+6, y-10, 3);
+    // Mouth: wrinkles at old age
+    g.lineStyle(2, 0x5d4037, 1);
+    g.beginPath(); g.arc(x, y-3, 6, 0.1, Math.PI-0.1, false); g.strokePath();
+    if (age > 55) { // wrinkle lines
+      g.lineStyle(1, 0xa1887f, 0.5);
+      g.beginPath(); g.moveTo(x-14, y-8); g.lineTo(x-8, y-4); g.strokePath();
+      g.beginPath(); g.moveTo(x+14, y-8); g.lineTo(x+8, y-4); g.strokePath();
     }
-
-    _drawTree(g, x, y) {
-      g.fillStyle(0x5d4037, 1);
-      g.fillRect(x - 8, y, 16, 55);
-      g.fillStyle(0x2e7d32, 1);
-      g.fillCircle(x, y - 10, 38);
-      g.fillStyle(0x388e3c, 1);
-      g.fillCircle(x - 15, y + 5, 28);
-      g.fillCircle(x + 15, y + 5, 28);
+    // Legs
+    g.fillStyle(0x37474f, 1); g.fillRect(x-14, y+38, 12, 28); g.fillRect(x+2, y+38, 12, 28);
+    g.fillStyle(0x212121, 1); g.fillRect(x-16, y+62, 16, 8); g.fillRect(x, y+62, 16, 8);
+    // Cane for elderly
+    if (age > 70) { g.lineStyle(3, 0xa1887f, 1); g.beginPath(); g.moveTo(x+18, y+10); g.lineTo(x+28, y+70); g.strokePath(); }
+  }
+  update(_, delta) {
+    if (!S.isDead && Math.abs(this.charX-this.charTargetX)>0.5) {
+      this.charX += (this.charTargetX - this.charX) * 0.07;
+      this.drawChar(S.age, S.married, S.children);
     }
+    const simHour = (S.month/12)*24 % 24;
+    this.drawSky(simHour);
+    this.drawCelestial(simHour);
+  }
+}
 
-    _drawSky(hour) {
-      const g = this.skyGfx;
-      g.clear();
-      let topColor, botColor;
-      if (hour >= 6 && hour < 9) {
-        const t = (hour - 6) / 3;
-        topColor = Phaser.Display.Color.Interpolate.ColorWithColor(
-          Phaser.Display.Color.ValueToColor(0x1a1a4e),
-          Phaser.Display.Color.ValueToColor(0x87ceeb), 100, t * 100);
-        botColor = Phaser.Display.Color.Interpolate.ColorWithColor(
-          Phaser.Display.Color.ValueToColor(0xff7043),
-          Phaser.Display.Color.ValueToColor(0xb3e5fc), 100, t * 100);
-      } else if (hour >= 9 && hour < 18) {
-        topColor = Phaser.Display.Color.ValueToColor(0x42a5f5);
-        botColor = Phaser.Display.Color.ValueToColor(0xe3f2fd);
-      } else if (hour >= 18 && hour < 21) {
-        const t = (hour - 18) / 3;
-        topColor = Phaser.Display.Color.Interpolate.ColorWithColor(
-          Phaser.Display.Color.ValueToColor(0x42a5f5),
-          Phaser.Display.Color.ValueToColor(0x1a1a4e), 100, t * 100);
-        botColor = Phaser.Display.Color.Interpolate.ColorWithColor(
-          Phaser.Display.Color.ValueToColor(0xe3f2fd),
-          Phaser.Display.Color.ValueToColor(0xff7043), 100, t * 100);
-      } else {
-        topColor = Phaser.Display.Color.ValueToColor(0x0d0d2b);
-        botColor = Phaser.Display.Color.ValueToColor(0x1a1a4e);
-      }
-      g.fillGradientStyle(
-        Phaser.Display.Color.GetColor(topColor.r, topColor.g, topColor.b),
-        Phaser.Display.Color.GetColor(topColor.r, topColor.g, topColor.b),
-        Phaser.Display.Color.GetColor(botColor.r, botColor.g, botColor.b),
-        Phaser.Display.Color.GetColor(botColor.r, botColor.g, botColor.b),
-        1);
-      g.fillRect(0, 0, W, 360);
+function lerpColor(c1, c2, t) {
+  const r1=(c1>>16)&0xff, g1=(c1>>8)&0xff, b1=c1&0xff;
+  const r2=(c2>>16)&0xff, g2=(c2>>8)&0xff, b2=c2&0xff;
+  return (Math.round(r1+(r2-r1)*t)<<16)|(Math.round(g1+(g2-g1)*t)<<8)|Math.round(b1+(b2-b1)*t);
+}
+
+new Phaser.Game({ type:Phaser.AUTO, canvas:document.getElementById('bg-canvas'), width:1000, height:660, backgroundColor:'#050512', scene:[BgScene], audio:{noAudio:true} });
+
+// ============================================================
+// SIMULATION ENGINE
+// ============================================================
+let paused = true;
+let speed = 1; // months per second
+const SPEEDS = [0.5, 1, 3, 12];
+const SPEED_LABELS = ['ゆっくり (2秒/月)', '普通 (1秒/月)', '早い (3ヶ月/秒)', '超速 (1年/秒)'];
+let speedIdx = 1;
+let simTimer = 0;
+let gameStarted = false;
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btn-pause').textContent = paused ? '▶ 再開' : '⏸ 一時停止';
+  document.getElementById('btn-pause').classList.toggle('active', paused);
+}
+function cycleSpeed() {
+  speedIdx = (speedIdx+1) % SPEEDS.length;
+  speed = SPEEDS[speedIdx];
+  document.getElementById('speed-label').textContent = '速度: ' + SPEED_LABELS[speedIdx];
+}
+
+function startGame(path) {
+  S.name = document.getElementById('name-input').value || '田中 太郎';
+  document.getElementById('start-screen').style.display = 'none';
+  gameStarted = true;
+  paused = false;
+  document.getElementById('btn-pause').textContent = '⏸ 一時停止';
+
+  if (path === 'university') {
+    S.inUniversity = true; S.uniYear = 1;
+    S.savings = 100000;
+    S.livingWith = 'parents';
+    log('🎓 大学に入学しました。4年間頑張りましょう！', 'good');
+    S.lifeEvents.push('大学進学');
+  } else if (path === 'work') {
+    S.job = 'office_hs'; S.jobMonths = 0;
+    S.grossIncome = JOBS.office_hs.gross;
+    S.livingWith = 'alone';
+    S.savings = 100000;
+    log('💼 高校卒業後、すぐに就職しました。', 'good');
+    S.lifeEvents.push('高卒就職');
+  } else {
+    S.job = 'parttime'; S.jobMonths = 0;
+    S.grossIncome = JOBS.parttime.gross;
+    S.livingWith = 'parents';
+    S.savings = 100000;
+    log('☕ フリーターとして生活を始めました。', 'normal');
+    S.lifeEvents.push('フリーター生活開始');
+  }
+  updateUI();
+  renderActions();
+
+  // Start simulation loop
+  setInterval(simLoop, 100);
+}
+
+let lastTick = Date.now();
+function simLoop() {
+  if (!gameStarted || paused || S.isDead) return;
+  const now = Date.now();
+  const delta = (now - lastTick) / 1000;
+  lastTick = now;
+  simTimer += delta;
+  const monthDuration = 1 / speed;
+  if (simTimer >= monthDuration) {
+    simTimer -= monthDuration;
+    tickMonth();
+  }
+}
+// Reset lastTick when resuming to avoid burst
+document.addEventListener('visibilitychange', () => { if (!document.hidden) lastTick = Date.now(); });
+
+// ============================================================
+// MONTHLY TICK
+// ============================================================
+function tickMonth() {
+  // Advance time
+  S.month++;
+  if (S.month > 12) { S.month = 1; S.year++; S.age++; onNewYear(); }
+
+  // University progression
+  if (S.inUniversity) tickUniversity();
+
+  // Income & expenses
+  tickFinances();
+
+  // Passive stat changes
+  tickStats();
+
+  // Aging effects
+  tickAging();
+
+  // Children aging
+  S.children.forEach(c => { c.ageMonths = (c.ageMonths||0)+1; if(c.ageMonths%12===0) c.age++; });
+
+  // Parents
+  tickParents();
+
+  // Investment
+  if (S.hasInvestment) {
+    const growth = (1 + (Math.random()*0.2 - 0.08)) ** (1/12);
+    S.investBalance = Math.round(S.investBalance * growth);
+  }
+
+  // Loan
+  if (S.hasLoan) {
+    S.loanBalance = Math.max(0, S.loanBalance - S.loanMonthly * 0.6);
+    if (S.loanBalance <= 0) { S.hasLoan=false; S.loanBalance=0; S.loanMonthly=0; log('🎉 奨学金を完済しました！', 'good'); }
+  }
+
+  // Random life events (not too frequent)
+  if (S.month % 3 === 0) maybeRandomEvent();
+
+  // Life stage events
+  checkLifeStageEvents();
+
+  updateUI();
+  renderActions();
+}
+
+function tickUniversity() {
+  if (S.month === 4) {
+    S.uniYear++;
+    if (S.uniYear > 4) {
+      S.inUniversity = false;
+      S.education = 'university';
+      S.lifeEvents.push('大学卒業');
+      showModal('🎓', '大学卒業！', `${S.name}は大学を卒業しました。\n就職活動の結果を選んでください。`, [
+        { label: '大企業に就職（月収30万）', desc: '安定しているが競争激しい', fn: ()=>{ S.job='office_uni'; S.grossIncome=300000; S.livingWith='alone'; S.lifeEvents.push('大企業就職'); log('💼 大企業に就職しました！', 'good'); } },
+        { label: 'IT企業エンジニア（月収35万）', desc: '成長産業、スキルが重要', fn: ()=>{ S.job='engineer'; S.grossIncome=350000; S.livingWith='alone'; S.lifeEvents.push('エンジニア就職'); log('💻 IT企業にエンジニアとして就職しました！', 'good'); } },
+        { label: '公務員（月収26万・安定）', desc: 'リストラなし・昇給ゆっくり', fn: ()=>{ S.job='office_uni'; S.grossIncome=260000; S.livingWith='alone'; S.lifeEvents.push('公務員就職'); log('🏛️ 公務員になりました。安定した生活が始まります。', 'good'); } },
+        { label: '大学院進学（さらに2年）', desc: '研究職・専門職への道', fn: ()=>{ S.inUniversity=true; S.uniYear=4; S.education='university'; log('📚 大学院に進学しました。さらに2年間研究します。', 'normal'); } },
+      ]);
     }
-
-    _drawCelestial(hour) {
-      const g = this.celestial;
-      g.clear();
-      // 0~24 => position arc across sky
-      const ratio = ((hour - 6 + 24) % 24) / 14; // 6am -> 8pm
-      const cx = lerp(80, W - 80, clamp(ratio, 0, 1));
-      const cy = lerp(60, 280, Math.abs(clamp(ratio, 0, 1) - 0.5) * 2);
-      if (hour >= 6 && hour < 20) {
-        // Sun
-        g.fillStyle(0xffee58, 1);
-        g.fillCircle(cx, cy, 28);
-        g.fillStyle(0xfff176, 0.5);
-        g.fillCircle(cx, cy, 40);
-      } else {
-        // Moon
-        const mx = (hour >= 20) ? lerp(W - 80, W + 60, (hour - 20) / 8) : lerp(-60, 80, hour / 6);
-        g.fillStyle(0xeceff1, 1);
-        g.fillCircle(mx, 80, 22);
-        g.fillStyle(0x1a1a4e, 1);
-        g.fillCircle(mx + 8, 74, 18);
-        // Stars
-        g.fillStyle(0xffffff, 1);
-        const stars = [[150,40],[300,20],[500,55],[620,30],[700,70],[100,100],[400,15]];
-        stars.forEach(([sx, sy]) => g.fillCircle(sx, sy, 2));
-      }
+    // University loan
+    if (S.uniYear === 2 && !S.hasLoan && S.savings < 200000) {
+      showModal('📋', '奨学金', `学費と生活費のため、奨学金を借りますか？`, [
+        { label: '借りる（毎月3万返済）', fn: ()=>{ S.hasLoan=true; S.loanBalance=2000000; S.loanMonthly=30000; S.savings+=500000; log('📋 奨学金200万を借りました。返済は就職後から。', 'warn'); } },
+        { label: '借りない（貯蓄で乗り切る）', fn: ()=>{ log('自力で乗り切ります。', 'normal'); } },
+      ]);
     }
+  }
+  // Uni expenses
+  const tuition = Math.round(50000 + (S.uniYear===1?200000:0));
+  S.savings -= tuition;
+}
 
-    // ---------- Character ----------
-    _buildCharacter() {
-      this.charGfx = this.add.graphics();
-      this.charX = W / 2;
-      this.charTargetX = W / 2;
-      this.charY = 308;
-      this._drawCharacter();
+function tickFinances() {
+  if (S.inUniversity || !S.job) return;
+  const tax = calcTax(S.grossIncome);
+  S.netIncome = S.grossIncome - tax;
+  const exp = calcExpenses();
+  const totalExp = exp.rent + exp.food + exp.util + exp.ins + exp.edu + exp.misc;
+  const net = S.netIncome - totalExp;
+  S.savings += net;
+  // Warn if broke
+  if (S.savings < 0) {
+    log(`⚠️ 貯蓄がマイナスになりました（¥${Math.abs(S.savings).toLocaleString()}の借金）`, 'bad');
+  }
+  if (S.savings < -1000000) {
+    log('💸 多重債務に陥りました。生活が破綻しています。', 'bad');
+    S.stress = Math.min(100, S.stress + 20);
+    S.happiness = Math.max(0, S.happiness - 20);
+  }
+  S.jobMonths++;
+  // Promotion check
+  checkPromotion();
+  // Unemployment check
+  if (S.job === 'unemployed') {
+    S.unemployedMonths++;
+    if (S.unemployedMonths >= 3) log('⚠️ 無職期間が長くなっています。', 'warn');
+    // 雇用保険：最大6ヶ月
+    if (S.unemployedMonths <= 6) S.savings += 80000;
+  } else { S.unemployedMonths = 0; }
+}
+
+function tickStats() {
+  // Stress naturally decreases
+  S.stress = Math.max(0, S.stress - 1 + (S.job==='unemployed' ? 3 : 0));
+  // High stress hurts health
+  if (S.stress > 70) S.hp = Math.max(0, S.hp - 0.5);
+  // Poor finances hurt happiness
+  if (S.savings < 100000) S.happiness = Math.max(0, S.happiness - 1);
+  // Social decay
+  S.social = Math.max(0, S.social - 0.5);
+  // Married happiness bonus
+  if (S.married) S.happiness = Math.min(100, S.happiness + 0.3);
+  // Exercise benefit
+  if (S.exerciseStreak > 0) { S.hp = Math.min(100, S.hp + 0.3); S.exerciseStreak--; }
+}
+
+function tickAging() {
+  if (S.age < 30) return;
+  // Gradual health decline with age
+  const declineRate = S.age < 40 ? 0.1 : S.age < 50 ? 0.2 : S.age < 60 ? 0.35 : S.age < 70 ? 0.5 : 0.8;
+  S.hp = Math.max(0, S.hp - declineRate);
+  // Check death
+  if (S.hp <= 0) { triggerDeath('老衰・病気'); return; }
+  // Random health crisis by age
+  if (S.age >= 40 && Math.random() < 0.008) triggerHealthCrisis();
+}
+
+function tickParents() {
+  if (S.age < 45) return;
+  S.parentHealth = Math.max(0, S.parentHealth - (1 + Math.random()));
+  if (S.parentHealth < 40 && !S.parentNeedsCare && Math.random() < 0.05) {
+    S.parentNeedsCare = true;
+    showModal('👴', '親の介護', `${S.name}の親が介護が必要な状態になりました。\nどうしますか？`, [
+      { label: '施設に入れる（毎月15万）', fn: ()=>{ S.loanMonthly+=150000; log('👴 親を介護施設に入れました。月15万の負担です。', 'warn'); S.lifeEvents.push('親の介護（施設）'); } },
+      { label: '自宅介護する（毎月5万＋時間）', fn: ()=>{ S.loanMonthly+=50000; S.stress=Math.min(100,S.stress+20); log('👴 自宅で親の介護を始めました。ストレスが増加します。', 'warn'); S.lifeEvents.push('親の介護（自宅）'); } },
+      { label: '兄弟に任せる', fn: ()=>{ S.happiness=Math.max(0,S.happiness-10); log('😔 介護を兄弟に任せました。罪悪感を感じています。', 'normal'); } },
+    ]);
+  }
+  if (S.parentHealth <= 0) {
+    S.parentHealth = 0;
+    if (!S.parentNeedsCare) return;
+    log('😢 親が亡くなりました。深い悲しみに包まれています。', 'bad');
+    S.happiness = Math.max(0, S.happiness - 25);
+    S.lifeEvents.push('親の死');
+    // 遺産
+    const inherit = Math.floor(Math.random() * 3000000) + 500000;
+    S.savings += inherit;
+    log(`💰 遺産として ¥${inherit.toLocaleString()} を受け取りました。`, 'good');
+    S.parentNeedsCare = false;
+  }
+}
+
+function checkPromotion() {
+  if (!S.job || S.job==='parttime' || S.job==='unemployed') return;
+  if (S.job === 'office_hs' || S.job === 'office_uni' || S.job==='engineer' || S.job==='sales') {
+    if (S.jobMonths >= 60 && S.job !== 'manager') {
+      S.job = 'manager'; S.grossIncome = JOBS.manager.gross;
+      log('🎉 課長に昇進しました！月収50万になりました。', 'good');
+      S.lifeEvents.push('課長昇進');
     }
+  } else if (S.job === 'manager' && S.jobMonths >= 120) {
+    S.job = 'senior_mgr'; S.grossIncome = JOBS.senior_mgr.gross;
+    log('🎉 部長に昇進しました！月収65万になりました。', 'good');
+    S.lifeEvents.push('部長昇進');
+  } else if (S.job === 'senior_mgr' && S.jobMonths >= 180) {
+    S.job = 'executive'; S.grossIncome = JOBS.executive.gross;
+    log('👑 役員・取締役に就任しました！月収90万になりました。', 'good');
+    S.lifeEvents.push('役員就任');
+  }
+  // Gradual raise
+  if (S.jobMonths % 12 === 0 && S.grossIncome > 0) {
+    const raise = Math.round(S.grossIncome * 0.02);
+    S.grossIncome += raise;
+    if (raise > 3000) log(`📈 昇給がありました（+¥${raise.toLocaleString()}/月）`, 'good');
+  }
+}
 
-    _drawCharacter() {
-      const g = this.charGfx;
-      g.clear();
-      const x = this.charX, y = this.charY;
-      // Shadow
-      g.fillStyle(0x000000, 0.2);
-      g.fillEllipse(x, y + 42, 44, 14);
-      // Body
-      g.fillStyle(0x1565c0, 1);
-      g.fillRoundedRect(x - 16, y + 2, 32, 38, 5);
-      // Head
-      g.fillStyle(0xffcc80, 1);
-      g.fillCircle(x, y - 8, 18);
-      // Hair
-      g.fillStyle(0x4e342e, 1);
-      g.fillEllipse(x, y - 22, 36, 16);
-      // Eyes
-      g.fillStyle(0x222222, 1);
-      g.fillCircle(x - 6, y - 9, 3);
-      g.fillCircle(x + 6, y - 9, 3);
-      // Mouth
-      g.lineStyle(2, 0x5d4037, 1);
-      g.beginPath(); g.arc(x, y - 2, 6, 0, Math.PI, false); g.strokePath();
-      // Legs
-      g.fillStyle(0x37474f, 1);
-      g.fillRect(x - 14, y + 38, 12, 28);
-      g.fillRect(x + 2, y + 38, 12, 28);
-      // Shoes
-      g.fillStyle(0x212121, 1);
-      g.fillRect(x - 16, y + 62, 16, 8);
-      g.fillRect(x, y + 62, 16, 8);
+function onNewYear() {
+  log(`━━ ${S.year}年 ${S.name}は${S.age}歳になりました ━━`, 'month');
+  S.lifeEvents.push(`${S.age}歳`);
+  // Birthday events
+  if (S.age === 25 && !S.married) log('💭 周りの友人が結婚し始めました。', 'normal');
+  if (S.age === 30 && !S.married) log('💭 30代。社会的プレッシャーを感じます。', 'warn');
+  if (S.age === 40) log('💭 40代。人生の折り返しを感じます。', 'normal');
+  if (S.age === 60) log('💭 定年が近づいています。老後の準備はできていますか？', 'warn');
+  if (S.age === 65) {
+    if (S.savings < 20000000) log('⚠️ 老後2000万問題。貯蓄が足りません！', 'bad');
+    else log('✅ 老後の資金は十分あります。', 'good');
+    if (S.job && S.job !== 'unemployed' && S.job !== 'parttime') {
+      showModal('📋', '定年退職', `65歳になり、定年を迎えました。`, [
+        { label: '引退する', fn: ()=>{ S.job='retired'; S.grossIncome=120000; /* 年金 */ S.lifeEvents.push('定年退職'); log('🎌 定年退職しました。年金生活が始まります。', 'good'); } },
+        { label: '再雇用・嘱託で続ける（月収半額）', fn: ()=>{ S.grossIncome=Math.round(S.grossIncome*0.5); log('👔 再雇用で働き続けます。', 'normal'); } },
+      ]);
     }
+  }
+  if (S.age >= 85) {
+    if (Math.random() < 0.15 + (100-S.hp)/200) triggerDeath('老衰');
+  }
+}
 
-    // ---------- UI Panel ----------
-    _buildUI() {
-      const panelY = 405;
-      // Background panel
-      const panel = this.add.graphics();
-      panel.fillStyle(0x0d1117, 0.92);
-      panel.fillRoundedRect(10, panelY, W - 20, 185, 12);
-      panel.lineStyle(1, 0x30363d, 1);
-      panel.strokeRoundedRect(10, panelY, W - 20, 185, 12);
+function checkLifeStageEvents() {
+  const monthId = S.year * 12 + S.month;
+  if (monthId - S.lastEventMonth < 6) return;
 
-      // Status bars section (left)
-      this._buildStatusBars(panelY);
+  // Marriage opportunity
+  if (!S.married && !S.partner && S.age >= 22 && S.age <= 45 && Math.random() < 0.015) {
+    S.lastEventMonth = monthId;
+    const names = ['山田 花子', '佐藤 美咲', '田中 愛', '鈴木 奈々', '高橋 さくら', '渡辺 陽子'];
+    const partnerName = names[Math.floor(Math.random()*names.length)];
+    const partnerAge = S.age + Math.floor(Math.random()*6) - 3;
+    showModal('💘', '出会い', `${partnerAge}歳の${partnerName}と出会いました。\n交際しますか？`, [
+      { label: '交際を始める', fn: ()=>{ S.partner={name:partnerName,age:partnerAge,metYear:S.year}; log(`💑 ${partnerName}さんと交際を始めました。`, 'good'); S.happiness=Math.min(100,S.happiness+15); } },
+      { label: '断る', fn: ()=>{ log('今は仕事に集中します。', 'normal'); } },
+    ]);
+  }
 
-      // Time / day display
-      this.timeText = this.add.text(W / 2, panelY + 15, '', {
-        fontSize: '22px', fontFamily: 'monospace', color: '#e2e8f0',
-        stroke: '#000', strokeThickness: 2
-      }).setOrigin(0.5, 0);
-
-      this.dayText = this.add.text(W / 2, panelY + 42, '', {
-        fontSize: '13px', fontFamily: 'sans-serif', color: '#94a3b8'
-      }).setOrigin(0.5, 0);
-
-      // Message box
-      this.msgBg = this.add.graphics();
-      this.msgBg.fillStyle(0x161b22, 0.9);
-      this.msgBg.fillRoundedRect(15, panelY + 140, W - 30, 45, 8);
-
-      this.msgText = this.add.text(W / 2, panelY + 163, '', {
-        fontSize: '13px', fontFamily: 'sans-serif', color: '#c9d1d9',
-        wordWrap: { width: W - 60 }
-      }).setOrigin(0.5, 0.5);
-    }
-
-    _buildStatusBars(panelY) {
-      const barDefs = [
-        { label: '❤️ 体力',   key: 'hp',        color: COLORS.bar_hp,  x: 20,  y: panelY + 68 },
-        { label: '⚡ 活力',   key: 'energy',    color: COLORS.bar_en,  x: 20,  y: panelY + 90 },
-        { label: '😊 幸福度', key: 'happiness', color: COLORS.bar_hap, x: 20,  y: panelY + 112 },
-        { label: '💰 所持金', key: 'money',     color: COLORS.bar_mon, x: 420, y: panelY + 68 },
-      ];
-
-      this.barObjs = {};
-      barDefs.forEach(def => {
-        this.add.text(def.x, def.y, def.label, {
-          fontSize: '12px', fontFamily: 'sans-serif', color: '#94a3b8'
-        });
-
-        if (def.key !== 'money') {
-          const bgBar = this.add.graphics();
-          bgBar.fillStyle(0x21262d, 1);
-          bgBar.fillRoundedRect(def.x + 90, def.y + 2, 170, 10, 5);
-
-          const bar = this.add.graphics();
-          this.barObjs[def.key] = { bar, bgBar, x: def.x + 90, y: def.y + 2, color: def.color };
-        } else {
-          const txt = this.add.text(def.x + 90, def.y, '¥500', {
-            fontSize: '14px', fontFamily: 'monospace', color: '#66bb6a'
-          });
-          this.barObjs[def.key] = { txt };
-        }
-      });
-
-      // Age / job
-      this.add.text(420, panelY + 90, '年齢 / 職業', {
-        fontSize: '12px', color: '#94a3b8', fontFamily: 'sans-serif'
-      });
-      this.ageJobText = this.add.text(510, panelY + 90, '', {
-        fontSize: '13px', fontFamily: 'monospace', color: '#e2e8f0'
-      });
-    }
-
-    _updateBars() {
-      const s = this.state;
-      ['hp','energy','happiness'].forEach(key => {
-        const obj = this.barObjs[key];
-        const val = clamp(s[key], 0, 100);
-        obj.bar.clear();
-        obj.bar.fillStyle(obj.color, 1);
-        obj.bar.fillRoundedRect(obj.x, obj.y, 170 * val / 100, 10, 5);
-      });
-      const mObj = this.barObjs.money;
-      mObj.txt.setText(`¥${s.money.toLocaleString()}`);
-      this.ageJobText.setText(`${s.age}歳 / ${s.job}`);
-    }
-
-    // ---------- Buttons ----------
-    _buildButtons() {
-      const btnY = 540;
-      const actions = [
-        { label: '💼 働く',    key: 'work',  x: 90,  color: COLORS.btn_work },
-        { label: '😴 寝る',    key: 'sleep', x: 255, color: COLORS.btn_sleep },
-        { label: '🍱 食べる',  key: 'eat',   x: 420, color: COLORS.btn_eat },
-        { label: '🎮 遊ぶ',    key: 'play',  x: 590, color: COLORS.btn_play },
-      ];
-
-      this.buttons = {};
-      actions.forEach(a => {
-        const btn = this.add.graphics();
-        const lbl = this.add.text(a.x, btnY, a.label, {
-          fontSize: '16px', fontFamily: 'sans-serif', color: '#ffffff',
-          stroke: '#000', strokeThickness: 1
-        }).setOrigin(0.5, 0.5).setInteractive({ useHandCursor: true });
-
-        const drawBtn = (hover) => {
-          btn.clear();
-          btn.fillStyle(hover ? 0x444444 : a.color, hover ? 0.9 : 1);
-          btn.fillRoundedRect(a.x - 80, btnY - 22, 160, 44, 8);
-          btn.lineStyle(1, hover ? 0xffffff : 0x00000033, 1);
-          btn.strokeRoundedRect(a.x - 80, btnY - 22, 160, 44, 8);
-        };
-
-        drawBtn(false);
-        lbl.on('pointerover', () => drawBtn(true));
-        lbl.on('pointerout', () => drawBtn(false));
-        lbl.on('pointerdown', () => this._doAction(a.key));
-
-        this.buttons[a.key] = { btn, lbl, drawBtn, x: a.x, y: btnY, color: a.color };
-      });
-    }
-
-    // ---------- Event Log ----------
-    _buildEventLog() {
-      // Overlay modal (hidden by default)
-      this.modal = this.add.graphics().setVisible(false);
-      this.modalTitle = this.add.text(W/2, 120, '', {
-        fontSize: '22px', fontFamily: 'sans-serif', color: '#f0f6fc',
-        stroke: '#000', strokeThickness: 2
-      }).setOrigin(0.5).setVisible(false);
-      this.modalBody = this.add.text(W/2, 200, '', {
-        fontSize: '15px', fontFamily: 'sans-serif', color: '#c9d1d9',
-        wordWrap: { width: 460 }, align: 'center'
-      }).setOrigin(0.5).setVisible(false);
-
-      // Dismiss button
-      this.modalBtn = this.add.text(W/2, 310, '[ 続ける ]', {
-        fontSize: '17px', fontFamily: 'sans-serif', color: '#58a6ff',
-        stroke: '#000', strokeThickness: 1
-      }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false);
-      this.modalBtn.on('pointerdown', () => this._closeModal());
-    }
-
-    _showModal(title, body) {
-      const g = this.modal;
-      g.clear();
-      g.fillStyle(0x000000, 0.78);
-      g.fillRect(0, 0, W, H);
-      g.fillStyle(0x161b22, 1);
-      g.fillRoundedRect(W/2 - 260, 80, 520, 280, 16);
-      g.lineStyle(2, 0x30363d, 1);
-      g.strokeRoundedRect(W/2 - 260, 80, 520, 280, 16);
-      g.setVisible(true);
-      this.modalTitle.setText(title).setVisible(true);
-      this.modalBody.setText(body).setVisible(true);
-      this.modalBtn.setVisible(true);
-      this.state.actionLocked = true;
-    }
-
-    _closeModal() {
-      this.modal.setVisible(false);
-      this.modalTitle.setVisible(false);
-      this.modalBody.setVisible(false);
-      this.modalBtn.setVisible(false);
-      this.state.actionLocked = false;
-    }
-
-    // ---------- Actions ----------
-    _doAction(key) {
-      if (this.state.actionLocked) return;
-      const s = this.state;
-      const h = s.hour;
-
-      if (key === 'work') {
-        if (h < 8 || h >= 22) {
-          this._showMsg('⚠️ 今は働けません（8〜22時のみ）');
-          return;
-        }
-        if (s.energy < 15) {
-          this._showMsg('⚠️ 疲れすぎて働けません！休んでください。');
-          return;
-        }
-        const earn = Phaser.Math.Between(120, 280);
-        s.money += earn;
-        s.energy = clamp(s.energy - 20, 0, 100);
-        s.hp = clamp(s.hp - 5, 0, 100);
-        s.happiness = clamp(s.happiness - 5, 0, 100);
-        s.hour = clamp(s.hour + 3, 0, 23);
-        this._showMsg(`💼 3時間働いて ¥${earn} 稼ぎました！`);
-        this._charWalkTo(Phaser.Math.Between(150, 650));
-        this._checkPromotion();
-
-      } else if (key === 'sleep') {
-        if (h >= 22 || h < 6) {
-          s.energy = clamp(s.energy + 50, 0, 100);
-          s.hp = clamp(s.hp + 15, 0, 100);
-          s.hour = 7; s.minute = 0;
-          s.day += 1;
-          if (s.day % 365 === 0) {
-            s.age += 1;
-            this._showModal('🎂 誕生日！', `${s.age}歳になりました！\nこれからも頑張りましょう。`);
-          } else {
-            this._showMsg(`😴 ぐっすり眠りました。${s.day}日目の朝です。`);
-          }
-          this._randomEvent();
-        } else {
-          s.energy = clamp(s.energy + 20, 0, 100);
-          s.hp = clamp(s.hp + 5, 0, 100);
-          s.hour = clamp(s.hour + 2, 0, 23);
-          this._showMsg('💤 少し仮眠しました（2時間）。');
-        }
-
-      } else if (key === 'eat') {
-        if (s.money < 500) {
-          this._showMsg('⚠️ お金が足りません（食事代 ¥500）。');
-          return;
-        }
-        s.money -= 500;
-        s.hp = clamp(s.hp + 25, 0, 100);
-        s.energy = clamp(s.energy + 15, 0, 100);
-        s.happiness = clamp(s.happiness + 5, 0, 100);
-        s.hour = clamp(s.hour + 1, 0, 23);
-        this._showMsg('🍱 美味しい食事をとりました（¥500消費）。');
-        this._charWalkTo(Phaser.Math.Between(150, 650));
-
-      } else if (key === 'play') {
-        if (s.money < 300) {
-          this._showMsg('⚠️ お金が足りません（娯楽費 ¥300）。');
-          return;
-        }
-        s.money -= 300;
-        s.happiness = clamp(s.happiness + 25, 0, 100);
-        s.energy = clamp(s.energy - 10, 0, 100);
-        s.hour = clamp(s.hour + 2, 0, 23);
-        this._showMsg('🎮 楽しく遊びました（¥300消費）。幸福度UP！');
-        this._charWalkTo(Phaser.Math.Between(150, 650));
-      }
-
-      this._checkGameOver();
-      this._updateAll();
-    }
-
-    _checkPromotion() {
-      const s = this.state;
-      if (s.money >= 10000 && s.job === 'フリーター') {
-        s.job = '正社員';
-        this._showModal('🎉 昇進！', '正社員になりました！\nこれから給料が上がります。');
-      } else if (s.money >= 50000 && s.job === '正社員') {
-        s.job = '課長';
-        this._showModal('🎉 昇進！', '課長に昇格しました！\n部下もできました。');
-      } else if (s.money >= 150000 && s.job === '課長') {
-        s.job = '部長';
-        this._showModal('🎉 昇進！', '部長になりました！\n会社の中心人物です。');
-      } else if (s.money >= 500000 && s.job === '部長') {
-        s.job = 'CEO';
-        this._showModal('👑 社長就任！', 'とうとう社長になりました！\n夢を叶えましたね。');
-      }
-    }
-
-    _randomEvent() {
-      const events = [
-        { chance: 0.12, fn: () => {
-          const bonus = Phaser.Math.Between(500, 2000);
-          this.state.money += bonus;
-          this._showModal('💰 臨時収入！', `¥${bonus}の臨時収入がありました！`);
+  // Marriage proposal
+  if (S.partner && !S.married && S.age >= 24) {
+    const datingYears = S.year - S.partner.metYear;
+    if (datingYears >= 2 && Math.random() < 0.04) {
+      S.lastEventMonth = monthId;
+      showModal('💍', 'プロポーズ', `${S.partner.name}さんとの交際${datingYears}年。\n結婚しますか？`, [
+        { label: '結婚する', desc: '結婚式費用300万（折半）', fn: ()=>{
+          S.married = true; S.livingWith='family';
+          S.savings -= 1500000;
+          S.lifeEvents.push(`${S.partner.name}と結婚`);
+          log(`💍 ${S.partner.name}さんと結婚しました！`, 'good');
+          S.happiness = Math.min(100, S.happiness + 20);
         }},
-        { chance: 0.08, fn: () => {
-          const loss = Phaser.Math.Between(300, 1000);
-          this.state.money = Math.max(0, this.state.money - loss);
-          this._showModal('😨 アクシデント', `予期せぬ出費 ¥${loss} が発生しました。`);
-        }},
-        { chance: 0.10, fn: () => {
-          this.state.happiness = clamp(this.state.happiness + 20, 0, 100);
-          this._showModal('🌸 良いことがあった', '友人から嬉しい連絡が来ました！幸福度UP！');
-        }},
-        { chance: 0.05, fn: () => {
-          this.state.hp = clamp(this.state.hp - 20, 0, 100);
-          this._showModal('🤒 体調不良', '少し体調を崩しました。休んでください。');
-        }},
-      ];
-
-      for (const e of events) {
-        if (Math.random() < e.chance) { e.fn(); break; }
-      }
-    }
-
-    _checkGameOver() {
-      const s = this.state;
-      if (s.hp <= 0) {
-        this._showModal('💀 ゲームオーバー', `体力が尽きました。\n${s.day}日間・${s.age}歳まで生きました。\nページをリロードして再挑戦！`);
-        this.state.actionLocked = true;
-      }
-    }
-
-    _showMsg(msg) {
-      this.state.message = msg;
-      this.msgText.setText(msg);
-    }
-
-    _charWalkTo(targetX) {
-      this.charTargetX = clamp(targetX, 60, W - 60);
-    }
-
-    // ---------- Time ----------
-    _tickTime(delta) {
-      if (this.state.actionLocked) return;
-      this.minuteTimer += delta;
-      if (this.minuteTimer >= this.minutePerMs) {
-        this.minuteTimer -= this.minutePerMs;
-        this.state.minute += 1;
-        if (this.state.minute >= 60) {
-          this.state.minute = 0;
-          this.state.hour += 1;
-          if (this.state.hour >= 24) {
-            this.state.hour = 0;
-          }
-          // Passive energy/hp drain
-          this.state.energy = clamp(this.state.energy - 1, 0, 100);
-          this.state.hp = clamp(this.state.hp - 0.5, 0, 100);
-          this._updateAll();
-        }
-        // Update time display every minute
-        this._updateTimeText();
-      }
-    }
-
-    _updateTimeText() {
-      const s = this.state;
-      const hh = String(s.hour).padStart(2, '0');
-      const mm = String(s.minute).padStart(2, '0');
-      this.timeText.setText(`${hh}:${mm}`);
-      this.dayText.setText(`第${s.day}日`);
-    }
-
-    // ---------- Master update ----------
-    _updateAll() {
-      this._updateBars();
-      this._updateTimeText();
-      this._drawSky(this.state.hour);
-      this._drawCelestial(this.state.hour);
-    }
-
-    // ---------- update loop ----------
-    update(time, delta) {
-      this._tickTime(delta);
-
-      // Character walk animation
-      if (Math.abs(this.charX - this.charTargetX) > 1) {
-        this.charX = lerp(this.charX, this.charTargetX, 0.08);
-        this._drawCharacter();
-      }
-
-      // Celestial smooth update
-      this._drawCelestial(this.state.hour + this.state.minute / 60);
+        { label: 'もう少し待つ', fn: ()=>{ log('結婚はもう少し待つことにしました。', 'normal'); } },
+        { label: '別れる', fn: ()=>{ S.partner=null; log('😔 別れることになりました。', 'bad'); S.happiness=Math.max(0,S.happiness-20); } },
+      ]);
     }
   }
 
-  // ============================================================
-  // Game config
-  // ============================================================
-  new Phaser.Game({
-    type: Phaser.AUTO,
-    width: W,
-    height: H,
-    backgroundColor: '#000000',
-    parent: 'game-container',
-    scene: [MainScene],
+  // Child opportunity
+  if (S.married && S.age >= 25 && S.age <= 42 && S.children.length < 3 && Math.random() < 0.02) {
+    S.lastEventMonth = monthId;
+    showModal('👶', '子供について', `子供を持つことを考えますか？`, [
+      { label: '子供を作る', fn: ()=>{
+        const childNames = ['太郎','花子','次郎','陽菜','翔','さくら'];
+        const n = childNames[Math.floor(Math.random()*childNames.length)];
+        S.children.push({name:n, age:0, ageMonths:0});
+        S.lifeEvents.push(`${n}誕生`);
+        log(`👶 ${n}が生まれました！おめでとうございます！`, 'good');
+        S.happiness = Math.min(100, S.happiness + 20);
+        S.savings -= 500000; // 出産費用
+      }},
+      { label: 'まだ早い', fn: ()=>{ log('子供はまだ先にします。', 'normal'); } },
+      { label: '子供は持たない', fn: ()=>{ log('DINKS（子なし共働き）を選択しました。', 'normal'); S.lifeEvents.push('DINKSを選択'); } },
+    ]);
+  }
+
+  // Recession event
+  if (Math.random() < 0.003) {
+    S.lastEventMonth = monthId;
+    log('📉 景気後退が起きています。株価・給与に影響が出ています。', 'bad');
+    S.grossIncome = Math.round(S.grossIncome * 0.85);
+    if (S.hasInvestment) S.investBalance = Math.round(S.investBalance * 0.7);
+    S.lifeEvents.push('経済危機を経験');
+  }
+}
+
+function maybeRandomEvent() {
+  if (S.isDead) return;
+  const rand = Math.random();
+  const events = [
+    // Good
+    { w:0.03, fn:()=>{ const b=Phaser.Math.Between?Phaser.Math.Between(50000,300000):Math.floor(Math.random()*250000)+50000; S.savings+=b; log(`💰 臨時ボーナスが入りました（¥${b.toLocaleString()}）！`, 'good'); } },
+    { w:0.02, fn:()=>{ S.happiness=Math.min(100,S.happiness+15); log('🌸 素晴らしい体験をしました。幸福度が上がりました。', 'good'); } },
+    { w:0.02, fn:()=>{ S.hp=Math.min(100,S.hp+8); log('🏥 健康診断の結果が良好でした。', 'good'); } },
+    // Neutral
+    { w:0.03, fn:()=>{ S.social=Math.min(100,S.social+10); log('👥 友人と久しぶりに会いました。', 'normal'); } },
+    { w:0.02, fn:()=>{ if(S.savings>500000){ S.savings-=200000; S.hp=Math.min(100,S.hp+10); log('🏥 人間ドックを受けました（¥20万）。早期発見あり。', 'warn'); } } },
+    // Bad
+    { w:0.025, fn:()=>{ const c=Math.floor(Math.random()*200000)+50000; S.savings-=c; log(`🚗 車の修理・事故費用 ¥${c.toLocaleString()} が発生しました。`, 'bad'); } },
+    { w:0.02, fn:()=>{ const c=Math.floor(Math.random()*100000)+30000; S.savings-=c; S.hp=Math.max(0,S.hp-8); log(`🏥 突然の入院費 ¥${c.toLocaleString()} がかかりました。`, 'bad'); S.stress=Math.min(100,S.stress+15); } },
+    { w:0.015, fn:()=>{ S.stress=Math.min(100,S.stress+20); S.hp=Math.max(0,S.hp-5); log('😰 職場での人間関係トラブルが起きました。', 'bad'); } },
+    { w:0.01, fn:()=>{ if(S.job&&S.job!=='unemployed'&&S.job!=='parttime'){ log('🚨 リストラ対象になりました。再就職が必要です。', 'bad'); S.job='unemployed'; S.grossIncome=0; S.lifeEvents.push('リストラ'); S.stress=Math.min(100,S.stress+30); } } },
+    { w:0.008, fn:()=>{ if(S.married){ showModal('💔','夫婦の危機','夫婦関係に問題が生じています。',[ { label:'カウンセリングに行く（¥10万）', fn:()=>{ S.savings-=100000; S.happiness=Math.min(100,S.happiness+15); log('💑 夫婦カウンセリングで関係改善。', 'good'); } }, { label:'離婚する', fn:()=>{ S.married=false; S.partner=null; S.savings=Math.round(S.savings*0.5); S.lifeEvents.push('離婚'); log('💔 離婚しました。財産を折半しました。', 'bad'); S.happiness=Math.max(0,S.happiness-30); } }, ]); } } },
+  ];
+  let cumulative = 0;
+  for (const e of events) {
+    cumulative += e.w;
+    if (rand < cumulative) { e.fn(); break; }
+  }
+}
+
+function triggerHealthCrisis() {
+  const crises = [
+    { name: 'がん（早期発見）', cost: 1000000, hpLoss: 20, fn: ()=>{ log('🏥 がんが早期発見されました。治療費100万かかります。', 'bad'); } },
+    { name: '脳梗塞', cost: 2000000, hpLoss: 35, fn: ()=>{ log('🚑 脳梗塞で倒れました。リハビリが必要です。', 'bad'); S.stress=Math.min(100,S.stress+30); } },
+    { name: '心筋梗塞', cost: 1500000, hpLoss: 30, fn: ()=>{ log('🚑 心筋梗塞で入院しました。', 'bad'); } },
+    { name: '糖尿病診断', cost: 200000, hpLoss: 10, fn: ()=>{ log('🏥 糖尿病と診断されました。生活改善が必要です。', 'warn'); } },
+  ];
+  const c = crises[Math.floor(Math.random()*crises.length)];
+  S.savings -= c.cost;
+  S.hp = Math.max(0, S.hp - c.hpLoss);
+  S.lifeEvents.push(c.name);
+  c.fn();
+  if (S.hp <= 0) triggerDeath(c.name);
+}
+
+function triggerDeath(cause) {
+  S.isDead = true;
+  S.deathAge = S.age;
+  S.deathCause = cause;
+  paused = true;
+  S.lifeEvents.push(`${S.age}歳で死亡（${cause}）`);
+  setTimeout(showGameOver, 1500);
+}
+
+function showGameOver() {
+  const el = document.getElementById('gameover');
+  el.classList.add('active');
+  const years = S.deathAge - 18;
+  const childrenStr = S.children.length > 0 ? S.children.map(c=>c.name).join('・') : 'なし';
+  const summary = [
+    `死因: ${S.deathCause}`,
+    `享年: ${S.deathAge}歳（${years}年の人生）`,
+    `最終職業: ${S.jobTitle || JOBS[S.job]?.title || '無職'}`,
+    `最終貯蓄: ¥${Math.max(0, S.savings).toLocaleString()}`,
+    `結婚: ${S.married ? (S.partner?.name+'と結婚') : '独身'}`,
+    `子供: ${childrenStr}`,
+    `主な出来事: ${S.lifeEvents.slice(-8).join(' → ')}`,
+  ].join('\n');
+  document.getElementById('go-summary').textContent = summary;
+}
+
+// ============================================================
+// ACTION BUTTONS
+// ============================================================
+function renderActions() {
+  const area = document.getElementById('action-area');
+  area.innerHTML = '';
+  const actions = getAvailableActions();
+  actions.forEach(a => {
+    const btn = document.createElement('button');
+    btn.className = 'act-btn';
+    btn.innerHTML = `${a.label}<span class="act-cost">${a.cost||''}</span>`;
+    btn.title = a.desc || '';
+    if (a.disabled) btn.disabled = true;
+    btn.onclick = () => { a.fn(); updateUI(); renderActions(); };
+    area.appendChild(btn);
   });
-  </script>
+}
+
+function getAvailableActions() {
+  const acts = [];
+  if (S.inUniversity) {
+    acts.push({ label:'📚 アルバイト', desc:'大学生バイト。月3〜5万', fn:()=>{ S.savings+=40000; log('☕ バイトで4万円稼ぎました。', 'normal'); } });
+    acts.push({ label:'🏃 運動する', desc:'健康・ストレス解消', fn:()=>{ S.hp=Math.min(100,S.hp+5); S.stress=Math.max(0,S.stress-8); S.exerciseStreak=3; log('🏃 運動しました。健康維持！', 'good'); } });
+    return acts;
+  }
+  if (S.job === 'unemployed' || !S.job) {
+    acts.push({ label:'📄 就職活動', desc:'求人に応募する', fn:()=>jobSearch() });
+  }
+  if (S.job && S.job !== 'unemployed') {
+    acts.push({ label:'💼 残業する', desc:'月収+5〜10%、ストレス増', fn:()=>{ const e=Math.round(S.grossIncome*0.07); S.savings+=e; S.stress=Math.min(100,S.stress+10); log(`💼 残業で¥${e.toLocaleString()}稼ぎましたが疲れました。`, 'warn'); } });
+    acts.push({ label:'📖 スキルアップ', desc:'資格・スキル習得（¥5万）', disabled: S.savings<50000, cost:'¥5万', fn:()=>{ S.savings-=50000; S.grossIncome=Math.round(S.grossIncome*1.05); log('📖 スキルアップ。月収が5%上がりました！', 'good'); } });
+    acts.push({ label:'🔄 転職活動', desc:'収入アップの可能性', fn:()=>jobChange() });
+  }
+  acts.push({ label:'🏃 運動する', fn:()=>{ S.hp=Math.min(100,S.hp+5); S.stress=Math.max(0,S.stress-8); S.exerciseStreak=3; log('🏃 運動しました。', 'good'); } });
+  acts.push({ label:'👥 交友を深める', fn:()=>{ S.social=Math.min(100,S.social+12); S.happiness=Math.min(100,S.happiness+5); S.savings-=5000; log('👥 友人と食事しました（¥5,000）。', 'normal'); } });
+  if (S.savings >= 500000 && !S.hasInvestment) {
+    acts.push({ label:'📈 投資を始める', cost:'50万〜', fn:()=>startInvestment() });
+  }
+  if (S.hasInvestment) {
+    acts.push({ label:`📊 投資残高: ¥${S.investBalance.toLocaleString()}`, disabled:true });
+  }
+  if (S.hp < 60) {
+    acts.push({ label:'🏥 病院に行く', cost:'¥3万', fn:()=>{ S.savings-=30000; S.hp=Math.min(100,S.hp+20); S.stress=Math.max(0,S.stress-10); log('🏥 病院を受診しました。健康回復。', 'good'); } });
+  }
+  return acts;
+}
+
+function jobSearch() {
+  const opts = [];
+  if (S.education === 'university') {
+    opts.push({ label: 'エンジニア（月収35万）', fn:()=>{ S.job='engineer'; S.grossIncome=350000; S.jobMonths=0; S.livingWith='alone'; log('💻 エンジニアとして採用されました！', 'good'); } });
+    opts.push({ label: '会社員（大卒・月収28万）', fn:()=>{ S.job='office_uni'; S.grossIncome=280000; S.jobMonths=0; S.livingWith='alone'; log('💼 会社員として採用されました。', 'good'); } });
+  }
+  opts.push({ label: '営業職（月収25万・高卒可）', fn:()=>{ S.job='sales'; S.grossIncome=250000; S.jobMonths=0; S.livingWith='alone'; log('📞 営業職に採用されました。', 'good'); } });
+  opts.push({ label: 'アルバイト（月収12万）', fn:()=>{ S.job='parttime'; S.grossIncome=120000; S.jobMonths=0; log('☕ アルバイトを始めました。', 'normal'); } });
+  opts.push({ label: 'もう少し待つ', fn:()=>{ log('今月は求職活動を続けます。', 'normal'); } });
+  showModal('📄', '就職活動', '求人が見つかりました。どれを選びますか？', opts);
+}
+
+function jobChange() {
+  const opts = [];
+  if (S.education==='university' && S.job !== 'engineer') opts.push({ label:'IT企業（月収+5〜15万）', fn:()=>{ S.job='engineer'; S.grossIncome=Math.max(400000,S.grossIncome*1.15|0); S.jobMonths=0; log('💻 IT企業に転職しました！月収アップ。', 'good'); S.lifeEvents.push('IT転職'); } });
+  opts.push({ label:'ベンチャー（高リスク高収入）', fn:()=>{ if(Math.random()<0.6){ S.grossIncome=Math.round(S.grossIncome*1.3); log('🚀 ベンチャー転職成功！収入30%増。', 'good'); }else{ S.grossIncome=Math.round(S.grossIncome*0.8); log('😰 ベンチャーが苦しい。収入20%減。', 'bad'); } S.jobMonths=0; S.lifeEvents.push('ベンチャー転職'); } });
+  opts.push({ label:'フリーランスになる', fn:()=>{ S.job='freelance'; S.grossIncome=350000; S.jobMonths=0; log('🖥️ フリーランスとして独立しました。', 'good'); S.lifeEvents.push('フリーランス独立'); } });
+  opts.push({ label:'今の会社に留まる', fn:()=>{ log('転職はやめました。', 'normal'); } });
+  showModal('🔄','転職活動','転職先を選んでください。',opts);
+}
+
+function startInvestment() {
+  showModal('📈','投資',`貯蓄の一部を投資に回しますか？`,[
+    { label:'積立NISA（月3万・低リスク）', fn:()=>{ S.hasInvestment=true; S.investBalance=500000; S.savings-=500000; log('📈 積立NISA開始。長期運用で資産形成。', 'good'); S.lifeEvents.push('投資開始'); } },
+    { label:'株式投資（高リスク・高リターン）', fn:()=>{ S.hasInvestment=true; S.investBalance=1000000; S.savings-=1000000; log('📊 株式投資開始。リスクに注意。', 'warn'); } },
+    { label:'やめておく', fn:()=>{ log('投資はやめました。', 'normal'); } },
+  ]);
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function showModal(icon, title, body, choices) {
+  paused = true;
+  document.getElementById('modal-icon').textContent = icon;
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').textContent = body;
+  const choicesEl = document.getElementById('modal-choices');
+  choicesEl.innerHTML = '';
+  choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = c.label + (c.desc ? `<div class="choice-desc">${c.desc}</div>` : '');
+    btn.onclick = () => {
+      closeModal();
+      c.fn();
+      updateUI();
+      renderActions();
+    };
+    choicesEl.appendChild(btn);
+  });
+  document.getElementById('modal-overlay').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  paused = false;
+  lastTick = Date.now();
+}
+
+// ============================================================
+// UI UPDATE
+// ============================================================
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+function updateUI() {
+  // Bars
+  const setBar = (id, val) => {
+    document.getElementById('bar-'+id).style.width = clamp(val,0,100)+'%';
+    document.getElementById('val-'+id).textContent = Math.round(val);
+  };
+  setBar('hp', S.hp);
+  setBar('st', S.stress);
+  setBar('hap', S.happiness);
+  setBar('soc', S.social);
+
+  // Char info
+  const info = document.getElementById('char-info');
+  const jobInfo = S.inUniversity ? `大学${S.uniYear}年生` : (JOBS[S.job]?.title || '無職');
+  const famInfo = S.married ? `既婚（${S.partner?.name}）` : (S.partner ? `交際中（${S.partner?.name}）` : '独身');
+  const childInfo = S.children.length > 0 ? `子供: ${S.children.map(c=>`${c.name}(${c.age}歳)`).join(' ')}` : '';
+  info.innerHTML = [
+    `<span>${S.name}</span>　${S.age}歳`,
+    `${S.year}年${S.month}月`,
+    `学歴: ${S.education==='university'?'大卒':'高卒'}`,
+    `職業: <span>${jobInfo}</span>`,
+    famInfo,
+    childInfo,
+    S.hasLoan ? `奨学金残: ¥${S.loanBalance.toLocaleString()}` : '',
+    S.parentNeedsCare ? '👴 親の介護中' : '',
+  ].filter(Boolean).map(l=>`<div>${l}</div>`).join('');
+
+  // Finance
+  document.getElementById('savings-big').textContent = '¥'+(Math.max(0,S.savings)).toLocaleString();
+  if (S.savings < 0) {
+    document.getElementById('savings-big').style.color='#f85149';
+    document.getElementById('savings-big').textContent = '¥'+S.savings.toLocaleString()+' (借金)';
+  } else { document.getElementById('savings-big').style.color='#58a6ff'; }
+
+  const tax = calcTax(S.grossIncome);
+  S.netIncome = S.grossIncome - tax;
+  const exp = calcExpenses();
+  const totalExp = exp.rent+exp.food+exp.util+exp.ins+exp.edu+exp.misc;
+  const net = S.netIncome - totalExp;
+  document.getElementById('fin-income').textContent = S.inUniversity ? '¥0（学生）' : '¥'+S.netIncome.toLocaleString();
+  document.getElementById('fin-rent').textContent = '-¥'+exp.rent.toLocaleString();
+  document.getElementById('fin-food').textContent = '-¥'+exp.food.toLocaleString();
+  document.getElementById('fin-util').textContent = '-¥'+exp.util.toLocaleString();
+  document.getElementById('fin-ins').textContent = '-¥'+exp.ins.toLocaleString();
+  document.getElementById('fin-edu').textContent = '-¥'+exp.edu.toLocaleString();
+  document.getElementById('fin-misc').textContent = '-¥'+exp.misc.toLocaleString();
+  const netEl = document.getElementById('fin-net');
+  netEl.textContent = (net>=0?'+':'')+'¥'+net.toLocaleString();
+  netEl.className = net>=0 ? 'money-pos' : 'money-neg';
+
+  // Date
+  document.getElementById('date-display').textContent = `${S.year}年${S.month}月`;
+
+  // Draw character
+  if (phaserScene) {
+    phaserScene.charTargetX = 300 + Math.sin(S.month)*150;
+    phaserScene.drawChar(S.age, S.married, S.children);
+  }
+}
+
+// ============================================================
+// LOG
+// ============================================================
+function log(msg, type='normal') {
+  const body = document.getElementById('log-body');
+  const el = document.createElement('div');
+  el.className = 'log-entry log-' + type;
+  el.textContent = `[${S.year}/${String(S.month).padStart(2,'0')}] ${msg}`;
+  body.prepend(el);
+  // Trim log
+  while (body.children.length > 80) body.removeChild(body.lastChild);
+}
+</script>
 </body>
 </html>
