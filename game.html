@@ -463,6 +463,7 @@ function startGame() {
   gameStarted = true;
   paused = false;
   document.getElementById('btn-pause').textContent = '⏸ 一時停止';
+  initStocks();
   log(`👶 ${S.name}が生まれました！${S.year}年${S.month}月。`, 'good');
   S.lifeEvents.push('誕生');
   updateUI();
@@ -523,6 +524,8 @@ function tickMonth() {
     if (S.loanBalance <= 0) { S.hasLoan=false; S.loanBalance=0; S.loanMonthly=0; log('🎉 奨学金を完済しました！', 'good'); }
   }
 
+  // Stocks
+  tickStocks();
   // Random life events (not too frequent)
   if (S.month % 3 === 0) maybeRandomEvent();
 
@@ -621,6 +624,169 @@ function buildGradChoices() {
   return opts;
 }
 
+// ============================================================
+// MASTER DATA
+// ============================================================
+
+// --- 株式銘柄 ---
+const STOCK_DATA = {
+  'テクノ電機':    { sector:'tech',      basePrice:1200, vol:0.05, div:0.010, icon:'💡' },
+  'さくら銀行':    { sector:'finance',   basePrice:800,  vol:0.03, div:0.030, icon:'🏦' },
+  'ニッポン自動車':{ sector:'auto',      basePrice:2400, vol:0.04, div:0.025, icon:'🚗' },
+  'メガフード':    { sector:'food',      basePrice:600,  vol:0.02, div:0.020, icon:'🍔' },
+  'スターゲーム':  { sector:'game',      basePrice:4500, vol:0.09, div:0.005, icon:'🎮' },
+  'コスモ薬品':    { sector:'pharma',    basePrice:3200, vol:0.04, div:0.015, icon:'💊' },
+  'ふじ不動産':    { sector:'realestate',basePrice:1800, vol:0.03, div:0.020, icon:'🏢' },
+  'ブルーエナジー':{ sector:'energy',    basePrice:950,  vol:0.05, div:0.030, icon:'⚡' },
+  'ネオコム':      { sector:'telecom',   basePrice:1500, vol:0.02, div:0.035, icon:'📡' },
+  'グローバルAI':  { sector:'tech',      basePrice:8000, vol:0.13, div:0.000, icon:'🤖' },
+  'ヒカリ流通':    { sector:'retail',    basePrice:700,  vol:0.03, div:0.025, icon:'🛒' },
+  'アルファ証券':  { sector:'finance',   basePrice:2100, vol:0.06, div:0.008, icon:'📊' },
+};
+// Runtime prices (initialized on start)
+const stockPrices = {};
+
+// --- 会社求人マスタ ---
+const COMPANY_JOBS = {
+  highschool: [
+    { company:'ニッポン自動車',   role:'製造職',       gross:210000, overtime:30, stability:85, stress:20, icon:'🚗', req:'highschool' },
+    { company:'メガフード',       role:'営業・販売',   gross:220000, overtime:25, stability:70, stress:25, icon:'🍔', req:'highschool' },
+    { company:'ヒカリ流通',       role:'物流スタッフ', gross:200000, overtime:20, stability:75, stress:15, icon:'🛒', req:'highschool' },
+    { company:'ブルーエナジー',   role:'現場作業員',   gross:230000, overtime:35, stability:80, stress:30, icon:'⚡', req:'highschool' },
+    { company:'市役所',           role:'行政事務（非常勤）', gross:180000, overtime:5, stability:95, stress:10, icon:'🏛️', req:'highschool' },
+  ],
+  university: [
+    { company:'テクノ電機',       role:'システムエンジニア', gross:350000, overtime:30, stability:80, stress:35, icon:'💡', req:'university' },
+    { company:'グローバルAI',     role:'AIエンジニア',  gross:450000, overtime:40, stability:60, stress:45, icon:'🤖', req:'university' },
+    { company:'さくら銀行',       role:'総合職',        gross:320000, overtime:25, stability:88, stress:30, icon:'🏦', req:'university' },
+    { company:'コスモ薬品',       role:'MR（医薬営業）',gross:340000, overtime:28, stability:82, stress:35, icon:'💊', req:'university' },
+    { company:'ふじ不動産',       role:'営業職',        gross:280000, overtime:20, stability:70, stress:30, icon:'🏢', req:'university' },
+    { company:'ネオコム',         role:'インフラエンジニア', gross:370000, overtime:20, stability:85, stress:25, icon:'📡', req:'university' },
+    { company:'国家公務員',       role:'一般行政職',    gross:265000, overtime:10, stability:98, stress:15, icon:'🏛️', req:'university' },
+    { company:'スターゲーム',     role:'ゲームプランナー', gross:300000, overtime:50, stability:55, stress:50, icon:'🎮', req:'university' },
+  ],
+};
+
+// --- 住居マスタ ---
+const APARTMENTS = [
+  { name:'1Kアパート（郊外・築25年）', rent:50000,  comfort:25, desc:'狭いが家賃最安。虫が出ることも。' },
+  { name:'1Kマンション（市内）',       rent:70000,  comfort:45, desc:'一人暮らしの標準。駅10分。' },
+  { name:'1LDKマンション（駅近）',     rent:90000,  comfort:60, desc:'ゆったり。駅5分の好立地。' },
+  { name:'2LDKマンション（市内）',     rent:110000, comfort:75, desc:'カップル・子供1人まで対応。' },
+  { name:'3LDK戸建て（郊外）',         rent:90000,  comfort:80, desc:'広い庭付き。車必須の郊外。' },
+  { name:'タワマン高層階（都心）',      rent:200000, comfort:95, desc:'最高の眺め。維持費も高い。' },
+];
+
+// --- 食生活マスタ ---
+const DIETS = [
+  { key:'homecook', name:'自炊中心',   cost:25000, hpMod:+0.3, happyMod:-0.1, desc:'健康的だが時間がかかる' },
+  { key:'mixed',    name:'自炊＋外食', cost:40000, hpMod:0,    happyMod:0,    desc:'バランス型' },
+  { key:'eatout',   name:'外食中心',   cost:60000, hpMod:-0.2, happyMod:+0.1, desc:'楽しいが出費と健康に影響' },
+  { key:'delivery', name:'デリバリー', cost:55000, hpMod:-0.1, happyMod:+0.2, desc:'便利だが割高' },
+  { key:'convenience',name:'コンビニ/ファスト', cost:35000, hpMod:-0.4, happyMod:-0.1, desc:'安くて早いが体に悪い' },
+];
+
+// --- 趣味マスタ ---
+const HOBBIES_DATA = [
+  { key:'gym',      name:'ジム通い',     cost:8000,  hpMod:+0.5, stressMod:-0.3, happyMod:+0.1, socialMod:0,    icon:'🏋️' },
+  { key:'travel',   name:'旅行',         cost:30000, hpMod:0,    stressMod:-0.5, happyMod:+0.5, socialMod:+0.1, icon:'✈️' },
+  { key:'gaming',   name:'ゲーム',       cost:3000,  hpMod:-0.1, stressMod:-0.2, happyMod:+0.3, socialMod:-0.1, icon:'🎮' },
+  { key:'cooking',  name:'料理',         cost:10000, hpMod:+0.1, stressMod:-0.1, happyMod:+0.2, socialMod:+0.1, icon:'🍳' },
+  { key:'reading',  name:'読書',         cost:2000,  hpMod:0,    stressMod:-0.2, happyMod:+0.1, socialMod:0,    icon:'📚' },
+  { key:'music',    name:'音楽（楽器）', cost:5000,  hpMod:0,    stressMod:-0.3, happyMod:+0.3, socialMod:+0.1, icon:'🎸' },
+  { key:'sports',   name:'スポーツ同好会',cost:5000, hpMod:+0.3, stressMod:-0.2, happyMod:+0.2, socialMod:+0.3, icon:'⚽' },
+  { key:'invest_study',name:'投資勉強',  cost:1000,  hpMod:0,    stressMod:+0.1, happyMod:0,    socialMod:0,    icon:'📈' },
+];
+
+// --- 保険マスタ ---
+const INSURANCES = [
+  { key:'none',   name:'保険なし',           cost:0,     coverage:0,      desc:'ノーリスクだが病気・死亡時に無防備' },
+  { key:'basic',  name:'県民共済（基本）',   cost:2000,  coverage:500000, desc:'月2,000円・最低限の保障' },
+  { key:'medical',name:'医療保険（入院特化）',cost:5000, coverage:1500000,desc:'入院1日1万円給付' },
+  { key:'life',   name:'定期生命保険（3000万）',cost:8000,coverage:30000000,desc:'死亡時3,000万。家族のために' },
+  { key:'combo',  name:'総合保険（医療＋生命）',cost:15000,coverage:32000000,desc:'手厚い保障。月1.5万' },
+];
+
+// ============================================================
+// NEW STATE FIELDS (追加)
+// ============================================================
+Object.assign(S, {
+  // 住居
+  apartment: null,       // APARTMENTS の要素
+  ownHouse: false,
+  mortgage: 0,           // 残高
+  mortgageMonthly: 0,
+  // 食生活
+  diet: 'mixed',         // DIETS key
+  // 趣味
+  hobbies: [],           // HOBBIES_DATA keys
+  // 保険
+  insurance: 'none',     // INSURANCES key
+  // 車
+  ownsCar: false,
+  carType: null,         // 'kei' | 'sedan' | 'suv'
+  carMonthly: 0,
+  // 株式ポートフォリオ
+  portfolio: {},         // { '銘柄名': shares }
+  // 勤務先
+  currentCompany: null,  // COMPANY_JOBS entry
+});
+
+// ============================================================
+// STOCK ENGINE
+// ============================================================
+function initStocks() {
+  for (const [name, d] of Object.entries(STOCK_DATA)) {
+    stockPrices[name] = d.basePrice;
+  }
+}
+
+function tickStocks() {
+  // Sector-wide shocks
+  const sectorShock = {};
+  for (const sec of ['tech','finance','auto','food','game','pharma','realestate','energy','telecom','retail']) {
+    sectorShock[sec] = (Math.random() - 0.5) * 0.04;
+  }
+  for (const [name, d] of Object.entries(STOCK_DATA)) {
+    const shock = sectorShock[d.sector] + (Math.random()-0.5)*d.vol*2;
+    stockPrices[name] = Math.max(10, Math.round(stockPrices[name] * (1 + shock)));
+  }
+  // Dividends quarterly
+  if (S.month % 3 === 0) {
+    let divTotal = 0;
+    for (const [name, shares] of Object.entries(S.portfolio)) {
+      if (shares > 0) {
+        const div = Math.round(stockPrices[name] * STOCK_DATA[name].div / 4 * shares);
+        divTotal += div;
+      }
+    }
+    if (divTotal > 0) {
+      S.savings += divTotal;
+      log(`💴 配当金 ¥${divTotal.toLocaleString()} を受け取りました。`, 'good');
+    }
+  }
+  // Big events
+  if (Math.random() < 0.002) {
+    const names = Object.keys(STOCK_DATA);
+    const target = names[Math.floor(Math.random()*names.length)];
+    const up = Math.random() < 0.5;
+    const change = up ? 1.3 : 0.5;
+    stockPrices[target] = Math.round(stockPrices[target] * change);
+    log(`📰 ${target}が${up?'急騰📈':'急落📉'}しました！（${up?'+30%':'-50%'}）`, up?'good':'bad');
+  }
+}
+
+function portfolioValue() {
+  let total = 0;
+  for (const [name, shares] of Object.entries(S.portfolio)) {
+    total += stockPrices[name] * shares;
+  }
+  return total;
+}
+
+// ============================================================
+// UNIVERSITY TICK
+// ============================================================
 function tickUniversity() {
   if (S.month === 4) {
     S.uniYear++;
@@ -628,371 +794,601 @@ function tickUniversity() {
       S.inUniversity = false;
       S.education = 'university';
       S.lifeEvents.push('大学卒業');
-      showModal('🎓', '大学卒業！', `${S.name}は大学を卒業しました。\n就職活動の結果を選んでください。`, [
-        { label: '大企業に就職（月収30万）', desc: '安定しているが競争激しい', fn: ()=>{ S.job='office_uni'; S.grossIncome=300000; S.livingWith='alone'; S.lifeEvents.push('大企業就職'); log('💼 大企業に就職しました！', 'good'); } },
-        { label: 'IT企業エンジニア（月収35万）', desc: '成長産業、スキルが重要', fn: ()=>{ S.job='engineer'; S.grossIncome=350000; S.livingWith='alone'; S.lifeEvents.push('エンジニア就職'); log('💻 IT企業にエンジニアとして就職しました！', 'good'); } },
-        { label: '公務員（月収26万・安定）', desc: 'リストラなし・昇給ゆっくり', fn: ()=>{ S.job='office_uni'; S.grossIncome=260000; S.livingWith='alone'; S.lifeEvents.push('公務員就職'); log('🏛️ 公務員になりました。安定した生活が始まります。', 'good'); } },
-        { label: '大学院進学（さらに2年）', desc: '研究職・専門職への道', fn: ()=>{ S.inUniversity=true; S.uniYear=4; S.education='university'; log('📚 大学院に進学しました。さらに2年間研究します。', 'normal'); } },
-      ]);
+      showModal('🎓', '大学卒業！', `${S.name}は大学を卒業しました。\n就職先を選んでください。`,
+        buildJobOffers('university').concat([
+          { label:'📚 大学院進学（さらに2年）', desc:'研究職・専門職への道', fn:()=>{ S.inUniversity=true; S.uniYear=4; S.education='university'; log('📚 大学院に進学しました。', 'normal'); } },
+        ])
+      );
     }
-    // University loan
     if (S.uniYear === 2 && !S.hasLoan && S.savings < 200000) {
-      showModal('📋', '奨学金', `学費と生活費のため、奨学金を借りますか？`, [
-        { label: '借りる（毎月3万返済）', fn: ()=>{ S.hasLoan=true; S.loanBalance=2000000; S.loanMonthly=30000; S.savings+=500000; log('📋 奨学金200万を借りました。返済は就職後から。', 'warn'); } },
-        { label: '借りない（貯蓄で乗り切る）', fn: ()=>{ log('自力で乗り切ります。', 'normal'); } },
+      showModal('📋','奨学金','学費のため、奨学金を借りますか？',[
+        { label:'借りる（月3万返済・200万）', fn:()=>{ S.hasLoan=true; S.loanBalance=2000000; S.loanMonthly=30000; S.savings+=500000; log('📋 奨学金200万を借りました。', 'warn'); } },
+        { label:'借りない', fn:()=>{ log('自力で乗り切ります。', 'normal'); } },
       ]);
     }
   }
-  // Uni expenses
-  const tuition = Math.round(50000 + (S.uniYear===1?200000:0));
-  S.savings -= tuition;
+  S.savings -= Math.round(50000 + (S.uniYear===1?200000:0));
+}
+
+function buildJobOffers(eduReq) {
+  const pool = COMPANY_JOBS[eduReq] || [];
+  // Pick 3-4 random offers
+  const shuffled = pool.slice().sort(()=>Math.random()-0.5).slice(0,4);
+  return shuffled.map(c => ({
+    label: `${c.icon} ${c.company}（${c.role}）`,
+    desc:  `月収¥${(c.gross/10000).toFixed(0)}万 | 残業${c.overtime}h | 安定度${c.stability}% | ストレス${c.stress}`,
+    fn: () => {
+      S.job = c.role.includes('エンジニア')||c.role.includes('AI') ? 'engineer' :
+               c.role.includes('公務員')||c.role.includes('行政') ? 'office_uni' : 'office_hs';
+      S.grossIncome = c.gross;
+      S.currentCompany = c;
+      S.jobMonths = 0;
+      S.livingWith = 'alone';
+      S.stress = Math.min(100, S.stress + c.stress * 0.3);
+      log(`${c.icon} ${c.company}の${c.role}として入社しました！月収¥${(c.gross/10000).toFixed(0)}万。`, 'good');
+      S.lifeEvents.push(`${c.company}入社`);
+      // Move out → choose apartment
+      showApartmentChoice();
+    },
+  }));
+}
+
+// ============================================================
+// FINANCES
+// ============================================================
+function calcExpenses() {
+  let rent=0, food=0, util=0, ins=0, edu=0, misc=0;
+  // 住居
+  if (S.ownHouse) {
+    rent = S.mortgageMonthly;
+  } else if (S.apartment) {
+    rent = S.apartment.rent;
+    util = S.married ? 18000 : 10000;
+  } else if (S.livingWith === 'parents') {
+    food = 20000; util = 5000; misc = 15000;
+  } else {
+    rent = 68000; util = 10000;
+  }
+  // 食生活
+  const dietData = DIETS.find(d=>d.key===S.diet) || DIETS[1];
+  food = S.livingWith==='parents' ? food : dietData.cost * (S.married?1.8:1) + S.children.filter(c=>c.age<18).length*10000;
+  // 光熱費補正
+  if (S.livingWith!=='parents') util += S.married ? 5000 : 0;
+  // 保険
+  const insData = INSURANCES.find(i=>i.key===S.insurance);
+  ins = insData ? insData.cost : 0;
+  // 社会保険（会社員なら天引き済みとみなさない → 自営・無職は別途）
+  if (!S.job || S.job==='unemployed' || S.job==='freelance') ins += 16000;
+  // 子の教育費
+  S.children.forEach(c => {
+    if (c.age>=3&&c.age<6) edu+=25000;
+    else if (c.age>=6&&c.age<15) edu+=15000;
+    else if (c.age>=15&&c.age<18) edu+=30000;
+    else if (c.age>=18&&c.age<22) edu+=60000;
+  });
+  // 趣味費
+  let hobbyTotal = 0;
+  S.hobbies.forEach(hk=>{ const h=HOBBIES_DATA.find(d=>d.key===hk); if(h) hobbyTotal+=h.cost; });
+  // 車
+  if (S.ownsCar) misc += S.carMonthly;
+  // ローン各種
+  misc += S.loanMonthly + hobbyTotal;
+  return { rent, food, util, ins, edu, misc };
 }
 
 function tickFinances() {
-  if (S.inUniversity || !S.job) return;
+  if (S.inChildhood || S.inUniversity || !S.job) return;
   const tax = calcTax(S.grossIncome);
   S.netIncome = S.grossIncome - tax;
   const exp = calcExpenses();
-  const totalExp = exp.rent + exp.food + exp.util + exp.ins + exp.edu + exp.misc;
+  const totalExp = exp.rent+exp.food+exp.util+exp.ins+exp.edu+exp.misc;
   const net = S.netIncome - totalExp;
   S.savings += net;
-  // Warn if broke
-  if (S.savings < 0) {
-    log(`⚠️ 貯蓄がマイナスになりました（¥${Math.abs(S.savings).toLocaleString()}の借金）`, 'bad');
-  }
-  if (S.savings < -1000000) {
-    log('💸 多重債務に陥りました。生活が破綻しています。', 'bad');
-    S.stress = Math.min(100, S.stress + 20);
-    S.happiness = Math.max(0, S.happiness - 20);
-  }
+  if (S.savings < 0) log(`⚠️ 貯蓄がマイナス（¥${Math.abs(S.savings).toLocaleString()}の借金）`, 'bad');
+  if (S.savings < -1000000) { log('💸 多重債務。生活が破綻しています。', 'bad'); S.stress=Math.min(100,S.stress+20); S.happiness=Math.max(0,S.happiness-20); }
   S.jobMonths++;
-  // Promotion check
   checkPromotion();
-  // Unemployment check
-  if (S.job === 'unemployed') {
+  if (S.job==='unemployed') {
     S.unemployedMonths++;
-    if (S.unemployedMonths >= 3) log('⚠️ 無職期間が長くなっています。', 'warn');
-    // 雇用保険：最大6ヶ月
-    if (S.unemployedMonths <= 6) S.savings += 80000;
-  } else { S.unemployedMonths = 0; }
+    if (S.unemployedMonths>=3) log('⚠️ 無職期間が長くなっています。', 'warn');
+    if (S.unemployedMonths<=6) S.savings+=80000;
+  } else { S.unemployedMonths=0; }
+  // 住宅ローン残高減少
+  if (S.ownHouse && S.mortgage > 0) {
+    S.mortgage = Math.max(0, S.mortgage - S.mortgageMonthly * 0.7);
+    if (S.mortgage <= 0) { log('🏠 住宅ローンを完済しました！', 'good'); S.mortgage=0; S.mortgageMonthly=0; }
+  }
+  // 食生活の健康影響
+  const dietData = DIETS.find(d=>d.key===S.diet) || DIETS[1];
+  S.hp = Math.max(0, Math.min(100, S.hp + dietData.hpMod));
+  S.happiness = Math.max(0, Math.min(100, S.happiness + dietData.happyMod));
+  // 趣味の効果
+  S.hobbies.forEach(hk=>{
+    const h = HOBBIES_DATA.find(d=>d.key===hk);
+    if (!h) return;
+    S.hp = Math.max(0,Math.min(100,S.hp+h.hpMod));
+    S.stress = Math.max(0,Math.min(100,S.stress+h.stressMod));
+    S.happiness = Math.max(0,Math.min(100,S.happiness+h.happyMod));
+    S.social = Math.max(0,Math.min(100,S.social+h.socialMod));
+  });
+  // 残業ストレス（会社の残業時間）
+  if (S.currentCompany) {
+    const otStress = S.currentCompany.overtime / 100;
+    S.stress = Math.min(100, S.stress + otStress);
+  }
 }
 
 function tickStats() {
-  // Stress naturally decreases
-  S.stress = Math.max(0, S.stress - 1 + (S.job==='unemployed' ? 3 : 0));
-  // High stress hurts health
+  S.stress = Math.max(0, S.stress - 1 + (S.job==='unemployed'?3:0));
   if (S.stress > 70) S.hp = Math.max(0, S.hp - 0.5);
-  // Poor finances hurt happiness
   if (S.savings < 100000) S.happiness = Math.max(0, S.happiness - 1);
-  // Social decay
   S.social = Math.max(0, S.social - 0.5);
-  // Married happiness bonus
   if (S.married) S.happiness = Math.min(100, S.happiness + 0.3);
-  // Exercise benefit
-  if (S.exerciseStreak > 0) { S.hp = Math.min(100, S.hp + 0.3); S.exerciseStreak--; }
+  if (S.exerciseStreak > 0) { S.hp = Math.min(100, S.hp+0.3); S.exerciseStreak--; }
+  // 住居の快適さ
+  if (S.apartment) S.happiness = Math.min(100, S.happiness + S.apartment.comfort*0.002);
+  else if (S.ownHouse) S.happiness = Math.min(100, S.happiness + 0.15);
 }
 
 function tickAging() {
   if (S.age < 30) return;
-  // Gradual health decline with age
-  const declineRate = S.age < 40 ? 0.1 : S.age < 50 ? 0.2 : S.age < 60 ? 0.35 : S.age < 70 ? 0.5 : 0.8;
-  S.hp = Math.max(0, S.hp - declineRate);
-  // Check death
+  const d = S.age<40?0.1:S.age<50?0.2:S.age<60?0.35:S.age<70?0.5:0.8;
+  S.hp = Math.max(0, S.hp - d);
   if (S.hp <= 0) { triggerDeath('老衰・病気'); return; }
-  // Random health crisis by age
   if (S.age >= 40 && Math.random() < 0.008) triggerHealthCrisis();
 }
 
 function tickParents() {
   if (S.age < 45) return;
-  S.parentHealth = Math.max(0, S.parentHealth - (1 + Math.random()));
+  S.parentHealth = Math.max(0, S.parentHealth-(1+Math.random()));
   if (S.parentHealth < 40 && !S.parentNeedsCare && Math.random() < 0.05) {
     S.parentNeedsCare = true;
-    showModal('👴', '親の介護', `${S.name}の親が介護が必要な状態になりました。\nどうしますか？`, [
-      { label: '施設に入れる（毎月15万）', fn: ()=>{ S.loanMonthly+=150000; log('👴 親を介護施設に入れました。月15万の負担です。', 'warn'); S.lifeEvents.push('親の介護（施設）'); } },
-      { label: '自宅介護する（毎月5万＋時間）', fn: ()=>{ S.loanMonthly+=50000; S.stress=Math.min(100,S.stress+20); log('👴 自宅で親の介護を始めました。ストレスが増加します。', 'warn'); S.lifeEvents.push('親の介護（自宅）'); } },
-      { label: '兄弟に任せる', fn: ()=>{ S.happiness=Math.max(0,S.happiness-10); log('😔 介護を兄弟に任せました。罪悪感を感じています。', 'normal'); } },
+    showModal('👴','親の介護',`${S.name}の親が介護が必要になりました。`,[
+      { label:'施設に入れる（月15万）', fn:()=>{ S.loanMonthly+=150000; log('👴 介護施設に入れました。月15万の負担。', 'warn'); S.lifeEvents.push('親の介護（施設）'); } },
+      { label:'自宅介護（月5万＋時間）', fn:()=>{ S.loanMonthly+=50000; S.stress=Math.min(100,S.stress+20); log('👴 自宅介護開始。ストレス増加。', 'warn'); S.lifeEvents.push('親の介護（自宅）'); } },
+      { label:'兄弟に任せる', fn:()=>{ S.happiness=Math.max(0,S.happiness-10); log('😔 介護を兄弟に任せました。', 'normal'); } },
     ]);
   }
-  if (S.parentHealth <= 0) {
-    S.parentHealth = 0;
-    if (!S.parentNeedsCare) return;
-    log('😢 親が亡くなりました。深い悲しみに包まれています。', 'bad');
-    S.happiness = Math.max(0, S.happiness - 25);
-    S.lifeEvents.push('親の死');
-    // 遺産
-    const inherit = Math.floor(Math.random() * 3000000) + 500000;
+  if (S.parentHealth <= 0 && S.parentNeedsCare) {
+    S.parentHealth = 0; S.parentNeedsCare = false;
+    log('😢 親が亡くなりました。', 'bad');
+    S.happiness = Math.max(0, S.happiness-25); S.lifeEvents.push('親の死');
+    const inherit = Math.floor(Math.random()*3000000)+500000;
     S.savings += inherit;
-    log(`💰 遺産として ¥${inherit.toLocaleString()} を受け取りました。`, 'good');
-    S.parentNeedsCare = false;
+    log(`💰 遺産¥${inherit.toLocaleString()}を受け取りました。`, 'good');
   }
 }
 
 function checkPromotion() {
-  if (!S.job || S.job==='parttime' || S.job==='unemployed') return;
-  if (S.job === 'office_hs' || S.job === 'office_uni' || S.job==='engineer' || S.job==='sales') {
-    if (S.jobMonths >= 60 && S.job !== 'manager') {
-      S.job = 'manager'; S.grossIncome = JOBS.manager.gross;
-      log('🎉 課長に昇進しました！月収50万になりました。', 'good');
-      S.lifeEvents.push('課長昇進');
-    }
-  } else if (S.job === 'manager' && S.jobMonths >= 120) {
-    S.job = 'senior_mgr'; S.grossIncome = JOBS.senior_mgr.gross;
-    log('🎉 部長に昇進しました！月収65万になりました。', 'good');
-    S.lifeEvents.push('部長昇進');
-  } else if (S.job === 'senior_mgr' && S.jobMonths >= 180) {
-    S.job = 'executive'; S.grossIncome = JOBS.executive.gross;
-    log('👑 役員・取締役に就任しました！月収90万になりました。', 'good');
-    S.lifeEvents.push('役員就任');
+  if (!S.job||S.job==='parttime'||S.job==='unemployed') return;
+  const base = ['office_hs','office_uni','engineer','sales'];
+  if (base.includes(S.job) && S.jobMonths>=60) {
+    S.job='manager'; S.grossIncome=JOBS.manager.gross;
+    log('🎉 課長に昇進しました！月収50万！', 'good'); S.lifeEvents.push('課長昇進');
+  } else if (S.job==='manager' && S.jobMonths>=120) {
+    S.job='senior_mgr'; S.grossIncome=JOBS.senior_mgr.gross;
+    log('🎉 部長に昇進しました！月収65万！', 'good'); S.lifeEvents.push('部長昇進');
+  } else if (S.job==='senior_mgr' && S.jobMonths>=180) {
+    S.job='executive'; S.grossIncome=JOBS.executive.gross;
+    log('👑 役員就任！月収90万！', 'good'); S.lifeEvents.push('役員就任');
   }
-  // Gradual raise
-  if (S.jobMonths % 12 === 0 && S.grossIncome > 0) {
-    const raise = Math.round(S.grossIncome * 0.02);
+  if (S.jobMonths%12===0 && S.grossIncome>0) {
+    const raise = Math.round(S.grossIncome*0.02);
     S.grossIncome += raise;
-    if (raise > 3000) log(`📈 昇給がありました（+¥${raise.toLocaleString()}/月）`, 'good');
+    if (raise>3000) log(`📈 昇給（+¥${raise.toLocaleString()}/月）`, 'good');
   }
 }
 
 function onNewYear() {
   if (S.inChildhood) { onChildhoodYear(); updateUI(); renderActions(); return; }
-  log(`━━ ${S.year}年 ${S.name}は${S.age}歳になりました ━━`, 'month');
+  log(`━━ ${S.year}年 ${S.name}は${S.age}歳 ━━`, 'month');
   S.lifeEvents.push(`${S.age}歳`);
-  // Birthday events
-  if (S.age === 25 && !S.married) log('💭 周りの友人が結婚し始めました。', 'normal');
-  if (S.age === 30 && !S.married) log('💭 30代。社会的プレッシャーを感じます。', 'warn');
-  if (S.age === 40) log('💭 40代。人生の折り返しを感じます。', 'normal');
-  if (S.age === 60) log('💭 定年が近づいています。老後の準備はできていますか？', 'warn');
-  if (S.age === 65) {
-    if (S.savings < 20000000) log('⚠️ 老後2000万問題。貯蓄が足りません！', 'bad');
-    else log('✅ 老後の資金は十分あります。', 'good');
-    if (S.job && S.job !== 'unemployed' && S.job !== 'parttime') {
-      showModal('📋', '定年退職', `65歳になり、定年を迎えました。`, [
-        { label: '引退する', fn: ()=>{ S.job='retired'; S.grossIncome=120000; /* 年金 */ S.lifeEvents.push('定年退職'); log('🎌 定年退職しました。年金生活が始まります。', 'good'); } },
-        { label: '再雇用・嘱託で続ける（月収半額）', fn: ()=>{ S.grossIncome=Math.round(S.grossIncome*0.5); log('👔 再雇用で働き続けます。', 'normal'); } },
+  if (S.age===25 && !S.married) log('💭 周りが結婚し始めました。', 'normal');
+  if (S.age===30 && !S.married) log('💭 30代。社会的プレッシャーを感じます。', 'warn');
+  if (S.age===30 && !S.ownHouse) log('💭 マイホームを考え始める年齢です。', 'normal');
+  if (S.age===40) log('💭 40代。人生の折り返しです。', 'normal');
+  if (S.age===50) { log('💭 50代。老後を真剣に考えましょう。', 'warn'); }
+  if (S.age===60) log('💭 定年まであと5年。老後の準備は？', 'warn');
+  if (S.age===65) {
+    const totalAssets = S.savings + portfolioValue() + (S.ownHouse ? 20000000 : 0);
+    if (totalAssets < 20000000) log('⚠️ 老後2000万問題。資産が足りません！', 'bad');
+    else log(`✅ 老後資産¥${(totalAssets/10000).toFixed(0)}万。十分です！`, 'good');
+    if (S.job && !['unemployed','parttime','retired'].includes(S.job)) {
+      showModal('📋','定年退職',`65歳。定年を迎えました。`,[
+        { label:'引退する（年金月12万）', fn:()=>{ S.job='retired'; S.grossIncome=120000; S.lifeEvents.push('定年退職'); log('🎌 退職しました。年金生活。', 'good'); } },
+        { label:'再雇用で続ける（月収半額）', fn:()=>{ S.grossIncome=Math.round(S.grossIncome*0.5); log('👔 再雇用で働き続けます。', 'normal'); } },
       ]);
     }
   }
-  if (S.age >= 85) {
-    if (Math.random() < 0.15 + (100-S.hp)/200) triggerDeath('老衰');
-  }
+  if (S.age>=85 && Math.random()<0.15+(100-S.hp)/200) triggerDeath('老衰');
 }
 
 function checkLifeStageEvents() {
-  const monthId = S.year * 12 + S.month;
-  if (monthId - S.lastEventMonth < 6) return;
+  if (S.inChildhood) return;
+  const mid = S.year*12+S.month;
+  if (mid - S.lastEventMonth < 5) return;
 
-  // Marriage opportunity
-  if (!S.married && !S.partner && S.age >= 22 && S.age <= 45 && Math.random() < 0.015) {
-    S.lastEventMonth = monthId;
-    const names = ['山田 花子', '佐藤 美咲', '田中 愛', '鈴木 奈々', '高橋 さくら', '渡辺 陽子'];
-    const partnerName = names[Math.floor(Math.random()*names.length)];
-    const partnerAge = S.age + Math.floor(Math.random()*6) - 3;
-    showModal('💘', '出会い', `${partnerAge}歳の${partnerName}と出会いました。\n交際しますか？`, [
-      { label: '交際を始める', fn: ()=>{ S.partner={name:partnerName,age:partnerAge,metYear:S.year}; log(`💑 ${partnerName}さんと交際を始めました。`, 'good'); S.happiness=Math.min(100,S.happiness+15); } },
-      { label: '断る', fn: ()=>{ log('今は仕事に集中します。', 'normal'); } },
+  // 出会い
+  if (!S.married && !S.partner && S.age>=22 && S.age<=45 && Math.random()<0.015) {
+    S.lastEventMonth = mid;
+    const names = ['山田 花子','佐藤 美咲','田中 愛','鈴木 奈々','高橋 さくら','渡辺 陽子','伊藤 恵','中村 詩'];
+    const n = names[Math.floor(Math.random()*names.length)];
+    const pa = S.age + Math.floor(Math.random()*6)-3;
+    const meet = ['職場で','合コンで','マッチングアプリで','趣味のサークルで','友人の紹介で'];
+    const where = meet[Math.floor(Math.random()*meet.length)];
+    showModal('💘','出会い',`${where}${pa}歳の${n}と出会いました。`,[
+      { label:'交際を始める', fn:()=>{ S.partner={name:n,age:pa,metYear:S.year}; log(`💑 ${n}さんと交際開始。`, 'good'); S.happiness=Math.min(100,S.happiness+15); } },
+      { label:'断る', fn:()=>{ log('今は仕事に集中します。', 'normal'); } },
     ]);
   }
-
-  // Marriage proposal
-  if (S.partner && !S.married && S.age >= 24) {
-    const datingYears = S.year - S.partner.metYear;
-    if (datingYears >= 2 && Math.random() < 0.04) {
-      S.lastEventMonth = monthId;
-      showModal('💍', 'プロポーズ', `${S.partner.name}さんとの交際${datingYears}年。\n結婚しますか？`, [
-        { label: '結婚する', desc: '結婚式費用300万（折半）', fn: ()=>{
-          S.married = true; S.livingWith='family';
-          S.savings -= 1500000;
+  // プロポーズ
+  if (S.partner && !S.married && S.age>=24) {
+    const dy = S.year - S.partner.metYear;
+    if (dy>=2 && Math.random()<0.04) {
+      S.lastEventMonth = mid;
+      showModal('💍','プロポーズ',`${S.partner.name}との交際${dy}年。結婚しますか？`,[
+        { label:'結婚する（式費用300万・折半）', fn:()=>{
+          S.married=true; S.livingWith='family'; S.savings-=1500000;
           S.lifeEvents.push(`${S.partner.name}と結婚`);
-          log(`💍 ${S.partner.name}さんと結婚しました！`, 'good');
-          S.happiness = Math.min(100, S.happiness + 20);
+          log(`💍 ${S.partner.name}と結婚しました！`, 'good');
+          S.happiness=Math.min(100,S.happiness+20);
+          if (S.apartment) { // 2LDK以上に引越し提案
+            showModal('🏠','新居選び','結婚のため新居を探しましょう。',
+              APARTMENTS.filter(a=>a.rent>=80000).map(a=>({
+                label:`${a.name}（¥${(a.rent/10000).toFixed(0)}万/月）`,
+                desc: a.desc,
+                fn:()=>{ S.apartment=a; log(`🏠 ${a.name}に引越しました。`, 'good'); },
+              })).concat([{ label:'今のまま', fn:()=>{ log('今の住居のままにします。', 'normal'); } }])
+            );
+          }
         }},
-        { label: 'もう少し待つ', fn: ()=>{ log('結婚はもう少し待つことにしました。', 'normal'); } },
-        { label: '別れる', fn: ()=>{ S.partner=null; log('😔 別れることになりました。', 'bad'); S.happiness=Math.max(0,S.happiness-20); } },
+        { label:'もう少し待つ', fn:()=>{ log('もう少し待つことにしました。', 'normal'); } },
+        { label:'別れる', fn:()=>{ S.partner=null; log('😔 別れました。', 'bad'); S.happiness=Math.max(0,S.happiness-20); } },
       ]);
     }
   }
-
-  // Child opportunity
-  if (S.married && S.age >= 25 && S.age <= 42 && S.children.length < 3 && Math.random() < 0.02) {
-    S.lastEventMonth = monthId;
-    showModal('👶', '子供について', `子供を持つことを考えますか？`, [
-      { label: '子供を作る', fn: ()=>{
-        const childNames = ['太郎','花子','次郎','陽菜','翔','さくら'];
-        const n = childNames[Math.floor(Math.random()*childNames.length)];
-        S.children.push({name:n, age:0, ageMonths:0});
+  // 子供
+  if (S.married && S.age>=25 && S.age<=42 && S.children.length<3 && Math.random()<0.02) {
+    S.lastEventMonth = mid;
+    showModal('👶','子供について','子供を持ちますか？',[
+      { label:'子供を作る（出産費用50万）', fn:()=>{
+        const ns=['太郎','花子','次郎','陽菜','翔','さくら'];
+        const n=ns[Math.floor(Math.random()*ns.length)];
+        S.children.push({name:n,age:0,ageMonths:0});
+        S.savings-=500000;
         S.lifeEvents.push(`${n}誕生`);
-        log(`👶 ${n}が生まれました！おめでとうございます！`, 'good');
-        S.happiness = Math.min(100, S.happiness + 20);
-        S.savings -= 500000; // 出産費用
+        log(`👶 ${n}が生まれました！`, 'good'); S.happiness=Math.min(100,S.happiness+20);
       }},
-      { label: 'まだ早い', fn: ()=>{ log('子供はまだ先にします。', 'normal'); } },
-      { label: '子供は持たない', fn: ()=>{ log('DINKS（子なし共働き）を選択しました。', 'normal'); S.lifeEvents.push('DINKSを選択'); } },
+      { label:'まだ早い', fn:()=>{ log('子供はまだ先にします。', 'normal'); } },
+      { label:'子供は持たない（DINKS）', fn:()=>{ log('DINKSを選択しました。', 'normal'); S.lifeEvents.push('DINKS選択'); } },
     ]);
   }
-
-  // Recession event
-  if (Math.random() < 0.003) {
-    S.lastEventMonth = monthId;
-    log('📉 景気後退が起きています。株価・給与に影響が出ています。', 'bad');
-    S.grossIncome = Math.round(S.grossIncome * 0.85);
-    if (S.hasInvestment) S.investBalance = Math.round(S.investBalance * 0.7);
-    S.lifeEvents.push('経済危機を経験');
+  // 景気後退
+  if (Math.random()<0.003) {
+    S.lastEventMonth=mid;
+    log('📉 景気後退。株価・給与に影響が出ています。', 'bad');
+    S.grossIncome=Math.round(S.grossIncome*0.85);
+    for (const name of Object.keys(S.portfolio)) stockPrices[name]=Math.round(stockPrices[name]*0.7);
+    S.lifeEvents.push('経済危機');
   }
 }
 
 function maybeRandomEvent() {
-  if (S.isDead) return;
-  const rand = Math.random();
-  const events = [
-    // Good
-    { w:0.03, fn:()=>{ const b=Phaser.Math.Between?Phaser.Math.Between(50000,300000):Math.floor(Math.random()*250000)+50000; S.savings+=b; log(`💰 臨時ボーナスが入りました（¥${b.toLocaleString()}）！`, 'good'); } },
-    { w:0.02, fn:()=>{ S.happiness=Math.min(100,S.happiness+15); log('🌸 素晴らしい体験をしました。幸福度が上がりました。', 'good'); } },
-    { w:0.02, fn:()=>{ S.hp=Math.min(100,S.hp+8); log('🏥 健康診断の結果が良好でした。', 'good'); } },
-    // Neutral
-    { w:0.03, fn:()=>{ S.social=Math.min(100,S.social+10); log('👥 友人と久しぶりに会いました。', 'normal'); } },
-    { w:0.02, fn:()=>{ if(S.savings>500000){ S.savings-=200000; S.hp=Math.min(100,S.hp+10); log('🏥 人間ドックを受けました（¥20万）。早期発見あり。', 'warn'); } } },
-    // Bad
-    { w:0.025, fn:()=>{ const c=Math.floor(Math.random()*200000)+50000; S.savings-=c; log(`🚗 車の修理・事故費用 ¥${c.toLocaleString()} が発生しました。`, 'bad'); } },
-    { w:0.02, fn:()=>{ const c=Math.floor(Math.random()*100000)+30000; S.savings-=c; S.hp=Math.max(0,S.hp-8); log(`🏥 突然の入院費 ¥${c.toLocaleString()} がかかりました。`, 'bad'); S.stress=Math.min(100,S.stress+15); } },
-    { w:0.015, fn:()=>{ S.stress=Math.min(100,S.stress+20); S.hp=Math.max(0,S.hp-5); log('😰 職場での人間関係トラブルが起きました。', 'bad'); } },
-    { w:0.01, fn:()=>{ if(S.job&&S.job!=='unemployed'&&S.job!=='parttime'){ log('🚨 リストラ対象になりました。再就職が必要です。', 'bad'); S.job='unemployed'; S.grossIncome=0; S.lifeEvents.push('リストラ'); S.stress=Math.min(100,S.stress+30); } } },
-    { w:0.008, fn:()=>{ if(S.married){ showModal('💔','夫婦の危機','夫婦関係に問題が生じています。',[ { label:'カウンセリングに行く（¥10万）', fn:()=>{ S.savings-=100000; S.happiness=Math.min(100,S.happiness+15); log('💑 夫婦カウンセリングで関係改善。', 'good'); } }, { label:'離婚する', fn:()=>{ S.married=false; S.partner=null; S.savings=Math.round(S.savings*0.5); S.lifeEvents.push('離婚'); log('💔 離婚しました。財産を折半しました。', 'bad'); S.happiness=Math.max(0,S.happiness-30); } }, ]); } } },
+  if (S.isDead || S.inChildhood) return;
+  const r = Math.random();
+  const evs = [
+    { w:0.03, fn:()=>{ const b=Math.floor(Math.random()*250000)+50000; S.savings+=b; log(`💰 臨時ボーナス¥${b.toLocaleString()}！`, 'good'); } },
+    { w:0.02, fn:()=>{ S.happiness=Math.min(100,S.happiness+15); log('🌸 素晴らしい体験をしました。', 'good'); } },
+    { w:0.02, fn:()=>{ if(S.savings>500000){ S.savings-=200000; S.hp=Math.min(100,S.hp+10); log('🏥 人間ドックを受けました（¥20万）。', 'warn'); } } },
+    { w:0.025, fn:()=>{ if(S.ownsCar){ const c=Math.floor(Math.random()*200000)+50000; S.savings-=c; log(`🚗 車の修理費¥${c.toLocaleString()}が発生。`, 'bad'); } } },
+    { w:0.02, fn:()=>{ const c=Math.floor(Math.random()*100000)+30000; S.savings-=c; S.hp=Math.max(0,S.hp-8); log(`🏥 突然の入院費¥${c.toLocaleString()}。`, 'bad'); S.stress=Math.min(100,S.stress+15);
+      // 保険給付
+      const ins=INSURANCES.find(i=>i.key===S.insurance);
+      if(ins&&ins.coverage>0){ const pay=Math.min(c,ins.coverage*0.3|0); S.savings+=pay; log(`🛡️ 保険から¥${pay.toLocaleString()}給付されました。`,'good'); }
+    } },
+    { w:0.015, fn:()=>{ S.stress=Math.min(100,S.stress+20); S.hp=Math.max(0,S.hp-5); log('😰 職場でのトラブル。', 'bad'); } },
+    { w:0.01, fn:()=>{ if(S.job&&!['unemployed','parttime'].includes(S.job)){ log('🚨 リストラ対象に！再就職が必要です。', 'bad'); S.job='unemployed'; S.grossIncome=0; S.lifeEvents.push('リストラ'); S.stress=Math.min(100,S.stress+30); } } },
+    { w:0.008, fn:()=>{ if(S.married){ showModal('💔','夫婦の危機','夫婦関係に問題が生じています。',[
+      { label:'カウンセリング（¥10万）', fn:()=>{ S.savings-=100000; S.happiness=Math.min(100,S.happiness+15); log('💑 カウンセリングで改善。', 'good'); } },
+      { label:'離婚する', fn:()=>{ S.married=false; S.partner=null; S.savings=Math.round(S.savings*0.5); S.lifeEvents.push('離婚'); log('💔 離婚。財産を折半。', 'bad'); S.happiness=Math.max(0,S.happiness-30); } },
+    ]); } } },
   ];
-  let cumulative = 0;
-  for (const e of events) {
-    cumulative += e.w;
-    if (rand < cumulative) { e.fn(); break; }
-  }
+  let cum=0; for (const e of evs) { cum+=e.w; if(r<cum){e.fn();break;} }
 }
 
 function triggerHealthCrisis() {
-  const crises = [
-    { name: 'がん（早期発見）', cost: 1000000, hpLoss: 20, fn: ()=>{ log('🏥 がんが早期発見されました。治療費100万かかります。', 'bad'); } },
-    { name: '脳梗塞', cost: 2000000, hpLoss: 35, fn: ()=>{ log('🚑 脳梗塞で倒れました。リハビリが必要です。', 'bad'); S.stress=Math.min(100,S.stress+30); } },
-    { name: '心筋梗塞', cost: 1500000, hpLoss: 30, fn: ()=>{ log('🚑 心筋梗塞で入院しました。', 'bad'); } },
-    { name: '糖尿病診断', cost: 200000, hpLoss: 10, fn: ()=>{ log('🏥 糖尿病と診断されました。生活改善が必要です。', 'warn'); } },
+  const cs=[
+    { name:'がん（早期発見）',cost:1000000,hpLoss:20,fn:()=>log('🏥 がん早期発見。治療費100万。','bad') },
+    { name:'脳梗塞',cost:2000000,hpLoss:35,fn:()=>{ log('🚑 脳梗塞で入院。','bad'); S.stress=Math.min(100,S.stress+30); } },
+    { name:'心筋梗塞',cost:1500000,hpLoss:30,fn:()=>log('🚑 心筋梗塞で入院。','bad') },
+    { name:'糖尿病',cost:200000,hpLoss:10,fn:()=>log('🏥 糖尿病診断。生活改善を。','warn') },
+    { name:'うつ病',cost:300000,hpLoss:15,fn:()=>{ log('😔 うつ病と診断されました。','bad'); S.stress=Math.min(100,S.stress+40); S.happiness=Math.max(0,S.happiness-25); } },
   ];
-  const c = crises[Math.floor(Math.random()*crises.length)];
-  S.savings -= c.cost;
-  S.hp = Math.max(0, S.hp - c.hpLoss);
-  S.lifeEvents.push(c.name);
-  c.fn();
-  if (S.hp <= 0) triggerDeath(c.name);
+  const c=cs[Math.floor(Math.random()*cs.length)];
+  S.savings-=c.cost; S.hp=Math.max(0,S.hp-c.hpLoss);
+  S.lifeEvents.push(c.name); c.fn();
+  // 保険給付
+  const ins=INSURANCES.find(i=>i.key===S.insurance);
+  if(ins&&ins.coverage>0){ const pay=Math.min(c.cost,ins.coverage*0.5|0); S.savings+=pay; log(`🛡️ 保険から¥${pay.toLocaleString()}給付。`,'good'); }
+  if(S.hp<=0) triggerDeath(c.name);
 }
 
 function triggerDeath(cause) {
-  S.isDead = true;
-  S.deathAge = S.age;
-  S.deathCause = cause;
-  paused = true;
+  S.isDead=true; S.deathAge=S.age; S.deathCause=cause; paused=true;
   S.lifeEvents.push(`${S.age}歳で死亡（${cause}）`);
-  setTimeout(showGameOver, 1500);
+  setTimeout(showGameOver,1500);
 }
 
 function showGameOver() {
-  const el = document.getElementById('gameover');
-  el.classList.add('active');
-  const years = S.deathAge - 18;
-  const childrenStr = S.children.length > 0 ? S.children.map(c=>c.name).join('・') : 'なし';
-  const summary = [
+  document.getElementById('gameover').classList.add('active');
+  const childrenStr = S.children.length>0 ? S.children.map(c=>c.name).join('・') : 'なし';
+  const pv = portfolioValue();
+  const totalAssets = Math.max(0,S.savings)+pv+(S.ownHouse?15000000:0);
+  const summary=[
     `死因: ${S.deathCause}`,
-    `享年: ${S.deathAge}歳（${years}年の人生）`,
-    `最終職業: ${S.jobTitle || JOBS[S.job]?.title || '無職'}`,
-    `最終貯蓄: ¥${Math.max(0, S.savings).toLocaleString()}`,
-    `結婚: ${S.married ? (S.partner?.name+'と結婚') : '独身'}`,
-    `子供: ${childrenStr}`,
-    `主な出来事: ${S.lifeEvents.slice(-8).join(' → ')}`,
+    `享年: ${S.deathAge}歳`,
+    `最終職業: ${S.currentCompany?S.currentCompany.company+' '+S.currentCompany.role : (JOBS[S.job]?.title||'無職')}`,
+    `総資産: ¥${totalAssets.toLocaleString()}（貯蓄¥${Math.max(0,S.savings).toLocaleString()} + 株¥${pv.toLocaleString()}）`,
+    `住居: ${S.ownHouse?'マイホーム':S.apartment?S.apartment.name:'賃貸'}`,
+    `結婚: ${S.married?(S.partner?.name+'と'):'独身'}　子供: ${childrenStr}`,
+    `保険: ${INSURANCES.find(i=>i.key===S.insurance)?.name||'なし'}`,
+    `主な出来事: ${S.lifeEvents.filter(e=>!e.match(/^\d+歳$/)).slice(-6).join(' → ')}`,
   ].join('\n');
-  document.getElementById('go-summary').textContent = summary;
+  document.getElementById('go-summary').textContent=summary;
 }
 
 // ============================================================
 // ACTION BUTTONS
 // ============================================================
 function renderActions() {
-  const area = document.getElementById('action-area');
-  area.innerHTML = '';
-  const actions = getAvailableActions();
-  actions.forEach(a => {
-    const btn = document.createElement('button');
-    btn.className = 'act-btn';
-    btn.innerHTML = `${a.label}<span class="act-cost">${a.cost||''}</span>`;
-    btn.title = a.desc || '';
-    if (a.disabled) btn.disabled = true;
-    btn.onclick = () => { a.fn(); updateUI(); renderActions(); };
+  const area=document.getElementById('action-area');
+  area.innerHTML='';
+  getAvailableActions().forEach(a=>{
+    const btn=document.createElement('button');
+    btn.className='act-btn';
+    btn.innerHTML=`${a.label}<span class="act-cost">${a.cost||''}</span>`;
+    btn.title=a.desc||'';
+    if(a.disabled) btn.disabled=true;
+    btn.onclick=()=>{ a.fn(); updateUI(); renderActions(); };
     area.appendChild(btn);
   });
 }
 
 function getAvailableActions() {
-  const acts = [];
+  const acts=[];
   if (S.inChildhood) {
-    if (S.age < 3) return [{ label:'👶 すやすや眠る', fn:()=>{ S.hp=Math.min(100,S.hp+3); log('💤 すやすや眠っています。', 'normal'); } }];
-    if (S.age < 6) return [
-      { label:'🧸 おもちゃで遊ぶ', fn:()=>{ S.happiness=Math.min(100,S.happiness+5); log('🧸 おもちゃで楽しく遊びました。', 'good'); } },
-      { label:'🏃 外で走り回る', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+3); S.hp=Math.min(100,S.hp+2); log('🏃 元気いっぱい外で遊びました。', 'good'); } },
+    if (S.age<3) return [{label:'👶 すやすや眠る',fn:()=>{S.hp=Math.min(100,S.hp+3);log('💤 すやすや眠っています。','normal');}}];
+    if (S.age<6) return [
+      {label:'🧸 おもちゃで遊ぶ',fn:()=>{S.happiness=Math.min(100,S.happiness+5);log('🧸 おもちゃで遊びました。','good');}},
+      {label:'🏃 外で走り回る',fn:()=>{S.athleticLevel=Math.min(100,S.athleticLevel+3);S.hp=Math.min(100,S.hp+2);log('🏃 外で遊びました。','good');}},
     ];
-    // 小学生以上
-    acts.push({ label:'📚 勉強する', fn:()=>{ S.studyLevel=Math.min(100,S.studyLevel+3); log('📚 一生懸命勉強しました。', 'good'); } });
-    acts.push({ label:'⚽ 運動する', fn:()=>{ S.athleticLevel=Math.min(100,S.athleticLevel+3); S.hp=Math.min(100,S.hp+2); log('⚽ 体を動かしました。', 'good'); } });
-    acts.push({ label:'👫 友達と遊ぶ', fn:()=>{ S.social=Math.min(100,S.social+4); S.happiness=Math.min(100,S.happiness+4); log('👫 友達と遊んで楽しい一日でした。', 'good'); } });
-    if (S.age >= 14) acts.push({ label:'📖 参考書を買う（¥3,000）', cost:'¥3,000', disabled:S.savings<3000, fn:()=>{ S.savings-=3000; S.studyLevel=Math.min(100,S.studyLevel+8); log('📖 参考書で自主学習しました。', 'good'); } });
+    acts.push({label:'📚 勉強する',fn:()=>{S.studyLevel=Math.min(100,S.studyLevel+3);log('📚 勉強しました。','good');}});
+    acts.push({label:'⚽ 運動する',fn:()=>{S.athleticLevel=Math.min(100,S.athleticLevel+3);S.hp=Math.min(100,S.hp+2);log('⚽ 運動しました。','good');}});
+    acts.push({label:'👫 友達と遊ぶ',fn:()=>{S.social=Math.min(100,S.social+4);S.happiness=Math.min(100,S.happiness+4);log('👫 友達と遊びました。','good');}});
+    if (S.age>=14) acts.push({label:'📖 参考書（¥3,000）',cost:'¥3,000',disabled:S.savings<3000,fn:()=>{S.savings-=3000;S.studyLevel=Math.min(100,S.studyLevel+8);log('📖 参考書で自習しました。','good');}});
     return acts;
   }
   if (S.inUniversity) {
-    acts.push({ label:'📚 アルバイト', desc:'大学生バイト。月3〜5万', fn:()=>{ S.savings+=40000; log('☕ バイトで4万円稼ぎました。', 'normal'); } });
-    acts.push({ label:'🏃 運動する', desc:'健康・ストレス解消', fn:()=>{ S.hp=Math.min(100,S.hp+5); S.stress=Math.max(0,S.stress-8); S.exerciseStreak=3; log('🏃 運動しました。健康維持！', 'good'); } });
+    acts.push({label:'☕ アルバイト',fn:()=>{S.savings+=40000;log('☕ バイトで4万稼ぎました。','normal');}});
+    acts.push({label:'🏃 運動する',fn:()=>{S.hp=Math.min(100,S.hp+5);S.stress=Math.max(0,S.stress-8);log('🏃 運動しました。','good');}});
+    acts.push({label:'📈 株を学ぶ',fn:()=>{ initStocks(); showStockMarket(); }});
     return acts;
   }
-  if (S.job === 'unemployed' || !S.job) {
-    acts.push({ label:'📄 就職活動', desc:'求人に応募する', fn:()=>jobSearch() });
+  // 就職中
+  if (!S.job||S.job==='unemployed') {
+    acts.push({label:'📄 就職活動',fn:()=>jobSearch()});
   }
-  if (S.job && S.job !== 'unemployed') {
-    acts.push({ label:'💼 残業する', desc:'月収+5〜10%、ストレス増', fn:()=>{ const e=Math.round(S.grossIncome*0.07); S.savings+=e; S.stress=Math.min(100,S.stress+10); log(`💼 残業で¥${e.toLocaleString()}稼ぎましたが疲れました。`, 'warn'); } });
-    acts.push({ label:'📖 スキルアップ', desc:'資格・スキル習得（¥5万）', disabled: S.savings<50000, cost:'¥5万', fn:()=>{ S.savings-=50000; S.grossIncome=Math.round(S.grossIncome*1.05); log('📖 スキルアップ。月収が5%上がりました！', 'good'); } });
-    acts.push({ label:'🔄 転職活動', desc:'収入アップの可能性', fn:()=>jobChange() });
+  if (S.job&&S.job!=='unemployed') {
+    acts.push({label:'💼 残業する',fn:()=>{const e=Math.round(S.grossIncome*0.07);S.savings+=e;S.stress=Math.min(100,S.stress+10);log(`💼 残業で¥${e.toLocaleString()}稼ぎました。`,'warn');}});
+    acts.push({label:'📖 スキルアップ',cost:'¥5万',disabled:S.savings<50000,fn:()=>{S.savings-=50000;S.grossIncome=Math.round(S.grossIncome*1.05);log('📖 スキルアップ。月収+5%。','good');}});
+    acts.push({label:'🔄 転職活動',fn:()=>jobChange()});
   }
-  acts.push({ label:'🏃 運動する', fn:()=>{ S.hp=Math.min(100,S.hp+5); S.stress=Math.max(0,S.stress-8); S.exerciseStreak=3; log('🏃 運動しました。', 'good'); } });
-  acts.push({ label:'👥 交友を深める', fn:()=>{ S.social=Math.min(100,S.social+12); S.happiness=Math.min(100,S.happiness+5); S.savings-=5000; log('👥 友人と食事しました（¥5,000）。', 'normal'); } });
-  if (S.savings >= 500000 && !S.hasInvestment) {
-    acts.push({ label:'📈 投資を始める', cost:'50万〜', fn:()=>startInvestment() });
-  }
-  if (S.hasInvestment) {
-    acts.push({ label:`📊 投資残高: ¥${S.investBalance.toLocaleString()}`, disabled:true });
-  }
-  if (S.hp < 60) {
-    acts.push({ label:'🏥 病院に行く', cost:'¥3万', fn:()=>{ S.savings-=30000; S.hp=Math.min(100,S.hp+20); S.stress=Math.max(0,S.stress-10); log('🏥 病院を受診しました。健康回復。', 'good'); } });
-  }
+  // ライフスタイル
+  acts.push({label:'🍽️ 食生活を変える',fn:()=>showDietChoice()});
+  acts.push({label:'🎯 趣味を管理する',fn:()=>showHobbyMenu()});
+  acts.push({label:'🏃 運動する',fn:()=>{S.hp=Math.min(100,S.hp+5);S.stress=Math.max(0,S.stress-8);S.exerciseStreak=3;log('🏃 運動しました。','good');}});
+  // 投資
+  if (Object.keys(stockPrices).length===0 || !S.portfolio) acts.push({label:'📈 株式投資を始める',fn:()=>{initStocks();showStockMarket();}});
+  else acts.push({label:`📊 株式ポートフォリオ`,fn:()=>showStockMarket()});
+  // 住居
+  if (!S.ownHouse && S.savings>=10000000) acts.push({label:'🏠 マイホームを購入',fn:()=>showHousePurchase()});
+  if (!S.apartment && S.livingWith!=='parents') acts.push({label:'🏠 引越しする',fn:()=>showApartmentChoice()});
+  // 車
+  if (!S.ownsCar && S.age>=18) acts.push({label:'🚗 車を買う',fn:()=>showCarMenu()});
+  else if (S.ownsCar) acts.push({label:`🚗 車を売る（${S.carType}）`,fn:()=>{S.ownsCar=false;S.carMonthly=0;const sv=S.carType==='kei'?400000:S.carType==='sedan'?800000:1200000;S.savings+=sv;log(`🚗 車を売りました（¥${sv.toLocaleString()}）。`,'good');}});
+  // 保険
+  acts.push({label:'🛡️ 保険を見直す',fn:()=>showInsuranceMenu()});
+  // 病院
+  if (S.hp<60) acts.push({label:'🏥 病院へ行く',cost:'¥3万',fn:()=>{S.savings-=30000;S.hp=Math.min(100,S.hp+20);log('🏥 病院を受診しました。','good');}});
   return acts;
 }
 
+// ============================================================
+// JOB SEARCH & CHANGE
+// ============================================================
 function jobSearch() {
-  const opts = [];
-  if (S.education === 'university') {
-    opts.push({ label: 'エンジニア（月収35万）', fn:()=>{ S.job='engineer'; S.grossIncome=350000; S.jobMonths=0; S.livingWith='alone'; log('💻 エンジニアとして採用されました！', 'good'); } });
-    opts.push({ label: '会社員（大卒・月収28万）', fn:()=>{ S.job='office_uni'; S.grossIncome=280000; S.jobMonths=0; S.livingWith='alone'; log('💼 会社員として採用されました。', 'good'); } });
-  }
-  opts.push({ label: '営業職（月収25万・高卒可）', fn:()=>{ S.job='sales'; S.grossIncome=250000; S.jobMonths=0; S.livingWith='alone'; log('📞 営業職に採用されました。', 'good'); } });
-  opts.push({ label: 'アルバイト（月収12万）', fn:()=>{ S.job='parttime'; S.grossIncome=120000; S.jobMonths=0; log('☕ アルバイトを始めました。', 'normal'); } });
-  opts.push({ label: 'もう少し待つ', fn:()=>{ log('今月は求職活動を続けます。', 'normal'); } });
-  showModal('📄', '就職活動', '求人が見つかりました。どれを選びますか？', opts);
+  const edu = S.education==='university' ? 'university' : 'highschool';
+  showModal('📄','求人一覧',`${edu==='university'?'大卒向け':'高卒向け'}の求人が見つかりました。`,
+    buildJobOffers(edu).concat([
+      { label:'☕ アルバイト（月収12万）', fn:()=>{ S.job='parttime'; S.grossIncome=120000; S.jobMonths=0; log('☕ アルバイトを始めました。','normal'); } },
+      { label:'もう少し待つ', fn:()=>log('今月は求職活動を続けます。','normal') },
+    ])
+  );
 }
 
 function jobChange() {
-  const opts = [];
-  if (S.education==='university' && S.job !== 'engineer') opts.push({ label:'IT企業（月収+5〜15万）', fn:()=>{ S.job='engineer'; S.grossIncome=Math.max(400000,S.grossIncome*1.15|0); S.jobMonths=0; log('💻 IT企業に転職しました！月収アップ。', 'good'); S.lifeEvents.push('IT転職'); } });
-  opts.push({ label:'ベンチャー（高リスク高収入）', fn:()=>{ if(Math.random()<0.6){ S.grossIncome=Math.round(S.grossIncome*1.3); log('🚀 ベンチャー転職成功！収入30%増。', 'good'); }else{ S.grossIncome=Math.round(S.grossIncome*0.8); log('😰 ベンチャーが苦しい。収入20%減。', 'bad'); } S.jobMonths=0; S.lifeEvents.push('ベンチャー転職'); } });
-  opts.push({ label:'フリーランスになる', fn:()=>{ S.job='freelance'; S.grossIncome=350000; S.jobMonths=0; log('🖥️ フリーランスとして独立しました。', 'good'); S.lifeEvents.push('フリーランス独立'); } });
-  opts.push({ label:'今の会社に留まる', fn:()=>{ log('転職はやめました。', 'normal'); } });
-  showModal('🔄','転職活動','転職先を選んでください。',opts);
+  const edu = S.education==='university'?'university':'highschool';
+  const pool = COMPANY_JOBS[edu].slice().sort(()=>Math.random()-0.5).slice(0,3);
+  const opts = pool.map(c=>({
+    label:`${c.icon} ${c.company}（${c.role}）`,
+    desc:`月収¥${(c.gross/10000).toFixed(0)}万 | 残業${c.overtime}h | 安定${c.stability}%`,
+    fn:()=>{
+      const prevCo = S.currentCompany?.company||'前職';
+      S.job=c.role.includes('エンジニア')||c.role.includes('AI')?'engineer':'office_uni';
+      S.grossIncome=c.gross; S.currentCompany=c; S.jobMonths=0;
+      S.stress=Math.min(100,S.stress+c.stress*0.3);
+      log(`🔄 ${prevCo}→${c.company}に転職。月収¥${(c.gross/10000).toFixed(0)}万。`,'good');
+      S.lifeEvents.push(`${c.company}転職`);
+    },
+  }));
+  opts.push({label:'フリーランスになる',desc:'自由だが収入不安定',fn:()=>{S.job='freelance';S.grossIncome=380000;S.currentCompany=null;S.jobMonths=0;log('🖥️ フリーランスとして独立。','good');S.lifeEvents.push('フリーランス独立');}});
+  opts.push({label:'今の会社に留まる',fn:()=>log('転職はやめました。','normal')});
+  showModal('🔄','転職先を選ぶ','どの会社に転職しますか？',opts);
 }
 
-function startInvestment() {
-  showModal('📈','投資',`貯蓄の一部を投資に回しますか？`,[
-    { label:'積立NISA（月3万・低リスク）', fn:()=>{ S.hasInvestment=true; S.investBalance=500000; S.savings-=500000; log('📈 積立NISA開始。長期運用で資産形成。', 'good'); S.lifeEvents.push('投資開始'); } },
-    { label:'株式投資（高リスク・高リターン）', fn:()=>{ S.hasInvestment=true; S.investBalance=1000000; S.savings-=1000000; log('📊 株式投資開始。リスクに注意。', 'warn'); } },
-    { label:'やめておく', fn:()=>{ log('投資はやめました。', 'normal'); } },
-  ]);
+// ============================================================
+// STOCK MARKET
+// ============================================================
+function showStockMarket() {
+  paused=true;
+  const box=document.getElementById('modal-box');
+  document.getElementById('modal-icon').textContent='📈';
+  document.getElementById('modal-title').textContent='株式市場';
+  document.getElementById('modal-body').textContent=`保有株式評価額: ¥${portfolioValue().toLocaleString()} | 貯蓄: ¥${S.savings.toLocaleString()}`;
+  const ch=document.getElementById('modal-choices');
+  ch.innerHTML='';
+
+  for (const [name, d] of Object.entries(STOCK_DATA)) {
+    const price=stockPrices[name]||d.basePrice;
+    const held=(S.portfolio[name]||0);
+    const val=price*held;
+    const change=Math.round((price/d.basePrice-1)*100);
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #21262d;font-size:12px;';
+    div.innerHTML=`
+      <span style="width:20px">${d.icon}</span>
+      <span style="flex:1;color:#c9d1d9">${name}</span>
+      <span style="width:60px;text-align:right;color:${change>=0?'#3fb950':'#f85149'}">¥${price.toLocaleString()}</span>
+      <span style="width:40px;text-align:right;color:${change>=0?'#3fb950':'#f85149'};font-size:10px">${change>=0?'+':''}${change}%</span>
+      <span style="width:50px;text-align:right;color:#8b949e;font-size:10px">${held}株</span>
+      <button onclick="buyStock('${name}',1)" style="background:#1f6feb;border:none;border-radius:4px;padding:3px 7px;color:#fff;cursor:pointer;font-size:11px">買</button>
+      <button onclick="buyStock('${name}',10)" style="background:#388bfd;border:none;border-radius:4px;padding:3px 5px;color:#fff;cursor:pointer;font-size:10px">×10</button>
+      ${held>0?`<button onclick="sellStock('${name}')" style="background:#f85149;border:none;border-radius:4px;padding:3px 7px;color:#fff;cursor:pointer;font-size:11px">売</button>`:''}
+    `;
+    ch.appendChild(div);
+  }
+  const closeBtn=document.createElement('button');
+  closeBtn.className='choice-btn'; closeBtn.textContent='閉じる';
+  closeBtn.style.marginTop='10px';
+  closeBtn.onclick=()=>closeModal();
+  ch.appendChild(closeBtn);
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
+function buyStock(name, qty) {
+  const price=stockPrices[name];
+  const cost=price*qty;
+  if (S.savings<cost){ log(`⚠️ 残高不足（¥${cost.toLocaleString()}必要）`,'warn'); return; }
+  S.savings-=cost;
+  S.portfolio[name]=(S.portfolio[name]||0)+qty;
+  log(`📈 ${name}を${qty}株購入（¥${cost.toLocaleString()}）。`,'good');
+  updateUI();
+  // refresh modal body
+  document.getElementById('modal-body').textContent=`保有株式評価額: ¥${portfolioValue().toLocaleString()} | 貯蓄: ¥${S.savings.toLocaleString()}`;
+  showStockMarket();
+}
+
+function sellStock(name) {
+  const shares=S.portfolio[name]||0;
+  if (shares<=0) return;
+  const proceeds=stockPrices[name]*shares;
+  S.savings+=proceeds;
+  const baseCost=STOCK_DATA[name].basePrice*shares;
+  const pl=proceeds-baseCost;
+  S.portfolio[name]=0;
+  log(`📉 ${name}を全${shares}株売却（¥${proceeds.toLocaleString()}、損益${pl>=0?'+':''}¥${pl.toLocaleString()}）。`,pl>=0?'good':'bad');
+  updateUI();
+  showStockMarket();
+}
+
+// ============================================================
+// LIFESTYLE MENUS
+// ============================================================
+function showDietChoice() {
+  showModal('🍽️','食生活を選ぶ','月々の食費と健康への影響が変わります。',
+    DIETS.map(d=>({
+      label:`${d.name}（月¥${(d.cost/10000).toFixed(1)}万）${S.diet===d.key?' ✓':''}`,
+      desc:`健康${d.hpMod>=0?'+':''}${d.hpMod}/月 | ${d.desc}`,
+      fn:()=>{ S.diet=d.key; log(`🍽️ 食生活を「${d.name}」に変えました。`,'normal'); },
+    }))
+  );
+}
+
+function showHobbyMenu() {
+  const opts=HOBBIES_DATA.map(h=>({
+    label:`${h.icon} ${h.name}（月¥${(h.cost/1000).toFixed(0)}k）${S.hobbies.includes(h.key)?' ✓（解除）':''}`,
+    desc:`HP${h.hpMod>=0?'+':''}${h.hpMod} ストレス${h.stressMod} 幸福${h.happyMod>=0?'+':''}${h.happyMod} 社会${h.socialMod>=0?'+':''}${h.socialMod}`,
+    fn:()=>{
+      if(S.hobbies.includes(h.key)){ S.hobbies=S.hobbies.filter(k=>k!==h.key); log(`${h.icon} ${h.name}をやめました。`,'normal'); }
+      else { S.hobbies.push(h.key); log(`${h.icon} ${h.name}を趣味にしました。`,'good'); }
+    },
+  }));
+  opts.push({label:'閉じる',fn:()=>{}});
+  showModal('🎯','趣味管理',`現在の趣味: ${S.hobbies.length===0?'なし':S.hobbies.map(k=>HOBBIES_DATA.find(h=>h.key===k)?.icon+HOBBIES_DATA.find(h=>h.key===k)?.name).join('、')}\n趣味はクリックでON/OFF`,opts);
+}
+
+function showInsuranceMenu() {
+  showModal('🛡️','保険を選ぶ','万が一の備え。給付金が医療費に充てられます。',
+    INSURANCES.map(i=>({
+      label:`${i.name}（月¥${i.cost.toLocaleString()}）${S.insurance===i.key?' ✓':''}`,
+      desc:`保障額¥${(i.coverage/10000).toFixed(0)}万 | ${i.desc}`,
+      fn:()=>{ S.insurance=i.key; log(`🛡️ 保険を「${i.name}」に変更しました。`,'normal'); },
+    }))
+  );
+}
+
+function showApartmentChoice() {
+  showModal('🏠','引越し先を選ぶ','住居によって家賃・快適さが変わります。',
+    APARTMENTS.map(a=>({
+      label:`${a.name}（月¥${(a.rent/10000).toFixed(0)}万）`,
+      desc:`快適度${a.comfort} | ${a.desc}`,
+      fn:()=>{ S.apartment=a; S.livingWith='alone'; log(`🏠 ${a.name}に引越しました。`,'good'); S.lifeEvents.push(`${a.name}に引越し`); },
+    })).concat([{label:'今のまま',fn:()=>log('引越しはやめました。','normal')}])
+  );
+}
+
+function showHousePurchase() {
+  const plans=[
+    { name:'中古マンション（2LDK）', price:25000000, monthly:70000, desc:'都内中古・築20年。リーズナブル。' },
+    { name:'新築マンション（3LDK）', price:45000000, monthly:120000, desc:'都内新築。管理費・修繕積立あり。' },
+    { name:'郊外一戸建て（4LDK）',   price:35000000, monthly:90000, desc:'広い庭。車必須。子育てに最適。' },
+    { name:'都心タワーマンション',    price:80000000, monthly:200000, desc:'最高の立地。資産価値高い。' },
+  ];
+  showModal('🏠','マイホームを購入','頭金20%＋35年ローン',
+    plans.map(p=>({
+      label:`${p.name}（¥${(p.price/10000).toFixed(0)}万）`,
+      desc:`月¥${(p.monthly/10000).toFixed(0)}万のローン | ${p.desc}`,
+      disabled: S.savings < p.price*0.2,
+      fn:()=>{
+        const down=Math.round(p.price*0.2);
+        S.savings-=down;
+        S.ownHouse=true; S.apartment=null;
+        S.mortgage=p.price-down; S.mortgageMonthly=p.monthly;
+        S.lifeEvents.push(`マイホーム購入（${p.name}）`);
+        log(`🏠 ${p.name}を購入！頭金¥${(down/10000).toFixed(0)}万、月¥${(p.monthly/10000).toFixed(0)}万のローン。`,'good');
+      },
+    })).concat([{label:'やめておく',fn:()=>log('マイホーム購入は見送りました。','normal')}])
+  );
+}
+
+function showCarMenu() {
+  const cars=[
+    { key:'kei',   name:'軽自動車',       buy:1000000, monthly:25000, desc:'維持費安い。燃費良好。' },
+    { key:'sedan', name:'セダン（普通車）',buy:2500000, monthly:45000, desc:'快適で実用的。' },
+    { key:'suv',   name:'SUV・ミニバン',  buy:4000000, monthly:65000, desc:'家族向け。子供が生まれたら。' },
+  ];
+  showModal('🚗','車を買う','購入費用＋毎月の維持費（ガソリン・保険・税）',
+    cars.map(c=>({
+      label:`${c.name}（¥${(c.buy/10000).toFixed(0)}万）`,
+      desc:`月維持費¥${(c.monthly/10000).toFixed(1)}万 | ${c.desc}`,
+      disabled:S.savings<c.buy,
+      fn:()=>{
+        S.savings-=c.buy; S.ownsCar=true; S.carType=c.key; S.carMonthly=c.monthly;
+        log(`🚗 ${c.name}を購入しました（¥${(c.buy/10000).toFixed(0)}万）。`,'good');
+        S.lifeEvents.push(`${c.name}購入`);
+      },
+    })).concat([{label:'やめておく',fn:()=>log('車の購入は見送りました。','normal')}])
+  );
 }
 
 // ============================================================
@@ -1071,27 +1467,33 @@ function updateUI() {
     document.getElementById('date-display').textContent = `${S.year}年${S.month}月`;
     return;
   }
-  document.getElementById('savings-big').textContent = '¥'+(Math.max(0,S.savings)).toLocaleString();
+  const pv = portfolioValue();
+  const totalAssets = Math.max(0,S.savings) + pv + (S.ownHouse?15000000:0);
   if (S.savings < 0) {
     document.getElementById('savings-big').style.color='#f85149';
-    document.getElementById('savings-big').textContent = '¥'+S.savings.toLocaleString()+' (借金)';
-  } else { document.getElementById('savings-big').style.color='#58a6ff'; }
+    document.getElementById('savings-big').textContent = '¥'+S.savings.toLocaleString()+'（借金）';
+  } else {
+    document.getElementById('savings-big').style.color='#58a6ff';
+    document.getElementById('savings-big').textContent = '¥'+S.savings.toLocaleString();
+  }
+  document.getElementById('savings-label').textContent = `貯蓄　株¥${pv.toLocaleString()}　総¥${totalAssets.toLocaleString()}`;
 
   const tax = calcTax(S.grossIncome);
   S.netIncome = S.grossIncome - tax;
   const exp = calcExpenses();
-  const totalExp = exp.rent+exp.food+exp.util+exp.ins+exp.edu+exp.misc;
-  const net = S.netIncome - totalExp;
-  document.getElementById('fin-income').textContent = S.inUniversity ? '¥0（学生）' : '¥'+S.netIncome.toLocaleString();
-  document.getElementById('fin-rent').textContent = '-¥'+exp.rent.toLocaleString();
-  document.getElementById('fin-food').textContent = '-¥'+exp.food.toLocaleString();
+  const net = S.netIncome - (exp.rent+exp.food+exp.util+exp.ins+exp.edu+exp.misc);
+  const dietName = DIETS.find(d=>d.key===S.diet)?.name||'';
+  const housing = S.ownHouse?'ローン返済':S.apartment?S.apartment.name.slice(0,8):'実家';
+  document.getElementById('fin-income').textContent = S.inUniversity?'¥0（学生）':'¥'+S.netIncome.toLocaleString();
+  document.getElementById('fin-rent').textContent = `-¥${exp.rent.toLocaleString()} ${housing}`;
+  document.getElementById('fin-food').textContent = `-¥${exp.food.toLocaleString()} ${dietName}`;
   document.getElementById('fin-util').textContent = '-¥'+exp.util.toLocaleString();
-  document.getElementById('fin-ins').textContent = '-¥'+exp.ins.toLocaleString();
+  document.getElementById('fin-ins').textContent = `-¥${exp.ins.toLocaleString()} ${INSURANCES.find(i=>i.key===S.insurance)?.name.slice(0,6)||''}`;
   document.getElementById('fin-edu').textContent = '-¥'+exp.edu.toLocaleString();
-  document.getElementById('fin-misc').textContent = '-¥'+exp.misc.toLocaleString();
+  document.getElementById('fin-misc').textContent = `-¥${exp.misc.toLocaleString()} ${S.ownsCar?'🚗':''}${S.hobbies.length>0?'🎯':''}`;
   const netEl = document.getElementById('fin-net');
   netEl.textContent = (net>=0?'+':'')+'¥'+net.toLocaleString();
-  netEl.className = net>=0 ? 'money-pos' : 'money-neg';
+  netEl.className = net>=0?'money-pos':'money-neg';
 
   // Date
   document.getElementById('date-display').textContent = `${S.year}年${S.month}月`;
