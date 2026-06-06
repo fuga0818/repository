@@ -3,708 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団</title>
-  <meta name="description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。無料見積もり即日対応。24時間受付。">
-  <meta name="keywords" content="清掃会社,オフィス清掃,店舗清掃,定期清掃,東京,清掃業者,ビルクリーニング,業務清掃">
-  <meta name="author" content="スパークルクリーン株式会社">
-  <link rel="canonical" href="https://fuga0818.github.io/repository/index.html">
-
-  <!-- OGP（SNSシェア用） -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団">
-  <meta property="og:description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。無料見積もり即日対応。">
-  <meta property="og:url" content="https://fuga0818.github.io/repository/index.html">
-  <meta property="og:site_name" content="スパークルクリーン株式会社">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
-  <meta property="og:locale" content="ja_JP">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団">
-  <meta name="twitter:description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
-
-  <!-- 構造化データ（JSON-LD） -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "スパークルクリーン株式会社",
-    "description": "オフィス・店舗・定期清掃のプロ集団。導入300社以上、顧客満足度98%。",
-    "url": "https://fuga0818.github.io/repository/index.html",
-    "telephone": "0120-XXX-XXX",
-    "email": "info@sparkle-clean.jp",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "神宮前〇〇1-2-3 スパークルビル5F",
-      "addressLocality": "渋谷区",
-      "addressRegion": "東京都",
-      "postalCode": "150-0001",
-      "addressCountry": "JP"
-    },
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-        "opens": "09:00",
-        "closes": "18:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Saturday","Sunday"],
-        "opens": "10:00",
-        "closes": "17:00"
-      }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "300"
-    },
-    "priceRange": "¥¥",
-    "areaServed": ["東京都","神奈川県","埼玉県","千葉県","大阪府"],
-    "serviceType": ["オフィス清掃","店舗清掃","定期清掃","ビルクリーニング"]
-  }
-  </script>
-
+  <title>ReservatioPro｜歯科クリニック向け予約自動化サービス</title>
+  <meta name="description" content="歯科クリニックの予約を24時間自動化。夜間・休診日の予約取りこぼしをゼロに。月額5,000円から始められる予約自動化サービス。">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    /* ---- ヒーロー ---- */
-    .hero {
-      position: relative;
-      min-height: 92vh;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      background: linear-gradient(135deg, #2a3d2e 0%, #4a8a5a 60%, #6aab7a 100%);
-    }
-    .hero__bg {
-      position: absolute;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1400&auto=format&fit=crop&q=60') center/cover no-repeat;
-      opacity: 0.18;
-    }
-    .hero__blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-    }
-    .hero__blob--1 {
-      width: 500px; height: 500px;
-      background: rgba(240,125,58,0.25);
-      top: -100px; right: -100px;
-    }
-    .hero__blob--2 {
-      width: 350px; height: 350px;
-      background: rgba(106,171,122,0.35);
-      bottom: -80px; left: -80px;
-    }
-    .hero__inner {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-    .hero__content { color: white; }
-    .hero__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: var(--radius-full);
-      padding: 6px 16px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      backdrop-filter: blur(8px);
-    }
-    .hero__badge i { color: var(--color-orange); }
-    .hero__title {
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
-      font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 20px;
-    }
-    .hero__title span { color: #ffd580; }
-    .hero__subtitle {
-      font-size: 1.05rem;
-      opacity: 0.88;
-      line-height: 1.8;
-      margin-bottom: 36px;
-    }
-    .hero__btns { display: flex; gap: 16px; flex-wrap: wrap; }
-    .hero__image-wrap {
-      position: relative;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
-      aspect-ratio: 4/3;
-    }
-    .hero__image-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .hero__image-badge {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: var(--shadow-md);
-    }
-    .hero__image-badge-icon {
-      width: 44px; height: 44px;
-      background: var(--color-green-light);
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--color-green-dark);
-      font-size: 1.3rem;
-    }
-    .hero__image-badge-text strong { display: block; font-size: 1.1rem; color: var(--color-text); }
-    .hero__image-badge-text span { font-size: 0.78rem; color: var(--color-text-light); }
-    .hero__scroll {
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: rgba(255,255,255,0.6);
-      font-size: 0.75rem;
-      animation: bounce 2s infinite;
-    }
-    @keyframes bounce {
-      0%,100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
-
-    /* ---- サービス概要 ---- */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .service-card { text-align: center; }
-    .service-card__icon {
-      width: 72px; height: 72px;
-      border-radius: var(--radius-lg);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem;
-      margin: 0 auto 20px;
-    }
-    .service-card__icon--green { background: var(--color-green-light); color: var(--color-green-dark); }
-    .service-card__icon--orange { background: var(--color-orange-light); color: var(--color-orange); }
-    .service-card__icon--blue { background: #e6f0ff; color: #4a7bc8; }
-    .service-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
-    .service-card p { font-size: 0.9rem; color: var(--color-text-light); margin-bottom: 20px; }
-    .service-card__link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.875rem; font-weight: 700;
-      color: var(--color-green-dark);
-      transition: var(--transition);
-    }
-    .service-card__link:hover { gap: 10px; }
-
-    /* ---- 選ばれる理由 ---- */
-    .reasons-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .reason-card {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      padding: 36px 28px;
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-      transition: var(--transition);
-    }
-    .reason-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
-    .reason-card__num {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--color-green);
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 12px;
-    }
-    .reason-card__icon {
-      width: 60px; height: 60px;
-      background: var(--color-green-light);
-      border-radius: var(--radius-md);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      color: var(--color-green-dark);
-      margin: 0 auto 20px;
-    }
-    .reason-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
-    .reason-card p { font-size: 0.875rem; color: var(--color-text-light); }
-
-    /* ---- 実績数字 ---- */
-    .stats-section {
-      background: linear-gradient(135deg, var(--color-green-dark), var(--color-green));
-      padding: 72px 0;
-      color: white;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
-      text-align: center;
-    }
-    .stat-item__num {
-      font-size: clamp(2.2rem, 4vw, 3rem);
-      font-weight: 900;
-      color: #ffd580;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-item__label { font-size: 0.9rem; opacity: 0.85; }
-
-    /* ---- お客様の声 ---- */
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .testimonial-card {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      position: relative;
-    }
-    .testimonial-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
-    .testimonial-card__quote {
-      font-size: 3rem;
-      color: var(--color-green-light);
-      line-height: 1;
-      margin-bottom: 16px;
-      font-family: Georgia, serif;
-    }
-    .testimonial-card__stars {
-      color: #f5a623;
-      font-size: 0.875rem;
-      margin-bottom: 16px;
-      letter-spacing: 2px;
-    }
-    .testimonial-card__text {
-      font-size: 0.9rem;
-      line-height: 1.8;
-      color: var(--color-text);
-      margin-bottom: 24px;
-    }
-    .testimonial-card__author {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-top: 1px solid var(--color-border);
-      padding-top: 20px;
-    }
-    .testimonial-card__avatar {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .testimonial-card__name { font-size: 0.875rem; font-weight: 700; }
-    .testimonial-card__role { font-size: 0.78rem; color: var(--color-text-light); }
-
-    /* ---- CTAバナー ---- */
-    .cta-banner {
-      background: linear-gradient(135deg, var(--color-orange) 0%, #e05a20 100%);
-      border-radius: var(--radius-lg);
-      padding: 60px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 32px;
-      flex-wrap: wrap;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-banner::before {
-      content: '';
-      position: absolute;
-      width: 300px; height: 300px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-      top: -100px; right: -80px;
-    }
-    .cta-banner__content { position: relative; z-index: 1; }
-    .cta-banner__title {
-      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-      font-weight: 900;
-      color: white;
-      margin-bottom: 8px;
-    }
-    .cta-banner__subtitle { font-size: 1rem; color: rgba(255,255,255,0.88); }
-    .cta-banner__btns {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ---- レスポンシブ ---- */
-    @media (max-width: 900px) {
-      .hero__inner { grid-template-columns: 1fr; gap: 40px; }
-      .hero__image-wrap { display: none; }
-      .hero { min-height: auto; padding: 80px 0; }
-      .services-grid, .reasons-grid, .testimonials-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .cta-banner { padding: 40px 24px; }
-    }
-  </style>
 </head>
 <body>
 
-<!-- ====== ヘッダー ====== -->
+<!-- ===== HEADER ===== -->
 <header class="header">
   <div class="container">
-    <div class="header__inner">
-      <a href="index.html" class="header__logo">
-        <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
-        <span>スパークルクリーン</span>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
+        <span class="logo-text">Reservatio<span>Pro</span></span>
       </a>
-      <nav class="header__nav">
-        <a href="index.html">ホーム</a>
-        <a href="service.html">サービス</a>
-        <a href="company.html">会社概要</a>
-        <a href="contact.html">お問い合わせ</a>
+      <nav class="nav">
+        <ul class="nav-links">
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="service.html">サービス・料金</a></li>
+          <li><a href="case.html">導入事例</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary nav-cta">無料相談はこちら</a>
       </nav>
-      <a href="contact.html" class="btn btn--primary btn--sm header__cta">
-        <i class="fa-solid fa-calendar-check"></i>今すぐ予約
-      </a>
-      <button class="hamburger" id="hamburger" aria-label="メニュー">
+      <button class="hamburger" aria-label="メニュー">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </header>
 
-<!-- モバイルメニュー -->
-<nav class="mobile-menu" id="mobile-menu">
+<!-- Mobile Menu -->
+<div class="mobile-menu">
   <a href="index.html">ホーム</a>
-  <a href="service.html">サービス</a>
-  <a href="company.html">会社概要</a>
+  <a href="service.html">サービス・料金</a>
+  <a href="case.html">導入事例</a>
   <a href="contact.html">お問い合わせ</a>
-  <a href="contact.html" class="btn btn--primary">
-    <i class="fa-solid fa-calendar-check"></i>今すぐ予約
-  </a>
-</nav>
+  <a href="contact.html" class="btn btn-primary">無料相談はこちら</a>
+</div>
 
-<!-- ====== ヒーロー ====== -->
+<!-- ===== HERO ===== -->
 <section class="hero">
-  <div class="hero__bg"></div>
-  <div class="hero__blob hero__blob--1"></div>
-  <div class="hero__blob hero__blob--2"></div>
-  <div class="hero__inner">
-    <div class="hero__content fade-in">
-      <div class="hero__badge">
-        <i class="fa-solid fa-award"></i>
-        顧客満足度 98% 達成
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-circle fa-xs"></i>
+        歯科クリニック専用・予約自動化サービス
       </div>
-      <h1 class="hero__title">
-        <span>輝く空間</span>が<br>
-        最高のビジネスを<br>
-        生み出す
+      <h1>
+        歯科クリニックの予約を、<br>
+        <span class="highlight">24時間自動化。</span>
       </h1>
-      <p class="hero__subtitle">
-        オフィス・店舗・施設の清掃を専門とするプロ集団。<br>
-        300社以上の信頼と実績で、あなたの大切な空間を<br>
-        ピカピカに仕上げます。
+      <p class="hero-sub">
+        夜間・休診日の予約取りこぼしをゼロに。<br>
+        受付の負担を減らし、患者満足度を上げる予約自動化サービス。
       </p>
-      <div class="hero__btns">
-        <a href="contact.html" class="btn btn--primary">
-          <i class="fa-solid fa-calendar-check"></i>無料で予約する
+      <div class="hero-btns">
+        <a href="contact.html" class="btn btn-primary btn-lg">
+          <i class="fas fa-comment-dots"></i> 無料相談はこちら
         </a>
-        <a href="service.html" class="btn btn--outline-white">
-          <i class="fa-solid fa-arrow-right"></i>サービスを見る
+        <a href="service.html" class="btn btn-outline btn-lg">
+          <i class="fas fa-arrow-right"></i> サービス詳細を見る
         </a>
-      </div>
-    </div>
-    <div class="hero__image-wrap fade-in fade-in-delay-2">
-      <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&auto=format&fit=crop&q=80"
-           alt="清掃スタッフが作業している様子">
-      <div class="hero__image-badge">
-        <div class="hero__image-badge-icon">
-          <i class="fa-solid fa-shield-check"></i>
-        </div>
-        <div class="hero__image-badge-text">
-          <strong>安心保証付き</strong>
-          <span>作業後7日間無料対応</span>
-        </div>
       </div>
     </div>
   </div>
-  <div class="hero__scroll">
-    <span>スクロール</span>
-    <i class="fa-solid fa-chevron-down"></i>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <i class="fas fa-chevron-down"></i>
   </div>
 </section>
 
-<!-- ====== サービス概要 ====== -->
+<!-- ===== PROBLEM ===== -->
+<section class="section problem">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">PROBLEM</span>
+      <h2 class="section-title">こんなお悩みありませんか？</h2>
+      <p class="section-desc">多くの歯科クリニックが抱える予約・受付に関する課題です。</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card fade-in">
+        <div class="problem-icon"><i class="fas fa-phone-slash"></i></div>
+        <div>
+          <h3>診療時間外の予約電話を取りこぼしている</h3>
+          <p>夜間や休診日にかかってくる予約の電話を受け取れず、患者が他院に流れてしまっている。</p>
+        </div>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-1">
+        <div class="problem-icon"><i class="fas fa-user-clock"></i></div>
+        <div>
+          <h3>受付スタッフが予約対応に追われている</h3>
+          <p>電話対応・予約台帳の管理・変更対応に時間を取られ、本来の業務に集中できていない。</p>
+        </div>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-2">
+        <div class="problem-icon"><i class="fas fa-globe"></i></div>
+        <div>
+          <h3>ホームページはあるが予約導線がない</h3>
+          <p>サイトを見た患者が「電話してください」で離脱。そのまま予約せず終わってしまっている。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
 <section class="section">
   <div class="container">
-    <div class="section-header">
-      <span class="section-label fade-in">Services</span>
-      <h2 class="section-title fade-in fade-in-delay-1">3つの主要サービス</h2>
-      <p class="section-subtitle fade-in fade-in-delay-2">
-        オフィスから店舗まで、あらゆる空間の清掃に対応。<br>お客様のニーズに合わせた最適なプランをご提案します。
-      </p>
+    <div class="text-center">
+      <span class="section-label">FEATURES</span>
+      <h2 class="section-title">ReservationProが選ばれる<br>3つの理由</h2>
+      <p class="section-desc">シンプルで使いやすく、低コストで始められる予約自動化を実現します。</p>
     </div>
-    <div class="services-grid">
-      <div class="card service-card fade-in">
-        <div class="service-card__icon service-card__icon--green">
-          <i class="fa-solid fa-building"></i>
-        </div>
-        <h3>オフィス清掃</h3>
-        <p>デスク・フロア・トイレなどオフィス全域を清潔に保ちます。早朝・夜間対応で業務の邪魔になりません。</p>
-        <a href="service.html#office" class="service-card__link">
-          詳しく見る <i class="fa-solid fa-arrow-right"></i>
-        </a>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon"><i class="fas fa-clock"></i></div>
+        <h3>24時間365日<br>自動予約受付</h3>
+        <p>深夜・休日でも患者が自分のペースで予約できます。取りこぼしゼロで機会損失を防ぎます。</p>
       </div>
-      <div class="card service-card fade-in fade-in-delay-1">
-        <div class="service-card__icon service-card__icon--orange">
-          <i class="fa-solid fa-store"></i>
-        </div>
-        <h3>店舗清掃</h3>
-        <p>飲食店・小売店・美容室など店舗に特化した清掃。お客様に気持ちよくご利用いただける空間を実現。</p>
-        <a href="service.html#store" class="service-card__link">
-          詳しく見る <i class="fa-solid fa-arrow-right"></i>
-        </a>
+      <div class="feature-card fade-in fade-in-delay-1">
+        <div class="feature-icon"><i class="fas fa-headset"></i></div>
+        <h3>導入から運用まで<br>完全サポート</h3>
+        <p>ITが苦手なスタッフでも安心。初期設定から日常運用まで、担当者が丁寧にサポートします。</p>
       </div>
-      <div class="card service-card fade-in fade-in-delay-2">
-        <div class="service-card__icon service-card__icon--blue">
-          <i class="fa-solid fa-rotate"></i>
-        </div>
-        <h3>定期清掃</h3>
-        <p>週1回〜月1回など、ご都合に合わせた定期プランで継続的に清潔な環境を維持します。</p>
-        <a href="service.html#regular" class="service-card__link">
-          詳しく見る <i class="fa-solid fa-arrow-right"></i>
-        </a>
+      <div class="feature-card fade-in fade-in-delay-2">
+        <div class="feature-icon"><i class="fas fa-yen-sign"></i></div>
+        <h3>月額5,000円から<br>はじめられる</h3>
+        <p>大手システムの数分の一のコストで導入可能。小規模クリニックでも無理なく継続できます。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ====== 選ばれる理由 ====== -->
-<section class="section section--gray">
+<!-- ===== PRICING ===== -->
+<section class="section pricing">
   <div class="container">
-    <div class="section-header">
-      <span class="section-label fade-in">Why Choose Us</span>
-      <h2 class="section-title fade-in fade-in-delay-1">スパークルクリーンが選ばれる理由</h2>
-      <p class="section-subtitle fade-in fade-in-delay-2">
-        創業以来変わらぬ3つの強みで、お客様から信頼をいただいています。
-      </p>
+    <div class="text-center">
+      <span class="section-label" style="color: var(--accent-light);">PRICING</span>
+      <h2 class="section-title">シンプルな料金体系</h2>
+      <p class="section-desc">複雑なプランはありません。わかりやすい1プランのみです。</p>
     </div>
-    <div class="reasons-grid">
-      <div class="reason-card fade-in">
-        <div class="reason-card__num">01</div>
-        <div class="reason-card__icon">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <h3>訓練されたプロスタッフ</h3>
-        <p>全スタッフが清掃技術の研修を修了。資格保有者も多数在籍し、高品質なサービスをお約束します。</p>
+    <div class="pricing-card fade-in">
+      <div class="pricing-badge">スタンダードプラン</div>
+      <div class="pricing-name">ReservatioPro</div>
+      <div class="pricing-row">
+        <span class="pricing-label">初期費用</span>
+        <span class="pricing-amount">¥15,000</span>
+        <span class="pricing-unit">（税別・初回のみ）</span>
       </div>
-      <div class="reason-card fade-in fade-in-delay-1">
-        <div class="reason-card__num">02</div>
-        <div class="reason-card__icon">
-          <i class="fa-solid fa-leaf"></i>
-        </div>
-        <h3>環境にやさしい洗剤</h3>
-        <p>人体・環境に安全なエコ認定洗剤を使用。小さなお子様やペットがいる環境でも安心してご利用いただけます。</p>
+      <div class="pricing-row">
+        <span class="pricing-label">月額費用</span>
+        <span class="pricing-amount">¥5,000</span>
+        <span class="pricing-unit">/ 月（税別）</span>
       </div>
-      <div class="reason-card fade-in fade-in-delay-2">
-        <div class="reason-card__num">03</div>
-        <div class="reason-card__icon">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <h3>24時間サポート体制</h3>
-        <p>緊急対応にも対応。電話・メール・LINEでいつでもご連絡いただけます。迅速な対応でご不安を解消します。</p>
+      <div class="pricing-divider"></div>
+      <div class="pricing-includes">
+        <h4>含まれるもの</h4>
+        <div class="pricing-feature"><i class="fas fa-check-circle"></i>予約自動化システムの導入</div>
+        <div class="pricing-feature"><i class="fas fa-check-circle"></i>初期設定・カスタマイズサポート</div>
+        <div class="pricing-feature"><i class="fas fa-check-circle"></i>既存ホームページへの組み込み対応</div>
+        <div class="pricing-feature"><i class="fas fa-check-circle"></i>運用開始後のサポート</div>
+        <div class="pricing-feature"><i class="fas fa-check-circle"></i>契約期間の縛りなし</div>
       </div>
+      <a href="contact.html" class="btn btn-primary">
+        <i class="fas fa-comment-dots"></i> まず無料相談してみる
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ====== 実績数字 ====== -->
-<section class="stats-section">
+<!-- ===== CTA ===== -->
+<section class="cta-banner">
   <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item fade-in">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="300" data-suffix="+">0+</span>
-        </div>
-        <div class="stat-item__label">導入企業数</div>
-      </div>
-      <div class="stat-item fade-in fade-in-delay-1">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="98" data-suffix="%">0%</span>
-        </div>
-        <div class="stat-item__label">顧客満足度</div>
-      </div>
-      <div class="stat-item fade-in fade-in-delay-2">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="24" data-suffix="h">0h</span>
-        </div>
-        <div class="stat-item__label">対応時間</div>
-      </div>
-      <div class="stat-item fade-in fade-in-delay-3">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="15" data-suffix="年">0年</span>
-        </div>
-        <div class="stat-item__label">業界経験</div>
-      </div>
-    </div>
+    <h2>まず無料相談してみる</h2>
+    <p>導入の疑問・費用感・既存システムとの連携など、何でもお気軽にご相談ください。<br>24時間以内にご返信いたします。</p>
+    <a href="contact.html" class="btn btn-outline btn-lg">
+      <i class="fas fa-arrow-right"></i> 無料相談フォームへ
+    </a>
   </div>
 </section>
 
-<!-- ====== お客様の声 ====== -->
-<section class="section section--green">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label fade-in">Testimonials</span>
-      <h2 class="section-title fade-in fade-in-delay-1">お客様の声</h2>
-      <p class="section-subtitle fade-in fade-in-delay-2">
-        ご利用いただいたお客様から嬉しいお声をいただいています。
-      </p>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card fade-in">
-        <div class="testimonial-card__quote">"</div>
-        <div class="testimonial-card__stars">★★★★★</div>
-        <p class="testimonial-card__text">
-          オフィスの定期清掃をお願いして1年になります。スタッフの方々が丁寧で、細かい部分まで気を配っていただいています。社員からも「会社がきれいになった」と好評です。
-        </p>
-        <div class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop"
-               alt="田中様">
-          <div>
-            <div class="testimonial-card__name">田中 健一 様</div>
-            <div class="testimonial-card__role">IT企業 総務部長</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in fade-in-delay-1">
-        <div class="testimonial-card__quote">"</div>
-        <div class="testimonial-card__stars">★★★★★</div>
-        <p class="testimonial-card__text">
-          飲食店を経営していますが、厨房の清掃が悩みでした。プロの方に入っていただいてからグリース汚れも完璧に落としていただき、保健所の検査も安心して受けられます。
-        </p>
-        <div class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-               src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop"
-               alt="山田様">
-          <div>
-            <div class="testimonial-card__name">山田 裕子 様</div>
-            <div class="testimonial-card__role">レストランオーナー</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in fade-in-delay-2">
-        <div class="testimonial-card__quote">"</div>
-        <div class="testimonial-card__stars">★★★★★</div>
-        <p class="testimonial-card__text">
-          急な依頼にも関わらず翌日に対応していただきました。価格も良心的で、作業クオリティも申し分なし。リピート確定です。スタッフの方の礼儀正しさも印象的でした。
-        </p>
-        <div class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop"
-               alt="鈴木様">
-          <div>
-            <div class="testimonial-card__name">鈴木 大輔 様</div>
-            <div class="testimonial-card__role">美容サロン経営</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== CTAバナー ====== -->
-<section class="section">
-  <div class="container">
-    <div class="cta-banner fade-in">
-      <div class="cta-banner__content">
-        <h2 class="cta-banner__title">まずは無料相談から始めてみませんか？</h2>
-        <p class="cta-banner__subtitle">お見積もり・ご相談は完全無料。お気軽にお問い合わせください。</p>
-      </div>
-      <div class="cta-banner__btns">
-        <a href="contact.html" class="btn btn--secondary">
-          <i class="fa-solid fa-envelope"></i>お問い合わせ
-        </a>
-        <a href="tel:0120000000" class="btn btn--outline-white">
-          <i class="fa-solid fa-phone"></i>電話で相談
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== フッター ====== -->
+<!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="container">
-    <div class="footer__grid">
-      <div class="footer__brand">
-        <a href="index.html" class="header__logo">
-          <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
-          <span>スパークルクリーン株式会社</span>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-icon"><i class="fas fa-calendar-check"></i></div>
+          <span class="logo-text">Reservatio<span>Pro</span></span>
         </a>
-        <p>プロの技術と誠実な対応で、あなたの大切な空間をいつもピカピカに。全国対応・24時間受付。</p>
+        <p>歯科クリニックの予約業務を<br>テクノロジーで自動化するサービスです。<br>受付負担を減らし、患者満足度を高めます。</p>
       </div>
-      <div class="footer__col">
-        <div class="footer__col-title">サービス</div>
-        <ul class="footer__links">
-          <li><a href="service.html#office">オフィス清掃</a></li>
-          <li><a href="service.html#store">店舗清掃</a></li>
-          <li><a href="service.html#regular">定期清掃</a></li>
-          <li><a href="service.html#price">料金プラン</a></li>
-        </ul>
+      <div class="footer-col">
+        <h4>メニュー</h4>
+        <a href="index.html">ホーム</a>
+        <a href="service.html">サービス・料金</a>
+        <a href="case.html">導入事例・FAQ</a>
+        <a href="contact.html">お問い合わせ</a>
       </div>
-      <div class="footer__col">
-        <div class="footer__col-title">会社情報</div>
-        <ul class="footer__links">
-          <li><a href="company.html">会社概要</a></li>
-          <li><a href="company.html#philosophy">企業理念</a></li>
-          <li><a href="company.html#staff">スタッフ紹介</a></li>
-          <li><a href="contact.html">採用情報</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <div class="footer__col-title">お問い合わせ</div>
-        <div class="footer__contact-item">
-          <i class="fa-solid fa-phone"></i>
-          <div><strong>0120-XXX-XXX</strong><br><small>受付 9:00〜18:00（年中無休）</small></div>
+      <div class="footer-col">
+        <h4>お問い合わせ</h4>
+        <div class="footer-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>TEL: 準備中</span>
         </div>
-        <div class="footer__contact-item">
-          <i class="fa-solid fa-envelope"></i>
-          <div>info@sparkle-clean.jp</div>
+        <div class="footer-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>準備中</span>
         </div>
-        <div class="footer__contact-item">
-          <i class="fa-solid fa-location-dot"></i>
-          <div>東京都渋谷区〇〇1-2-3<br>スパークルビル5F</div>
+        <div class="footer-contact-item">
+          <i class="fas fa-clock"></i>
+          <span>返信：24時間以内</span>
         </div>
       </div>
     </div>
-    <div class="footer__bottom">
-      <span>© 2024 スパークルクリーン株式会社 All Rights Reserved.</span>
-      <div style="display:flex;gap:16px;">
+    <div class="footer-bottom">
+      <p>&copy; 2025 ReservatioPro. All rights reserved.</p>
+      <div class="footer-bottom-links">
         <a href="#">プライバシーポリシー</a>
         <a href="#">利用規約</a>
       </div>

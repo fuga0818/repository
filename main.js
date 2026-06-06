@@ -1,10 +1,18 @@
-/* =============================================
-   スパークルクリーン株式会社 - 共通スクリプト
-   ============================================= */
+/* ===========================
+   ReservatioPro - Main JS
+   =========================== */
 
-// ---- ハンバーガーメニュー ----
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobile-menu');
+// ---- Header scroll effect ----
+const header = document.querySelector('.header');
+if (header) {
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+}
+
+// ---- Hamburger menu ----
+const hamburger = document.querySelector('.hamburger');
+const mobileMenu = document.querySelector('.mobile-menu');
 
 if (hamburger && mobileMenu) {
   hamburger.addEventListener('click', () => {
@@ -13,7 +21,6 @@ if (hamburger && mobileMenu) {
     document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   });
 
-  // メニュー内リンククリックで閉じる
   mobileMenu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       hamburger.classList.remove('open');
@@ -23,26 +30,18 @@ if (hamburger && mobileMenu) {
   });
 }
 
-// ---- スクロールでヘッダーに影 ----
-const header = document.querySelector('.header');
-if (header) {
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 10);
-  });
-}
-
-// ---- アクティブナビ ----
-const currentPath = location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.header__nav a, .mobile-menu a').forEach(a => {
-  const href = a.getAttribute('href');
-  if (href === currentPath || (currentPath === '' && href === 'index.html')) {
-    a.classList.add('active');
+// ---- Active nav link ----
+const currentPage = location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+    link.classList.add('active');
   }
 });
 
-// ---- フェードインアニメーション（Intersection Observer） ----
+// ---- Fade-in on scroll (Intersection Observer) ----
 const fadeEls = document.querySelectorAll('.fade-in');
-if (fadeEls.length > 0) {
+if (fadeEls.length) {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
@@ -52,56 +51,23 @@ if (fadeEls.length > 0) {
         }
       });
     },
-    { threshold: 0.12 }
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
   );
   fadeEls.forEach(el => observer.observe(el));
 }
 
-// ---- カウントアップアニメーション ----
-function animateCount(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const suffix = el.dataset.suffix || '';
-  const duration = 1800;
-  const start = performance.now();
-
-  function update(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(eased * target) + suffix;
-    if (progress < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-
-const countEls = document.querySelectorAll('.count-up');
-if (countEls.length > 0) {
-  const countObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCount(entry.target);
-          countObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.5 }
-  );
-  countEls.forEach(el => countObserver.observe(el));
-}
-
-// ---- FAQ アコーディオン ----
+// ---- FAQ accordion ----
 document.querySelectorAll('.faq-item').forEach(item => {
   const question = item.querySelector('.faq-question');
   const answer = item.querySelector('.faq-answer');
+
   if (!question || !answer) return;
 
   question.addEventListener('click', () => {
     const isOpen = item.classList.contains('open');
-    // 他を閉じる
-    document.querySelectorAll('.faq-item.open').forEach(other => {
-      other.classList.remove('open');
-      other.querySelector('.faq-answer').style.maxHeight = '0';
+    document.querySelectorAll('.faq-item.open').forEach(openItem => {
+      openItem.classList.remove('open');
+      openItem.querySelector('.faq-answer').style.maxHeight = null;
     });
     if (!isOpen) {
       item.classList.add('open');
@@ -110,33 +76,23 @@ document.querySelectorAll('.faq-item').forEach(item => {
   });
 });
 
-// ---- お問い合わせフォームのバリデーション（contact.html用） ----
-const contactForm = document.getElementById('contact-form');
+// ---- Contact form submit (mock) ----
+const contactForm = document.querySelector('.js-contact-form');
 if (contactForm) {
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = contactForm.querySelector('[name="name"]').value.trim();
-    const email = contactForm.querySelector('[name="email"]').value.trim();
-    const message = contactForm.querySelector('[name="message"]').value.trim();
-
-    if (!name || !email || !message) {
-      showFormMessage('必須項目をすべて入力してください。', 'error');
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showFormMessage('正しいメールアドレスを入力してください。', 'error');
-      return;
-    }
-    showFormMessage('送信しました。担当者より2営業日以内にご連絡いたします。', 'success');
-    contactForm.reset();
+    const btn = contactForm.querySelector('.form-submit');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> 送信完了しました！';
+    btn.disabled = true;
+    btn.style.background = '#10b981';
+    btn.style.borderColor = '#10b981';
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.disabled = false;
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      contactForm.reset();
+    }, 3500);
   });
-}
-
-function showFormMessage(msg, type) {
-  const el = document.getElementById('form-message');
-  if (!el) return;
-  el.textContent = msg;
-  el.className = 'form-message form-message--' + type;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 6000);
 }
