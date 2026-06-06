@@ -1,717 +1,641 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団</title>
-  <meta name="description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。無料見積もり即日対応。24時間受付。">
-  <meta name="keywords" content="清掃会社,オフィス清掃,店舗清掃,定期清掃,東京,清掃業者,ビルクリーニング,業務清掃">
-  <meta name="author" content="スパークルクリーン株式会社">
-  <link rel="canonical" href="https://fuga0818.github.io/repository/index.html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLAR SYSTEM EXPLORER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <!-- OGP（SNSシェア用） -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団">
-  <meta property="og:description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。無料見積もり即日対応。">
-  <meta property="og:url" content="https://fuga0818.github.io/repository/index.html">
-  <meta property="og:site_name" content="スパークルクリーン株式会社">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
-  <meta property="og:locale" content="ja_JP">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="スパークルクリーン株式会社 | 東京・オフィス・店舗清掃のプロ集団">
-  <meta name="twitter:description" content="東京・首都圏のオフィス清掃・店舗清掃・定期清掃ならスパークルクリーン。導入300社以上、顧客満足度98%。">
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200&auto=format&fit=crop&q=80">
+:root {
+  --space-black: #000008;
+  --accent-cyan: #00e5ff;
+  --accent-blue: #4fc3f7;
+  --text-primary: #e8f4fd;
+  --text-secondary: #90caf9;
+}
 
-  <!-- 構造化データ（JSON-LD） -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "スパークルクリーン株式会社",
-    "description": "オフィス・店舗・定期清掃のプロ集団。導入300社以上、顧客満足度98%。",
-    "url": "https://fuga0818.github.io/repository/index.html",
-    "telephone": "0120-XXX-XXX",
-    "email": "info@sparkle-clean.jp",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "神宮前〇〇1-2-3 スパークルビル5F",
-      "addressLocality": "渋谷区",
-      "addressRegion": "東京都",
-      "postalCode": "150-0001",
-      "addressCountry": "JP"
-    },
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-        "opens": "09:00",
-        "closes": "18:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Saturday","Sunday"],
-        "opens": "10:00",
-        "closes": "17:00"
-      }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "300"
-    },
-    "priceRange": "¥¥",
-    "areaServed": ["東京都","神奈川県","埼玉県","千葉県","大阪府"],
-    "serviceType": ["オフィス清掃","店舗清掃","定期清掃","ビルクリーニング"]
-  }
-  </script>
+html, body {
+  width: 100%; height: 100%;
+  background: var(--space-black);
+  color: var(--text-primary);
+  font-family: 'Noto Sans JP', sans-serif;
+  overflow-x: hidden;
+}
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    /* ---- ヒーロー ---- */
-    .hero {
-      position: relative;
-      min-height: 92vh;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      background: linear-gradient(135deg, #2a3d2e 0%, #4a8a5a 60%, #6aab7a 100%);
-    }
-    .hero__bg {
-      position: absolute;
-      inset: 0;
-      background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1400&auto=format&fit=crop&q=60') center/cover no-repeat;
-      opacity: 0.18;
-    }
-    .hero__blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-    }
-    .hero__blob--1 {
-      width: 500px; height: 500px;
-      background: rgba(240,125,58,0.25);
-      top: -100px; right: -100px;
-    }
-    .hero__blob--2 {
-      width: 350px; height: 350px;
-      background: rgba(106,171,122,0.35);
-      bottom: -80px; left: -80px;
-    }
-    .hero__inner {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-    .hero__content { color: white; }
-    .hero__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: var(--radius-full);
-      padding: 6px 16px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      backdrop-filter: blur(8px);
-    }
-    .hero__badge i { color: var(--color-orange); }
-    .hero__title {
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
-      font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 20px;
-    }
-    .hero__title span { color: #ffd580; }
-    .hero__subtitle {
-      font-size: 1.05rem;
-      opacity: 0.88;
-      line-height: 1.8;
-      margin-bottom: 36px;
-    }
-    .hero__btns { display: flex; gap: 16px; flex-wrap: wrap; }
-    .hero__image-wrap {
-      position: relative;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
-      aspect-ratio: 4/3;
-    }
-    .hero__image-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .hero__image-badge {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: var(--shadow-md);
-    }
-    .hero__image-badge-icon {
-      width: 44px; height: 44px;
-      background: var(--color-green-light);
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--color-green-dark);
-      font-size: 1.3rem;
-    }
-    .hero__image-badge-text strong { display: block; font-size: 1.1rem; color: var(--color-text); }
-    .hero__image-badge-text span { font-size: 0.78rem; color: var(--color-text-light); }
-    .hero__scroll {
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: rgba(255,255,255,0.6);
-      font-size: 0.75rem;
-      animation: bounce 2s infinite;
-    }
-    @keyframes bounce {
-      0%,100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
+/* STARS */
+#stars-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
 
-    /* ---- サービス概要 ---- */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .service-card { text-align: center; }
-    .service-card__icon {
-      width: 72px; height: 72px;
-      border-radius: var(--radius-lg);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem;
-      margin: 0 auto 20px;
-    }
-    .service-card__icon--green { background: var(--color-green-light); color: var(--color-green-dark); }
-    .service-card__icon--orange { background: var(--color-orange-light); color: var(--color-orange); }
-    .service-card__icon--blue { background: #e6f0ff; color: #4a7bc8; }
-    .service-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
-    .service-card p { font-size: 0.9rem; color: var(--color-text-light); margin-bottom: 20px; }
-    .service-card__link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.875rem; font-weight: 700;
-      color: var(--color-green-dark);
-      transition: var(--transition);
-    }
-    .service-card__link:hover { gap: 10px; }
+/* SCREENS */
+.screen {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 10;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease;
+  overflow-y: auto;
+}
+.screen.active { opacity: 1; pointer-events: all; }
 
-    /* ---- 選ばれる理由 ---- */
-    .reasons-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .reason-card {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      padding: 36px 28px;
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-      transition: var(--transition);
-    }
-    .reason-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
-    .reason-card__num {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: var(--color-green);
-      opacity: 0.3;
-      line-height: 1;
-      margin-bottom: 12px;
-    }
-    .reason-card__icon {
-      width: 60px; height: 60px;
-      background: var(--color-green-light);
-      border-radius: var(--radius-md);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      color: var(--color-green-dark);
-      margin: 0 auto 20px;
-    }
-    .reason-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
-    .reason-card p { font-size: 0.875rem; color: var(--color-text-light); }
+/* ========== TOP SCREEN ========== */
+#screen-top {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 18px 16px 40px;
+}
 
-    /* ---- 実績数字 ---- */
-    .stats-section {
-      background: linear-gradient(135deg, var(--color-green-dark), var(--color-green));
-      padding: 72px 0;
-      color: white;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
-      text-align: center;
-    }
-    .stat-item__num {
-      font-size: clamp(2.2rem, 4vw, 3rem);
-      font-weight: 900;
-      color: #ffd580;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-item__label { font-size: 0.9rem; opacity: 0.85; }
+.site-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.3rem, 3.8vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-align: center;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 50%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 18px rgba(79,195,247,0.5));
+}
 
-    /* ---- お客様の声 ---- */
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .testimonial-card {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      position: relative;
-    }
-    .testimonial-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
-    .testimonial-card__quote {
-      font-size: 3rem;
-      color: var(--color-green-light);
-      line-height: 1;
-      margin-bottom: 16px;
-      font-family: Georgia, serif;
-    }
-    .testimonial-card__stars {
-      color: #f5a623;
-      font-size: 0.875rem;
-      margin-bottom: 16px;
-      letter-spacing: 2px;
-    }
-    .testimonial-card__text {
-      font-size: 0.9rem;
-      line-height: 1.8;
-      color: var(--color-text);
-      margin-bottom: 24px;
-    }
-    .testimonial-card__author {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-top: 1px solid var(--color-border);
-      padding-top: 20px;
-    }
-    .testimonial-card__avatar {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .testimonial-card__name { font-size: 0.875rem; font-weight: 700; }
-    .testimonial-card__role { font-size: 0.78rem; color: var(--color-text-light); }
+.site-subtitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.5rem, 1.4vw, 0.8rem);
+  letter-spacing: 0.4em;
+  color: var(--text-secondary);
+  margin-top: 6px; text-align: center;
+}
 
-    /* ---- CTAバナー ---- */
-    .cta-banner {
-      background: linear-gradient(135deg, var(--color-orange) 0%, #e05a20 100%);
-      border-radius: var(--radius-lg);
-      padding: 60px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 32px;
-      flex-wrap: wrap;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-banner::before {
-      content: '';
-      position: absolute;
-      width: 300px; height: 300px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-      top: -100px; right: -80px;
-    }
-    .cta-banner__content { position: relative; z-index: 1; }
-    .cta-banner__title {
-      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-      font-weight: 900;
-      color: white;
-      margin-bottom: 8px;
-    }
-    .cta-banner__subtitle { font-size: 1rem; color: rgba(255,255,255,0.88); }
-    .cta-banner__btns {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
+/* Orrery */
+.orrery-wrapper {
+  position: relative;
+  width: min(90vw, 680px);
+  aspect-ratio: 1;
+  margin: 8px auto 0;
+  flex-shrink: 0;
+}
 
-    /* ---- レスポンシブ ---- */
-    @media (max-width: 900px) {
-      .hero__inner { grid-template-columns: 1fr; gap: 40px; }
-      .hero__image-wrap { display: none; }
-      .hero { min-height: auto; padding: 80px 0; }
-      .services-grid, .reasons-grid, .testimonials-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .cta-banner { padding: 40px 24px; }
-    }
-  </style>
+.orrery-svg {
+  width: 100%; height: 100%;
+  overflow: visible;
+}
+
+.orbit-ring {
+  fill: none;
+  stroke: rgba(79,195,247,0.13);
+  stroke-width: 1;
+}
+
+.sun-wrapper {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.sun-img {
+  width: clamp(42px, 8.5vw, 68px);
+  height: clamp(42px, 8.5vw, 68px);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 0 18px 7px rgba(255,200,0,0.55),
+    0 0 55px 18px rgba(255,140,0,0.28),
+    0 0 110px 38px rgba(255,80,0,0.13);
+  animation: sun-pulse 3s ease-in-out infinite;
+}
+
+@keyframes sun-pulse {
+  0%,100% { box-shadow: 0 0 18px 7px rgba(255,200,0,0.55), 0 0 55px 18px rgba(255,140,0,0.28); }
+  50%      { box-shadow: 0 0 28px 13px rgba(255,220,0,0.75), 0 0 75px 28px rgba(255,160,0,0.38); }
+}
+
+.planet-orbit {
+  position: absolute; top: 50%; left: 50%;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.planet-btn {
+  position: absolute;
+  border-radius: 50%; overflow: hidden;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.18);
+  transition: border-color 0.3s;
+  pointer-events: all;
+  background: #111;
+}
+.planet-btn:hover {
+  border-color: var(--accent-cyan);
+  z-index: 20;
+}
+.planet-btn img {
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 50%; display: block;
+}
+
+.planet-label {
+  position: absolute;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.4rem, 1vw, 0.6rem);
+  color: var(--accent-cyan);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 6px var(--accent-cyan);
+  left: 50%; transform: translateX(-50%);
+}
+
+.hint-text {
+  font-size: clamp(0.6rem, 1.4vw, 0.78rem);
+  color: rgba(144,202,249,0.55);
+  letter-spacing: 0.2em;
+  margin-top: 10px; text-align: center;
+  animation: blink 2.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.35} 50%{opacity:1} }
+
+/* ========== DETAIL SCREEN ========== */
+#screen-detail {
+  background: linear-gradient(180deg, rgba(0,0,15,0.97) 0%, rgba(2,5,30,0.97) 100%);
+  display: flex; flex-direction: column;
+  align-items: center; padding: 0 0 60px;
+}
+
+.detail-header {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(79,195,247,0.18);
+  background: rgba(0,0,20,0.85);
+  backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 50;
+}
+
+.back-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.58rem, 1.4vw, 0.72rem);
+  color: var(--accent-cyan);
+  background: none;
+  border: 1px solid var(--accent-cyan);
+  padding: 7px 14px; border-radius: 4px;
+  cursor: pointer; letter-spacing: 0.15em;
+  transition: background 0.3s, color 0.3s;
+}
+.back-btn:hover { background: var(--accent-cyan); color: #000; }
+
+.detail-nav { display: flex; gap: 10px; }
+
+.nav-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.52rem, 1.2vw, 0.68rem);
+  color: var(--text-secondary);
+  background: rgba(79,195,247,0.07);
+  border: 1px solid rgba(79,195,247,0.28);
+  padding: 7px 12px; border-radius: 4px;
+  cursor: pointer; letter-spacing: 0.08em;
+  transition: all 0.3s; white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+.detail-body {
+  width: 100%; max-width: 880px;
+  padding: 38px 22px 0;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 36px;
+}
+
+/* Planet display */
+.planet-display {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.planet-glow-ring {
+  position: absolute; border-radius: 50%;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+  50%      { opacity: 1;   transform: translate(-50%,-50%) scale(1.06); }
+}
+
+.planet-detail-img {
+  width: clamp(170px, 38vw, 290px);
+  height: clamp(170px, 38vw, 290px);
+  border-radius: 50%; object-fit: cover;
+  animation: planet-spin 28s linear infinite;
+  position: relative; z-index: 2;
+  border: 2px solid rgba(255,255,255,0.13);
+}
+@keyframes planet-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* Info */
+.planet-info { width: 100%; text-align: center; }
+
+.planet-name-ja {
+  font-size: clamp(1.9rem, 6.5vw, 3.3rem);
+  font-weight: 700; line-height: 1; margin-bottom: 6px;
+}
+.planet-name-en {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.85rem, 2.3vw, 1.3rem);
+  letter-spacing: 0.3em; color: var(--text-secondary);
+  font-weight: 400; margin-bottom: 28px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px; max-width: 580px;
+  margin: 0 auto 28px;
+}
+@media (min-width: 580px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.stat-card {
+  background: rgba(79,195,247,0.055);
+  border: 1px solid rgba(79,195,247,0.18);
+  border-radius: 8px; padding: 14px 10px; text-align: center;
+  transition: border-color 0.3s;
+}
+.stat-card:hover { border-color: rgba(79,195,247,0.45); }
+
+.stat-label {
+  font-size: 0.62rem; letter-spacing: 0.18em;
+  color: var(--text-secondary); margin-bottom: 8px;
+  font-family: 'Orbitron', sans-serif;
+}
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  font-weight: 700; color: var(--text-primary);
+}
+
+.divider {
+  width: 100%; max-width: 580px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(79,195,247,0.35), transparent);
+  margin: 0 auto;
+}
+
+.planet-desc {
+  max-width: 620px; margin: 0 auto;
+  line-height: 1.95; font-size: clamp(0.82rem, 1.9vw, 0.97rem);
+  color: rgba(232,244,253,0.83);
+  background: rgba(79,195,247,0.04);
+  border-left: 3px solid var(--accent-cyan);
+  padding: 18px 22px; border-radius: 0 8px 8px 0;
+  text-align: left;
+}
+
+@media (max-width: 460px) {
+  .detail-header { padding: 10px 12px; }
+  .back-btn { padding: 6px 9px; }
+  .nav-btn  { padding: 6px 7px; }
+}
+</style>
 </head>
 <body>
 
-<!-- ====== ヘッダー ====== -->
-<header class="header">
-  <div class="container">
-    <div class="header__inner">
-      <a href="index.html" class="header__logo">
-        <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
-        <span>スパークルクリーン</span>
-      </a>
-      <nav class="header__nav">
-        <a href="index.html">ホーム</a>
-        <a href="service.html">サービス</a>
-        <a href="company.html">会社概要</a>
-        <a href="contact.html">お問い合わせ</a>
-      </nav>
-      <a href="contact.html" class="btn btn--primary btn--sm header__cta">
-        <i class="fa-solid fa-calendar-check"></i>今すぐ予約
-      </a>
-      <button class="hamburger" id="hamburger" aria-label="メニュー">
-        <span></span><span></span><span></span>
-      </button>
+<canvas id="stars-canvas"></canvas>
+
+<!-- TOP SCREEN -->
+<div id="screen-top" class="screen active">
+  <h1 class="site-title">SOLAR SYSTEM EXPLORER</h1>
+  <p class="site-subtitle">太陽系 宇宙探索</p>
+
+  <div class="orrery-wrapper" id="orrery">
+    <svg class="orrery-svg" id="orbit-svg" viewBox="0 0 680 680"></svg>
+    <div class="sun-wrapper">
+      <img class="sun-img" id="sun-btn"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg/1024px-The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg"
+        alt="太陽">
+    </div>
+    <!-- Planets injected by JS -->
+  </div>
+
+  <p class="hint-text">▶ 惑星をクリックして探索する</p>
+</div>
+
+<!-- DETAIL SCREEN -->
+<div id="screen-detail" class="screen">
+  <div class="detail-header">
+    <button class="back-btn" id="back-btn">◀ TOP</button>
+    <div class="detail-nav">
+      <button class="nav-btn" id="prev-btn">◀ 前の惑星</button>
+      <button class="nav-btn" id="next-btn">次の惑星 ▶</button>
     </div>
   </div>
-</header>
 
-<!-- モバイルメニュー -->
-<nav class="mobile-menu" id="mobile-menu">
-  <a href="index.html">ホーム</a>
-  <a href="service.html">サービス</a>
-  <a href="company.html">会社概要</a>
-  <a href="contact.html">お問い合わせ</a>
-  <a href="contact.html" class="btn btn--primary">
-    <i class="fa-solid fa-calendar-check"></i>今すぐ予約
-  </a>
-</nav>
-
-<!-- ====== ヒーロー ====== -->
-<section class="hero">
-  <div class="hero__bg"></div>
-  <div class="hero__blob hero__blob--1"></div>
-  <div class="hero__blob hero__blob--2"></div>
-  <div class="hero__inner">
-    <div class="hero__content fade-in">
-      <div class="hero__badge">
-        <i class="fa-solid fa-award"></i>
-        顧客満足度 98% 達成
-      </div>
-      <h1 class="hero__title">
-        <span>輝く空間</span>が<br>
-        最高のビジネスを<br>
-        生み出す
-      </h1>
-      <p class="hero__subtitle">
-        オフィス・店舗・施設の清掃を専門とするプロ集団。<br>
-        300社以上の信頼と実績で、あなたの大切な空間を<br>
-        ピカピカに仕上げます。
-      </p>
-      <div class="hero__btns">
-        <a href="contact.html" class="btn btn--primary">
-          <i class="fa-solid fa-calendar-check"></i>無料で予約する
-        </a>
-        <a href="service.html" class="btn btn--outline-white">
-          <i class="fa-solid fa-arrow-right"></i>サービスを見る
-        </a>
-      </div>
+  <div class="detail-body">
+    <div class="planet-display" id="planet-display">
+      <div class="planet-glow-ring" id="planet-glow"></div>
+      <img class="planet-detail-img" id="planet-img" src="" alt="">
     </div>
-    <div class="hero__image-wrap fade-in fade-in-delay-2">
-      <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?w=800&auto=format&fit=crop&q=80"
-           alt="清掃スタッフが作業している様子">
-      <div class="hero__image-badge">
-        <div class="hero__image-badge-icon">
-          <i class="fa-solid fa-shield-check"></i>
+
+    <div class="planet-info">
+      <div class="planet-name-ja" id="planet-name-ja"></div>
+      <div class="planet-name-en" id="planet-name-en"></div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">直径</div>
+          <div class="stat-value" id="stat-diameter"></div>
         </div>
-        <div class="hero__image-badge-text">
-          <strong>安心保証付き</strong>
-          <span>作業後7日間無料対応</span>
+        <div class="stat-card">
+          <div class="stat-label">太陽からの距離</div>
+          <div class="stat-value" id="stat-distance"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">公転周期</div>
+          <div class="stat-value" id="stat-period"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">衛星数</div>
+          <div class="stat-value" id="stat-moons"></div>
         </div>
       </div>
+
+      <div class="divider"></div>
+      <br>
+      <p class="planet-desc" id="planet-desc"></p>
     </div>
   </div>
-  <div class="hero__scroll">
-    <span>スクロール</span>
-    <i class="fa-solid fa-chevron-down"></i>
-  </div>
-</section>
+</div>
 
-<!-- ====== サービス概要 ====== -->
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label fade-in">Services</span>
-      <h2 class="section-title fade-in fade-in-delay-1">3つの主要サービス</h2>
-      <p class="section-subtitle fade-in fade-in-delay-2">
-        オフィスから店舗まで、あらゆる空間の清掃に対応。<br>お客様のニーズに合わせた最適なプランをご提案します。
-      </p>
-    </div>
-    <div class="services-grid">
-      <div class="card service-card fade-in">
-        <div class="service-card__icon service-card__icon--green">
-          <i class="fa-solid fa-building"></i>
-        </div>
-        <h3>オフィス清掃</h3>
-        <p>デスク・フロア・トイレなどオフィス全域を清潔に保ちます。早朝・夜間対応で業務の邪魔になりません。</p>
-        <a href="service.html#office" class="service-card__link">
-          詳しく見る <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-      <div class="card service-card fade-in fade-in-delay-1">
-        <div class="service-card__icon service-card__icon--orange">
-          <i class="fa-solid fa-store"></i>
-        </div>
-        <h3>店舗清掃</h3>
-        <p>飲食店・小売店・美容室など店舗に特化した清掃。お客様に気持ちよくご利用いただける空間を実現。</p>
-        <a href="service.html#store" class="service-card__link">
-          詳しく見る <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-      <div class="card service-card fade-in fade-in-delay-2">
-        <div class="service-card__icon service-card__icon--blue">
-          <i class="fa-solid fa-rotate"></i>
-        </div>
-        <h3>定期清掃</h3>
-        <p>週1回〜月1回など、ご都合に合わせた定期プランで継続的に清潔な環境を維持します。</p>
-        <a href="service.html#regular" class="service-card__link">
-          詳しく見る <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+<script>
+// ===== PLANET DATA =====
+const planets = [
+  {
+    nameJa: '水星', nameEn: 'MERCURY',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mercury_in_true_color.jpg/600px-Mercury_in_true_color.jpg',
+    color: '#b5a99a',
+    glowColor: 'rgba(181,169,154,0.45)',
+    diameter: '4,879 km',
+    distance: '0.39 AU',
+    period: '88 日',
+    moons: '0',
+    desc: '太陽系最小の惑星。表面は無数のクレーターで覆われ、大気がほぼ存在しないため昼夜の温度差は600℃以上に達する。太陽に最も近く、その重力の影響で自転と公転が3:2の軌道共鳴をしている。',
+    orbitR: 0.175, size: 0.030, speed: 0.047, startAngle: 0.8
+  },
+  {
+    nameJa: '金星', nameEn: 'VENUS',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Venus-real_color.jpg/600px-Venus-real_color.jpg',
+    color: '#e8cda0',
+    glowColor: 'rgba(232,205,160,0.45)',
+    diameter: '12,104 km',
+    distance: '0.72 AU',
+    period: '225 日',
+    moons: '0',
+    desc: '地球の双子星とも呼ばれるが、分厚い二酸化炭素の大気が強烈な温室効果を生み、表面温度は約465℃に達する。太陽系で最も高温な惑星で、自転方向が他の惑星と逆向きという特異な性質を持つ。',
+    orbitR: 0.240, size: 0.040, speed: 0.035, startAngle: 2.1
+  },
+  {
+    nameJa: '地球', nameEn: 'EARTH',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/600px-The_Earth_seen_from_Apollo_17.jpg',
+    color: '#4fc3f7',
+    glowColor: 'rgba(79,195,247,0.45)',
+    diameter: '12,742 km',
+    distance: '1.00 AU',
+    period: '365 日',
+    moons: '1（月）',
+    desc: '太陽系唯一の生命体が確認されている惑星。液体の水が存在し、適切な大気組成と磁場を持つ。表面積の約71%が海洋で覆われており、プレートテクトニクスによって地表が継続的に変化している。',
+    orbitR: 0.312, size: 0.042, speed: 0.028, startAngle: 4.5
+  },
+  {
+    nameJa: '火星', nameEn: 'MARS',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/600px-OSIRIS_Mars_true_color.jpg',
+    color: '#c1440e',
+    glowColor: 'rgba(193,68,14,0.45)',
+    diameter: '6,779 km',
+    distance: '1.52 AU',
+    period: '687 日',
+    moons: '2',
+    desc: '赤い惑星と呼ばれる火星は、酸化鉄に覆われた赤茶けた地表が特徴。太陽系最高峰のオリンポス山（標高21km）を持ち、古代には液体の水が流れた痕跡が数多く残る。現在も多数の探査機が調査中。',
+    orbitR: 0.388, size: 0.034, speed: 0.022, startAngle: 1.3
+  },
+  {
+    nameJa: '木星', nameEn: 'JUPITER',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg/600px-Jupiter_and_its_shrunken_Great_Red_Spot.jpg',
+    color: '#c88b3a',
+    glowColor: 'rgba(200,139,58,0.45)',
+    diameter: '139,820 km',
+    distance: '5.20 AU',
+    period: '11.9 年',
+    moons: '95',
+    desc: '太陽系最大の惑星で、質量は他の全惑星の合計の2.5倍以上。大赤斑は地球が2〜3個入る巨大な嵐で300年以上継続している。強力な磁場と多数の衛星を持ち、ガリレオが発見した4大衛星は今も研究対象。',
+    orbitR: 0.468, size: 0.068, speed: 0.013, startAngle: 3.7
+  },
+  {
+    nameJa: '土星', nameEn: 'SATURN',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/600px-Saturn_during_Equinox.jpg',
+    color: '#e4d191',
+    glowColor: 'rgba(228,209,145,0.45)',
+    diameter: '116,460 km',
+    distance: '9.58 AU',
+    period: '29.5 年',
+    moons: '146',
+    desc: '美しい環を持つ惑星として知られる土星。環は氷と岩石からなり、幅は数十万kmに及ぶが厚さはわずか数百m。平均密度は水より低く、太陽系の惑星の中で唯一水に浮くことができるとされる。',
+    orbitR: 0.550, size: 0.060, speed: 0.009, startAngle: 0.5
+  },
+  {
+    nameJa: '天王星', nameEn: 'URANUS',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Uranus2.jpg/600px-Uranus2.jpg',
+    color: '#7de8e8',
+    glowColor: 'rgba(125,232,232,0.45)',
+    diameter: '50,724 km',
+    distance: '19.2 AU',
+    period: '84 年',
+    moons: '28',
+    desc: '自転軸が97.77°傾いており、横倒しで公転する特異な惑星。青緑色の外観はメタンガスによるもので、核は氷と岩石で構成される「氷巨人」に分類される。内部構造の詳細はいまだ未解明の部分が多い。',
+    orbitR: 0.630, size: 0.050, speed: 0.006, startAngle: 2.8
+  },
+  {
+    nameJa: '海王星', nameEn: 'NEPTUNE',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg/600px-Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg',
+    color: '#3f6bbf',
+    glowColor: 'rgba(63,107,191,0.45)',
+    diameter: '49,244 km',
+    distance: '30.1 AU',
+    period: '165 年',
+    moons: '16',
+    desc: '太陽系最外縁の惑星で、太陽から約45億km離れている。風速2,100km/hという太陽系最速の風が吹き荒れる。唯一ボイジャー2号のみが接近探査を行い、大暗斑と呼ばれる巨大嵐を観測した。',
+    orbitR: 0.708, size: 0.048, speed: 0.004, startAngle: 5.1
+  }
+];
 
-<!-- ====== 選ばれる理由 ====== -->
-<section class="section section--gray">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label fade-in">Why Choose Us</span>
-      <h2 class="section-title fade-in fade-in-delay-1">スパークルクリーンが選ばれる理由</h2>
-      <p class="section-subtitle fade-in fade-in-delay-2">
-        創業以来変わらぬ3つの強みで、お客様から信頼をいただいています。
-      </p>
-    </div>
-    <div class="reasons-grid">
-      <div class="reason-card fade-in">
-        <div class="reason-card__num">01</div>
-        <div class="reason-card__icon">
-          <i class="fa-solid fa-user-tie"></i>
-        </div>
-        <h3>訓練されたプロスタッフ</h3>
-        <p>全スタッフが清掃技術の研修を修了。資格保有者も多数在籍し、高品質なサービスをお約束します。</p>
-      </div>
-      <div class="reason-card fade-in fade-in-delay-1">
-        <div class="reason-card__num">02</div>
-        <div class="reason-card__icon">
-          <i class="fa-solid fa-leaf"></i>
-        </div>
-        <h3>環境にやさしい洗剤</h3>
-        <p>人体・環境に安全なエコ認定洗剤を使用。小さなお子様やペットがいる環境でも安心してご利用いただけます。</p>
-      </div>
-      <div class="reason-card fade-in fade-in-delay-2">
-        <div class="reason-card__num">03</div>
-        <div class="reason-card__icon">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <h3>24時間サポート体制</h3>
-        <p>緊急対応にも対応。電話・メール・LINEでいつでもご連絡いただけます。迅速な対応でご不安を解消します。</p>
-      </div>
-    </div>
-  </div>
-</section>
+// ===== STARS =====
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
 
-<!-- ====== 実績数字 ====== -->
-<section class="stats-section">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item fade-in">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="300" data-suffix="+">0+</span>
-        </div>
-        <div class="stat-item__label">導入企業数</div>
-      </div>
-      <div class="stat-item fade-in fade-in-delay-1">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="98" data-suffix="%">0%</span>
-        </div>
-        <div class="stat-item__label">顧客満足度</div>
-      </div>
-      <div class="stat-item fade-in fade-in-delay-2">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="24" data-suffix="h">0h</span>
-        </div>
-        <div class="stat-item__label">対応時間</div>
-      </div>
-      <div class="stat-item fade-in fade-in-delay-3">
-        <div class="stat-item__num">
-          <span class="count-up" data-target="15" data-suffix="年">0年</span>
-        </div>
-        <div class="stat-item__label">業界経験</div>
-      </div>
-    </div>
-  </div>
-</section>
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
 
-<!-- ====== お客様の声 ====== -->
-<section class="section section--green">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label fade-in">Testimonials</span>
-      <h2 class="section-title fade-in fade-in-delay-1">お客様の声</h2>
-      <p class="section-subtitle fade-in fade-in-delay-2">
-        ご利用いただいたお客様から嬉しいお声をいただいています。
-      </p>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card fade-in">
-        <div class="testimonial-card__quote">"</div>
-        <div class="testimonial-card__stars">★★★★★</div>
-        <p class="testimonial-card__text">
-          オフィスの定期清掃をお願いして1年になります。スタッフの方々が丁寧で、細かい部分まで気を配っていただいています。社員からも「会社がきれいになった」と好評です。
-        </p>
-        <div class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop"
-               alt="田中様">
-          <div>
-            <div class="testimonial-card__name">田中 健一 様</div>
-            <div class="testimonial-card__role">IT企業 総務部長</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in fade-in-delay-1">
-        <div class="testimonial-card__quote">"</div>
-        <div class="testimonial-card__stars">★★★★★</div>
-        <p class="testimonial-card__text">
-          飲食店を経営していますが、厨房の清掃が悩みでした。プロの方に入っていただいてからグリース汚れも完璧に落としていただき、保健所の検査も安心して受けられます。
-        </p>
-        <div class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-               src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop"
-               alt="山田様">
-          <div>
-            <div class="testimonial-card__name">山田 裕子 様</div>
-            <div class="testimonial-card__role">レストランオーナー</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in fade-in-delay-2">
-        <div class="testimonial-card__quote">"</div>
-        <div class="testimonial-card__stars">★★★★★</div>
-        <p class="testimonial-card__text">
-          急な依頼にも関わらず翌日に対応していただきました。価格も良心的で、作業クオリティも申し分なし。リピート確定です。スタッフの方の礼儀正しさも印象的でした。
-        </p>
-        <div class="testimonial-card__author">
-          <img class="testimonial-card__avatar"
-               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop"
-               alt="鈴木様">
-          <div>
-            <div class="testimonial-card__name">鈴木 大輔 様</div>
-            <div class="testimonial-card__role">美容サロン経営</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+function initStars() {
+  stars = [];
+  const count = Math.floor((canvas.width * canvas.height) / 2800);
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.4 + 0.2,
+      speed: Math.random() * 0.008 + 0.003,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
 
-<!-- ====== CTAバナー ====== -->
-<section class="section">
-  <div class="container">
-    <div class="cta-banner fade-in">
-      <div class="cta-banner__content">
-        <h2 class="cta-banner__title">まずは無料相談から始めてみませんか？</h2>
-        <p class="cta-banner__subtitle">お見積もり・ご相談は完全無料。お気軽にお問い合わせください。</p>
-      </div>
-      <div class="cta-banner__btns">
-        <a href="contact.html" class="btn btn--secondary">
-          <i class="fa-solid fa-envelope"></i>お問い合わせ
-        </a>
-        <a href="tel:0120000000" class="btn btn--outline-white">
-          <i class="fa-solid fa-phone"></i>電話で相談
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+function drawStars(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const s of stars) {
+    const a = 0.25 + 0.75 * Math.abs(Math.sin(t * s.speed + s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${a})`;
+    ctx.fill();
+  }
+}
 
-<!-- ====== フッター ====== -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div class="footer__brand">
-        <a href="index.html" class="header__logo">
-          <div class="header__logo-icon"><i class="fa-solid fa-sparkles"></i></div>
-          <span>スパークルクリーン株式会社</span>
-        </a>
-        <p>プロの技術と誠実な対応で、あなたの大切な空間をいつもピカピカに。全国対応・24時間受付。</p>
-      </div>
-      <div class="footer__col">
-        <div class="footer__col-title">サービス</div>
-        <ul class="footer__links">
-          <li><a href="service.html#office">オフィス清掃</a></li>
-          <li><a href="service.html#store">店舗清掃</a></li>
-          <li><a href="service.html#regular">定期清掃</a></li>
-          <li><a href="service.html#price">料金プラン</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <div class="footer__col-title">会社情報</div>
-        <ul class="footer__links">
-          <li><a href="company.html">会社概要</a></li>
-          <li><a href="company.html#philosophy">企業理念</a></li>
-          <li><a href="company.html#staff">スタッフ紹介</a></li>
-          <li><a href="contact.html">採用情報</a></li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <div class="footer__col-title">お問い合わせ</div>
-        <div class="footer__contact-item">
-          <i class="fa-solid fa-phone"></i>
-          <div><strong>0120-XXX-XXX</strong><br><small>受付 9:00〜18:00（年中無休）</small></div>
-        </div>
-        <div class="footer__contact-item">
-          <i class="fa-solid fa-envelope"></i>
-          <div>info@sparkle-clean.jp</div>
-        </div>
-        <div class="footer__contact-item">
-          <i class="fa-solid fa-location-dot"></i>
-          <div>東京都渋谷区〇〇1-2-3<br>スパークルビル5F</div>
-        </div>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© 2024 スパークルクリーン株式会社 All Rights Reserved.</span>
-      <div style="display:flex;gap:16px;">
-        <a href="#">プライバシーポリシー</a>
-        <a href="#">利用規約</a>
-      </div>
-    </div>
-  </div>
-</footer>
+resizeCanvas(); initStars();
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); buildOrrery(); });
 
-<script src="main.js"></script>
+// ===== ORRERY =====
+const orrery   = document.getElementById('orrery');
+const orbitSvg = document.getElementById('orbit-svg');
+let planetOrbitEls = [];
+
+function buildOrrery() {
+  document.querySelectorAll('.planet-orbit').forEach(e => e.remove());
+  planetOrbitEls = [];
+  orbitSvg.innerHTML = '';
+
+  const w  = orrery.offsetWidth;
+  const cx = w / 2, cy = w / 2;
+
+  // Orbit rings
+  planets.forEach(p => {
+    const r = p.orbitR * w;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', cx);
+    circle.setAttribute('cy', cy);
+    circle.setAttribute('r', r);
+    circle.setAttribute('class', 'orbit-ring');
+    orbitSvg.appendChild(circle);
+  });
+
+  // Planet elements
+  planets.forEach((p, i) => {
+    const orbitR = p.orbitR * w;
+    const pSize  = Math.max(p.size * w, 16);
+
+    const orbitDiv = document.createElement('div');
+    orbitDiv.className = 'planet-orbit';
+
+    const btn = document.createElement('div');
+    btn.className = 'planet-btn';
+    btn.style.cssText = `width:${pSize}px;height:${pSize}px;left:${orbitR - pSize/2}px;top:${-pSize/2}px;`;
+    btn.title = p.nameJa;
+
+    const img = document.createElement('img');
+    img.src = p.img; img.alt = p.nameJa;
+    btn.appendChild(img);
+
+    const label = document.createElement('div');
+    label.className = 'planet-label';
+    label.textContent = p.nameJa;
+    label.style.top = (pSize + 4) + 'px';
+    btn.appendChild(label);
+
+    btn.addEventListener('click', () => showPlanet(i));
+    orbitDiv.appendChild(btn);
+    orrery.appendChild(orbitDiv);
+    planetOrbitEls.push({ orbitDiv });
+  });
+}
+
+buildOrrery();
+
+// ===== ANIMATION LOOP =====
+let lastTime = 0, elapsed = 0;
+
+function animate(ts) {
+  const dt = ts - lastTime;
+  lastTime = ts;
+  elapsed += dt * 0.001;
+
+  drawStars(elapsed);
+
+  planets.forEach((p, i) => {
+    const el = planetOrbitEls[i];
+    if (!el) return;
+    const angle = p.startAngle + elapsed * p.speed * 2 * Math.PI;
+    el.orbitDiv.style.transform = `rotate(${angle}rad)`;
+    const label = el.orbitDiv.querySelector('.planet-label');
+    if (label) label.style.transform = `translateX(-50%) rotate(${-angle}rad)`;
+    const btn = el.orbitDiv.querySelector('.planet-btn');
+    if (btn) btn.style.transform = `rotate(${-angle}rad)`;
+  });
+
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+
+// ===== SCREEN TRANSITIONS =====
+const screenTop    = document.getElementById('screen-top');
+const screenDetail = document.getElementById('screen-detail');
+let currentIdx = 0;
+
+function showScreen(toShow, toHide) {
+  toHide.style.opacity = '0';
+  toHide.style.pointerEvents = 'none';
+  toHide.classList.remove('active');
+  setTimeout(() => {
+    toShow.classList.add('active');
+    toShow.style.opacity = '1';
+    toShow.style.pointerEvents = 'all';
+    toShow.scrollTop = 0;
+  }, 320);
+}
+
+function showPlanet(idx) {
+  currentIdx = ((idx % planets.length) + planets.length) % planets.length;
+  const p = planets[currentIdx];
+
+  document.getElementById('planet-img').src = p.img;
+  document.getElementById('planet-img').alt = p.nameJa;
+  document.getElementById('planet-name-ja').textContent = p.nameJa;
+  document.getElementById('planet-name-ja').style.color = p.color;
+  document.getElementById('planet-name-en').textContent = p.nameEn;
+  document.getElementById('stat-diameter').textContent  = p.diameter;
+  document.getElementById('stat-distance').textContent  = p.distance;
+  document.getElementById('stat-period').textContent    = p.period;
+  document.getElementById('stat-moons').textContent     = p.moons;
+  document.getElementById('planet-desc').textContent    = p.desc;
+
+  const glow = document.getElementById('planet-glow');
+  const sz = Math.min(window.innerWidth * 0.6, 300);
+  glow.style.cssText = `
+    width:${sz}px; height:${sz}px;
+    left:50%; top:50%;
+    background: radial-gradient(circle, ${p.glowColor} 0%, transparent 70%);
+    transform: translate(-50%,-50%) scale(1);
+  `;
+
+  showScreen(screenDetail, screenTop);
+}
+
+document.getElementById('back-btn').addEventListener('click', () => showScreen(screenTop, screenDetail));
+document.getElementById('prev-btn').addEventListener('click', () => showPlanet(currentIdx - 1));
+document.getElementById('next-btn').addEventListener('click', () => showPlanet(currentIdx + 1));
+</script>
 </body>
 </html>
