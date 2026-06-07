@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>私鴨歯科 | 世田谷区尾山台の歯科医院</title>
+  <meta name="description" content="私鴨歯科は東京都世田谷区尾山台にある歯科医院です。虫歯予防・ホワイトニング・インプラントなど幅広い診療を行っています。">
+  <style>
+    /* ===== リセット・基本 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      color: #333;
+      line-height: 1.8;
+      background: #fff;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+    ul { list-style: none; }
+
+    /* ===== カラー変数 ===== */
+    :root {
+      --green-dark:   #2d6a4f;
+      --green-mid:    #40916c;
+      --green-light:  #74c69d;
+      --green-pale:   #d8f3dc;
+      --green-bg:     #f0faf3;
+      --accent:       #52b788;
+      --text-main:    #2c3e35;
+      --text-sub:     #5a7063;
+      --white:        #ffffff;
+    }
+
+    /* ===== 共通レイアウト ===== */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 80px 0; }
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 12px;
+      letter-spacing: .05em;
+    }
+    .section-title span {
+      display: block;
+      font-size: .85rem;
+      font-weight: 400;
+      color: var(--green-light);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .section-divider {
+      width: 48px; height: 3px;
+      background: var(--green-light);
+      margin: 0 auto 48px;
+      border-radius: 2px;
+    }
+
+    /* ===== ヘッダー ===== */
+    #header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(45,106,79,.12);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+      max-width: 1080px; margin: 0 auto;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.4rem;
+    }
+    .logo-text { line-height: 1.2; }
+    .logo-name { font-size: 1.25rem; font-weight: 700; color: var(--green-dark); }
+    .logo-sub  { font-size: .72rem; color: var(--text-sub); letter-spacing: .08em; }
+    .header-tel {
+      text-align: right;
+      line-height: 1.3;
+    }
+    .header-tel .tel-label { font-size: .72rem; color: var(--text-sub); }
+    .header-tel a {
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--green-dark); letter-spacing: .04em;
+    }
+    .header-tel a::before { content: "☎ "; font-size: 1rem; }
+    nav ul { display: flex; gap: 4px; }
+    nav a {
+      display: block; padding: 8px 14px;
+      font-size: .88rem; color: var(--text-main);
+      border-radius: 4px;
+      transition: background .2s, color .2s;
+    }
+    nav a:hover { background: var(--green-pale); color: var(--green-dark); }
+    .header-right { display: flex; align-items: center; gap: 24px; }
+
+    /* ===== ヒーロー ===== */
+    #hero {
+      position: relative;
+      min-height: 520px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-light) 100%);
+      display: flex; align-items: center;
+      overflow: hidden;
+      padding: 0;
+    }
+    .hero-bg-leaf {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(ellipse 300px 300px at 80% 20%, rgba(255,255,255,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 200px 200px at 15% 80%, rgba(255,255,255,.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* 装飾的な葉っぱ風 SVG 代替 */
+    .hero-bg-leaf::after {
+      content: "";
+      position: absolute; right: -60px; bottom: -60px;
+      width: 400px; height: 400px;
+      border-radius: 50% 0 50% 50%;
+      background: rgba(255,255,255,.06);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      color: #fff;
+      max-width: 600px;
+      padding: 60px 48px;
+    }
+    .hero-label {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: .8rem; letter-spacing: .12em;
+      margin-bottom: 20px;
+    }
+    .hero-catch {
+      font-size: 2.4rem; font-weight: 700;
+      line-height: 1.4;
+      text-shadow: 0 2px 8px rgba(0,0,0,.15);
+      margin-bottom: 20px;
+    }
+    .hero-catch em { font-style: normal; color: #b7e4c7; }
+    .hero-sub {
+      font-size: 1rem; line-height: 1.9;
+      opacity: .92; margin-bottom: 32px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: #fff; color: var(--green-dark);
+      font-weight: 700; font-size: .95rem;
+      padding: 14px 32px;
+      border-radius: 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+    .hero-card {
+      position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 16px;
+      padding: 28px 36px;
+      color: #fff; text-align: center;
+      min-width: 220px;
+    }
+    .hero-card-title { font-size: .8rem; letter-spacing: .1em; opacity: .85; margin-bottom: 14px; }
+    .hero-card-item { font-size: .95rem; margin: 6px 0; }
+    .hero-card-item strong { font-weight: 700; }
+    .hero-card-closed { font-size: .8rem; margin-top: 10px; opacity: .8; }
+
+    /* ===== お知らせ ===== */
+    #news { background: var(--green-bg); padding: 60px 0; }
+    .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .news-card {
+      background: #fff; border-radius: 12px;
+      padding: 28px 32px;
+      box-shadow: 0 2px 12px rgba(45,106,79,.08);
+    }
+    .news-card-title {
+      font-size: 1rem; font-weight: 700; color: var(--green-dark);
+      border-left: 4px solid var(--green-light);
+      padding-left: 12px; margin-bottom: 16px;
+    }
+    /* 診療時間表 */
+    .hours-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .hours-table th, .hours-table td {
+      padding: 8px 12px; text-align: center;
+      border: 1px solid #e8f4ec;
+    }
+    .hours-table thead th { background: var(--green-mid); color: #fff; font-weight: 600; }
+    .hours-table tbody tr:nth-child(even) { background: var(--green-bg); }
+    .hours-table td.closed { color: #c0392b; font-weight: 700; }
+    .hours-table td.open  { color: var(--green-mid); font-weight: 700; }
+    .news-list li {
+      padding: 10px 0;
+      border-bottom: 1px dashed #d8f0e0;
+      font-size: .9rem;
+      display: flex; gap: 12px; align-items: baseline;
+    }
+    .news-list li:last-child { border-bottom: none; }
+    .news-date { font-size: .78rem; color: var(--text-sub); white-space: nowrap; }
+
+    /* ===== 特徴 ===== */
+    #features { background: #fff; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    }
+    .feature-card {
+      background: var(--green-bg);
+      border-radius: 16px; padding: 36px 24px;
+      text-align: center;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(45,106,79,.13); }
+    .feature-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--green-mid);
+      color: #fff; font-size: 1.8rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+    }
+    .feature-title { font-size: 1.05rem; font-weight: 700; color: var(--green-dark); margin-bottom: 10px; }
+    .feature-text  { font-size: .88rem; color: var(--text-sub); line-height: 1.8; }
+
+    /* ===== 診療メニュー ===== */
+    #menu { background: var(--green-bg); }
+    .menu-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px;
+    }
+    .menu-card {
+      background: #fff; border-radius: 14px;
+      padding: 32px 16px 24px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(45,106,79,.08);
+      transition: transform .25s, box-shadow .25s;
+      cursor: default;
+    }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(45,106,79,.15); }
+    .menu-icon {
+      font-size: 2.4rem; margin-bottom: 14px;
+      line-height: 1;
+    }
+    .menu-num {
+      display: inline-block;
+      background: var(--green-pale);
+      color: var(--green-dark);
+      font-size: .7rem; font-weight: 700;
+      border-radius: 10px; padding: 2px 10px;
+      margin-bottom: 10px;
+    }
+    .menu-title { font-size: .95rem; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+    .menu-desc  { font-size: .78rem; color: var(--text-sub); line-height: 1.7; }
+
+    /* ===== 院長ごあいさつ ===== */
+    #greeting { background: #fff; }
+    .greeting-inner {
+      display: flex; align-items: flex-start; gap: 56px;
+    }
+    .greeting-photo {
+      flex-shrink: 0; width: 240px;
+    }
+    .greeting-photo .photo-placeholder {
+      width: 240px; height: 300px;
+      background: linear-gradient(160deg, var(--green-pale) 0%, var(--green-bg) 100%);
+      border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      color: var(--green-mid); font-size: .85rem;
+    }
+    .greeting-photo .photo-placeholder .photo-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+    }
+    .greeting-photo .photo-caption {
+      text-align: center; margin-top: 14px;
+      font-size: .9rem; color: var(--text-sub); line-height: 1.5;
+    }
+    .greeting-photo .photo-caption strong { display: block; font-size: 1.1rem; color: var(--green-dark); }
+    .greeting-text p {
+      font-size: .96rem; line-height: 2;
+      color: var(--text-main); margin-bottom: 1.4em;
+    }
+    .greeting-sign {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--green-pale);
+      font-size: .9rem; color: var(--text-sub);
+    }
+    .greeting-sign strong { color: var(--green-dark); font-size: 1.05rem; }
+
+    /* ===== アクセス ===== */
+    #access { background: var(--green-bg); }
+    .access-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .access-info dt {
+      font-weight: 700; color: var(--green-dark); font-size: .85rem;
+      margin-top: 14px;
+    }
+    .access-info dd { font-size: .95rem; color: var(--text-main); margin-left: 0; }
+    .access-info { background: #fff; border-radius: 14px; padding: 32px; box-shadow: 0 2px 10px rgba(45,106,79,.07); }
+    .tel-big {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--green-pale); border-radius: 10px;
+      padding: 14px 20px; margin-top: 18px;
+    }
+    .tel-big .tel-icon { font-size: 1.4rem; }
+    .tel-big a { font-size: 1.5rem; font-weight: 700; color: var(--green-dark); }
+    .map-wrap {
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(45,106,79,.1);
+      height: 360px;
+    }
+    .map-wrap iframe { width: 100%; height: 100%; border: none; }
+
+    /* ===== フッター ===== */
+    footer {
+      background: var(--green-dark);
+      color: rgba(255,255,255,.85);
+      padding: 48px 0 24px;
+    }
+    .footer-inner {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 40px; max-width: 1080px; margin: 0 auto; padding: 0 24px;
+    }
+    .footer-brand .logo-name { color: #fff; font-size: 1.4rem; }
+    .footer-brand .logo-sub  { color: rgba(255,255,255,.6); }
+    .footer-brand p { font-size: .88rem; margin-top: 14px; opacity: .8; line-height: 1.9; }
+    .footer-title { font-size: .8rem; letter-spacing: .12em; color: var(--green-light); margin-bottom: 12px; }
+    .footer-hours dt { font-size: .8rem; opacity: .7; margin-top: 8px; }
+    .footer-hours dd { font-size: .92rem; }
+    .footer-tel a { font-size: 1.3rem; font-weight: 700; color: #fff; }
+    .footer-tel a::before { content: "☎ "; }
+    .footer-note { font-size: .78rem; opacity: .6; margin-top: 6px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.15);
+      margin-top: 40px; padding-top: 20px;
+      text-align: center; font-size: .78rem; opacity: .55;
+      max-width: 1080px; margin: 40px auto 0; padding: 20px 24px 0;
+    }
+
+    /* ===== 電話CTAバー ===== */
+    .cta-bar {
+      background: var(--green-mid); color: #fff;
+      text-align: center; padding: 18px 24px;
+    }
+    .cta-bar p { font-size: .88rem; opacity: .9; margin-bottom: 6px; }
+    .cta-bar a {
+      font-size: 1.8rem; font-weight: 700; color: #fff;
+      letter-spacing: .06em;
+    }
+    .cta-bar a::before { content: "☎ "; font-size: 1.4rem; }
+    .cta-bar .cta-note { font-size: .78rem; margin-top: 4px; opacity: .75; margin-bottom: 0; }
+
+    /* ===== レスポンシブ ===== */
+    @media (max-width: 900px) {
+      .header-inner { flex-wrap: wrap; gap: 10px; }
+      nav { order: 3; width: 100%; }
+      nav ul { flex-wrap: wrap; }
+      .hero-card { display: none; }
+      .hero-content { padding: 48px 24px; }
+      .hero-catch { font-size: 1.8rem; }
+      .news-grid, .access-inner { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .menu-grid { grid-template-columns: repeat(3, 1fr); }
+      .greeting-inner { flex-direction: column; align-items: center; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .section-title { font-size: 1.5rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr; }
+      .header-tel a { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== ヘッダー ===== -->
+<header id="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🦷</div>
+      <div class="logo-text">
+        <div class="logo-name">私鴨歯科</div>
+        <div class="logo-sub">SHIKAMO DENTAL CLINIC</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <nav>
+        <ul>
+          <li><a href="#news">診療時間</a></li>
+          <li><a href="#features">特徴</a></li>
+          <li><a href="#menu">診療メニュー</a></li>
+          <li><a href="#greeting">院長ごあいさつ</a></li>
+          <li><a href="#access">アクセス</a></li>
+        </ul>
+      </nav>
+      <div class="header-tel">
+        <div class="tel-label">お電話でのご予約</div>
+        <a href="tel:07012551121">070-1255-1121</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== メインビジュアル ===== -->
+<section id="hero">
+  <div class="hero-bg-leaf"></div>
+  <div class="hero-content">
+    <div class="hero-label">世田谷区尾山台の歯科医院</div>
+    <h1 class="hero-catch">
+      お口の健康が、<br>
+      <em>あなたの笑顔</em>を<br>
+      つくります。
+    </h1>
+    <p class="hero-sub">
+      「痛い」「怖い」というイメージを変えたい。<br>
+      安心して通える歯科医院を目指し、<br>
+      スタッフ一同、心を込めて診療いたします。
+    </p>
+    <a href="tel:07012551121" class="btn-primary">☎ お電話でご予約</a>
+  </div>
+  <div class="hero-card">
+    <div class="hero-card-title">▸ 診療時間</div>
+    <div class="hero-card-item">午前 <strong>9:00 〜 13:00</strong></div>
+    <div class="hero-card-item">午後 <strong>15:00 〜 19:00</strong></div>
+    <div class="hero-card-closed">休診日：木曜日</div>
+    <div class="hero-card-closed" style="margin-top:14px; font-size:.88rem;">
+      ☎ 070-1255-1121
+    </div>
+  </div>
+</section>
+
+<!-- ===== お知らせ・診療時間 ===== -->
+<section id="news">
+  <div class="container">
+    <h2 class="section-title"><span>Information</span>お知らせ・診療時間</h2>
+    <div class="section-divider"></div>
+    <div class="news-grid">
+      <!-- 診療時間 -->
+      <div class="news-card">
+        <div class="news-card-title">診療時間</div>
+        <table class="hours-table">
+          <thead>
+            <tr>
+              <th>時間帯</th>
+              <th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th><th>日</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>午前<br><small>9:00〜13:00</small></td>
+              <td class="open">○</td><td class="open">○</td><td class="open">○</td>
+              <td class="closed">休</td>
+              <td class="open">○</td><td class="open">○</td><td class="open">○</td>
+            </tr>
+            <tr>
+              <td>午後<br><small>15:00〜19:00</small></td>
+              <td class="open">○</td><td class="open">○</td><td class="open">○</td>
+              <td class="closed">休</td>
+              <td class="open">○</td><td class="open">○</td><td class="open">○</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:.78rem; color:var(--text-sub); margin-top:10px;">
+          ※ 祝日は診療時間が変わる場合があります。お電話でご確認ください。<br>
+          ※ 予約制です。お電話にてご予約ください。
+        </p>
+      </div>
+      <!-- お知らせ -->
+      <div class="news-card">
+        <div class="news-card-title">お知らせ</div>
+        <ul class="news-list">
+          <li>
+            <span class="news-date">2025.06.01</span>
+            <span>夏季休暇（8月13日〜15日）のお知らせ</span>
+          </li>
+          <li>
+            <span class="news-date">2025.04.10</span>
+            <span>3DS（新しい虫歯予防）の受付を開始しました</span>
+          </li>
+          <li>
+            <span class="news-date">2025.03.01</span>
+            <span>ホームページをリニューアルしました</span>
+          </li>
+          <li>
+            <span class="news-date">2025.01.07</span>
+            <span>年末年始休診（12月29日〜1月6日）が終了しました</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 当院の特徴 ===== -->
+<section id="features">
+  <div class="container">
+    <h2 class="section-title"><span>Our Features</span>当院の特徴・こだわり</h2>
+    <div class="section-divider"></div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">😌</div>
+        <div class="feature-title">痛みに配慮した治療</div>
+        <p class="feature-text">
+          「歯医者が怖い」という方も安心してご来院いただけるよう、丁寧な説明と痛みを最小限に抑えた治療を心がけています。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">予防歯科・定期検診</div>
+        <p class="feature-text">
+          治療だけでなく、虫歯・歯周病になりにくいお口の環境づくりをサポート。定期的なメンテナンスで健康を長く守ります。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <div class="feature-title">最新の治療技術</div>
+        <p class="feature-text">
+          3DS・再生医療・インプラントなど、最新の知見を取り入れた治療メニューをご提供。患者さまに合った最適な治療をご提案します。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌿</div>
+        <div class="feature-title">清潔で落ち着いた院内</div>
+        <p class="feature-text">
+          緑を基調とした温かみのある院内で、リラックスして治療を受けていただけます。感染防止にも細心の注意を払っています。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">丁寧なカウンセリング</div>
+        <p class="feature-text">
+          「どうしたいか」「どんな不安があるか」を丁寧にお聞きします。ご納得いただいてから治療を進めますのでご安心ください。
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏡</div>
+        <div class="feature-title">地域に根ざした医院</div>
+        <p class="feature-text">
+          尾山台駅近くで地域の皆さまに長く親しまれる歯科医院を目指しています。お子さまからご高齢の方まで幅広くお迎えします。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 診療メニュー ===== -->
+<section id="menu">
+  <div class="container">
+    <h2 class="section-title"><span>Treatment Menu</span>診療メニュー</h2>
+    <div class="section-divider"></div>
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="menu-icon">🦠</div>
+        <div class="menu-num">Menu 01</div>
+        <div class="menu-title">新しい虫歯予防<br>3DS</div>
+        <p class="menu-desc">
+          薬剤を使って虫歯菌を除菌。再発しにくい口内環境をつくる最新の予防法です。
+        </p>
+      </div>
+      <div class="menu-card">
+        <div class="menu-icon">🌟</div>
+        <div class="menu-num">Menu 02</div>
+        <div class="menu-title">ホワイトニング</div>
+        <p class="menu-desc">
+          歯を削らず白くする安全な施術。ご自宅でできるホームタイプもご用意しています。
+        </p>
+      </div>
+      <div class="menu-card">
+        <div class="menu-icon">💎</div>
+        <div class="menu-num">Menu 03</div>
+        <div class="menu-title">非金属治療<br>（メタルフリー）</div>
+        <p class="menu-desc">
+          金属を使わないセラミック治療で、見た目も美しく、金属アレルギーの心配も不要です。
+        </p>
+      </div>
+      <div class="menu-card">
+        <div class="menu-icon">🔬</div>
+        <div class="menu-num">Menu 04</div>
+        <div class="menu-title">再生医療</div>
+        <p class="menu-desc">
+          歯周病によって失われた骨や歯茎を再生。できる限り自分の歯を守る治療です。
+        </p>
+      </div>
+      <div class="menu-card">
+        <div class="menu-icon">🦷</div>
+        <div class="menu-num">Menu 05</div>
+        <div class="menu-title">インプラント</div>
+        <p class="menu-desc">
+          失った歯を人工歯根で補う治療。天然歯に近い見た目と噛み心地を実現します。
+        </p>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:36px; font-size:.88rem; color:var(--text-sub);">
+      ※ 詳しい内容・費用はお電話または来院時にお気軽にお尋ねください。
+    </p>
+  </div>
+</section>
+
+<!-- ===== 院長ごあいさつ ===== -->
+<section id="greeting">
+  <div class="container">
+    <h2 class="section-title"><span>From the Director</span>院長ごあいさつ</h2>
+    <div class="section-divider"></div>
+    <div class="greeting-inner">
+      <div class="greeting-photo">
+        <div class="photo-placeholder">
+          <div class="photo-avatar">👨‍⚕️</div>
+          <span>院長写真</span>
+        </div>
+        <div class="photo-caption">
+          私鴨歯科 院長<br>
+          <strong>私鴨 出数</strong>
+        </div>
+      </div>
+      <div class="greeting-text">
+        <p>
+          はじめまして。院長の私鴨 出数です。
+        </p>
+        <p>
+          歯科医院というと、「痛い」「怖い」というイメージをお持ちの方も多いのではないでしょうか。私自身も、患者さんに少しでも安心して通っていただける場所をつくりたいという思いで、日々診療に取り組んでいます。
+        </p>
+        <p>
+          お口の健康は、全身の健康にもつながる大切なものです。虫歯や歯周病の治療はもちろん、予防歯科や定期検診を通じて、皆さまの健康を長く支えていけるよう、スタッフ一同、心を込めてお手伝いいたします。
+        </p>
+        <p>
+          「ちょっと気になる」「久しぶりに歯を診てもらいたい」と思ったときは、どうぞお気軽にご相談ください。
+        </p>
+        <div class="greeting-sign">
+          私鴨歯科 院長　<strong>私鴨 出数</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== アクセス ===== -->
+<section id="access">
+  <div class="container">
+    <h2 class="section-title"><span>Access</span>アクセス・地図</h2>
+    <div class="section-divider"></div>
+    <div class="access-inner">
+      <div class="access-info">
+        <dl>
+          <dt>医院名</dt>
+          <dd>私鴨歯科</dd>
+          <dt>所在地</dt>
+          <dd>〒158-0086 東京都世田谷区尾山台3丁目23-3</dd>
+          <dt>最寄り駅</dt>
+          <dd>東急大井町線 尾山台駅 徒歩約5分</dd>
+          <dt>駐車場</dt>
+          <dd>なし（お車でお越しの際は近隣のコインパーキングをご利用ください）</dd>
+          <dt>診療時間</dt>
+          <dd>午前 9:00〜13:00 ／ 午後 15:00〜19:00</dd>
+          <dt>休診日</dt>
+          <dd>木曜日・祝日（※祝日は変動あり）</dd>
+          <dt>予約方法</dt>
+          <dd>お電話・FAXにてご予約ください（WEB予約はございません）</dd>
+        </dl>
+        <div class="tel-big">
+          <span class="tel-icon">📞</span>
+          <div>
+            <div style="font-size:.78rem; color:var(--text-sub);">電話予約・お問い合わせ</div>
+            <a href="tel:07012551121">070-1255-1121</a>
+          </div>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3244.4964869305987!2d139.65076577643568!3d35.60498577259022!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f4dce2cdf78f%3A0x4c19b09e0f36d04!2z5bCE5bGx5Y-j5LiA5Y-j5LiA77yT4oiS77yS77yT4oiS77yT!5e0!3m2!1sja!2sjp!4v1700000000000!5m2!1sja!2sjp&q=東京都世田谷区尾山台3丁目23-3"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="私鴨歯科 地図">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 電話CTAバー ===== -->
+<div class="cta-bar">
+  <p>ご予約・お問い合わせはお電話にて受け付けております</p>
+  <a href="tel:07012551121">070-1255-1121</a>
+  <p class="cta-note">受付時間：午前 9:00〜13:00 ／ 午後 15:00〜19:00（木曜休診）</p>
+</div>
+
+<!-- ===== フッター ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-icon" style="background:var(--green-light);">🦷</div>
+        <div class="logo-text">
+          <div class="logo-name">私鴨歯科</div>
+          <div class="logo-sub">SHIKAMO DENTAL CLINIC</div>
+        </div>
+      </div>
+      <p>〒158-0086<br>東京都世田谷区尾山台3丁目23-3<br>東急大井町線 尾山台駅 徒歩約5分</p>
+    </div>
+    <div>
+      <div class="footer-title">▸ HOURS</div>
+      <dl class="footer-hours">
+        <dt>午前診療</dt><dd>9:00 〜 13:00</dd>
+        <dt>午後診療</dt><dd>15:00 〜 19:00</dd>
+        <dt>休診日</dt><dd>木曜日</dd>
+      </dl>
+    </div>
+    <div>
+      <div class="footer-title">▸ CONTACT</div>
+      <div class="footer-tel">
+        <a href="tel:07012551121">070-1255-1121</a>
+        <p class="footer-note">電話・FAXにてご予約ください<br>WEB予約はございません</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 私鴨歯科 All Rights Reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
